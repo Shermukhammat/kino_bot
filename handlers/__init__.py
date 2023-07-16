@@ -1,2 +1,2 @@
 from . import comands
-from .. import message
+from . import message
