@@ -9,7 +9,7 @@ class Database:
         conection = sqlite3.connect(file_name)
         cursor = conection.cursor()
         
-        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'user_name', 'lang', 'registred');")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
         
         print("database conected ...")

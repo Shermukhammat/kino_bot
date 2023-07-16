@@ -9,4 +9,9 @@ class RAM:
         if self.users.get(id) != None:
             return True
         return False
-        
+    
+    def registr(self, id = None, name = None, registred = None, admin = False):
+        if not admin:
+            data = {}
+        else:
+            pass
