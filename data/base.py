@@ -30,6 +30,24 @@ class Database:
         conection.commit()
         conection.close()
         return users_data
+    
+
+    def registir(self, id = None, name = None, registred = None, lang = 'uz', admin = False):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        name = name.replace("'", '"')
+        if not admin:
+            match = f"INSERT INTO {self.users} ('id', 'name', 'lang', 'registred') VALUES ({id}, '{name}', '{lang}', '{registred}');"
+            cursor.execute(match)
+            print(f'New user {name}')
+        else:
+            pass
+
+        conection.commit()
+        conection.close()
+    
+    
 
 
 if __name__ == '__main__':
