@@ -18,7 +18,7 @@ async def core_message_handler(message : types.Message):
 
         elif user['where'] == 'head_menu':
             if message.text == '🎛 Menu':
-                await message.reply(f"Foydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.menu())
+                await message.answer(f"📓 Bosh menu:\n\nFoydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.menu())
 
     else:
         pass
