@@ -7,6 +7,10 @@ async def start(message : types.Message):
     if ram.check_user(id):
         user = ram.get_info(id)
         await message.answer(f"Foydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}")
+    
+    elif ram.check_admin(id):
+        pass
+    
     else:
         name = message.from_user.first_name
         ram.registr(id = id, name = name)

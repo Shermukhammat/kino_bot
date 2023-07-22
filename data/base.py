@@ -29,7 +29,23 @@ class Database:
             # print(row) 
         conection.commit()
         conection.close()
+        
         return users_data
+    
+    def get_admins(self):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        admins_data = {}
+
+        match = f"SELECT * FROM {self.admins};"
+        for row in cursor.execute(match):
+            id, name, lang, registred_time = row[0], row[1], row[2], row[3]
+            admins_data[id] = {'name' : name, 'lang' : lang, 'where' : 'none', 'action' : 'none', 'registred' : registred_time}
+            # print(row) 
+        conection.commit()
+        conection.close()
+
+        return admins_data
     
 
     def registir(self, id = None, name = None, registred = None, lang = 'uz', admin = False):
@@ -37,12 +53,18 @@ class Database:
         cursor = conection.cursor()
 
         name = name.replace("'", '"')
-        if not admin:
+        if False == admin:
             match = f"INSERT INTO {self.users} ('id', 'name', 'lang', 'registred') VALUES ({id}, '{name}', '{lang}', '{registred}');"
             cursor.execute(match)
             print(f'New user {name}')
         else:
-            pass
+            match = f"INSERT INTO {self.admins} ('id', 'name', 'lang', 'registred') VALUES ({id}, '{name}', '{lang}', '{registred}');"
+            match2 = f"DELETE  FROM {self.users} WHERE id == {id};"
+
+            cursor.execute(match)
+            cursor.execute(match2)
+            
+            print(f'New uadminser {name}')
 
         conection.commit()
         conection.close()
