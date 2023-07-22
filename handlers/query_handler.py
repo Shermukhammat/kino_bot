@@ -16,6 +16,13 @@ async def query_handler(query : types.CallbackQuery):
 
         elif text == 'less':
             await bot.edit_message_reply_markup(chat_id = id, message_id = message_id, reply_markup = ibuttons.menu())
+    
+    elif ram.check_admin(id):
+        if text == 'more':
+            await bot.edit_message_reply_markup(chat_id = id, message_id = message_id, reply_markup = ibuttons.more_menu(admin = True))
 
+        elif text == 'less':
+            await bot.edit_message_reply_markup(chat_id = id, message_id = message_id, reply_markup = ibuttons.menu())
+    
     else:
         print(print("Sizniki  utmagan"))
