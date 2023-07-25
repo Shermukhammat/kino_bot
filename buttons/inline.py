@@ -54,6 +54,11 @@ class Inline_buttons:
             
             return InlineKeyboardMarkup(inline_keyboard = buttons)
     
+    def ask_movi_input(self):
+        buttons = [[InlineKeyboardButton(text = "🙏 Qo'lda", callback_data = "hand" ), InlineKeyboardButton(text = "♻️ Avtomatik", callback_data = "avto")],
+                   [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
+        
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
     
         
         

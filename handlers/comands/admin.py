@@ -1,5 +1,5 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, ram, states
+from loader import types, dp, ram
 
 @dp.message_handler(commands = 'admin')
 async def admin(message : types.Message):

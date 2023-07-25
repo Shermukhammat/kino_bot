@@ -1,4 +1,5 @@
 from aiogram import Bot, Dispatcher, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from login import BOT_TOKEN
 from data.base import Database
@@ -7,11 +8,11 @@ from buttons.defolt import Defolt_buttons
 from buttons.inline import Inline_buttons
 from states import My_States
 
-
+storage = MemoryStorage()
 bot = Bot(token = BOT_TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, storage = storage)
 db = Database("./data/database.db")
 ram = RAM(db)
 dbuttons = Defolt_buttons()
 ibuttons = Inline_buttons()
-states = My_States()
+my_states = My_States()

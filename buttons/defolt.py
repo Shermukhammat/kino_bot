@@ -17,8 +17,9 @@ class Defolt_buttons:
     
     
     def media(self):
-        buttons = [[KeyboardButton(text = "🎬 Kino qo'shish"), KeyboardButton(text = "📺 Serial qo'shish")],
-                   [KeyboardButton(text = "🔥 Primyeralarni taxrirlash"), KeyboardButton(text = "⬅️ Orqaga")]]
+        buttons = [[KeyboardButton(text = "🔥 Primyeralarni taxrirlash")],
+                   [KeyboardButton(text = "🎬 Kino qo'shish"), KeyboardButton(text = "📺 Serial qo'shish")],
+                   [KeyboardButton(text = "⬅️ Orqaga")]]
         
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     

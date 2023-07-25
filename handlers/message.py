@@ -1,4 +1,27 @@
-from loader import types, dp, db, ram, bot, dbuttons, ibuttons
+from aiogram.dispatcher import FSMContext
+from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states
+
+
+
+@dp.message_handler(state = my_states.movi_add_with_hand)
+async def add_movi_with_hand(message : types.Message, state : FSMContext):
+    id = message.from_user.id
+
+    if ram.check_admin(id):
+        admin = ram.get_info(id, admin = True)
+        name = admin['name']
+        where = admin['where']
+
+        if admin['where'] == 'media':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'head_menu'
+
+                await state.finish()
+                await message.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
+            
+            else:
+                pass
+
 
 
 
@@ -67,20 +90,10 @@ async def core_message_handler(message : types.Message):
                 await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
             
             elif message.text == "🎬 Kino qo'shish":
-                admin['where'] = 'add_movi'
-                await message.answer(f"Kino qushish menyusi", reply_markup = dbuttons.add_movi())
+                # await message.answer(f"{admin['name']} qanday usul bilan kino kiritmoqchisiz?", reply_markup = ibuttons.input_movi())
 
-        elif admin['where'] == 'add_movi':
-            if message.text ==  "⬅️ Orqaga":
-                admin['where'] = 'media'
-                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+                await bot.send_photo(chat_id = id, photo = open('./data/pictures/2.jpg', 'rb'), caption = f"{admin['name']} qanday usul bilan kino kiritmoqchisiz?", reply_markup = ibuttons.ask_movi_input())
 
-            elif message.text == "♻️ Avtomatik":
-                await message.answer("Avtomatik kino qo'shish yoqildi. Kino yuborishingiz mumkun!",  reply_markup = dbuttons.add_movi(mode = 'avto'))
-
-            elif message.text == '🔵 Avtomatik':
-                await message.answer("Avtomatik kino qo'shish o'chirildi.",  reply_markup = dbuttons.add_movi())
-            
             
 
     else:
