@@ -1,31 +1,24 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states
+from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi
 
 
 
-@dp.message_handler(state = my_states.movi_add_with_hand)
-async def add_movi_with_hand(message : types.Message, state : FSMContext):
+@dp.message_handler(state = get_movi.get_title)
+async def get_title(message : types.Message, state : FSMContext):
     id = message.from_user.id
 
-    if ram.check_admin(id):
-        admin = ram.get_info(id, admin = True)
-        name = admin['name']
-        where = admin['where']
+    admin = ram.get_info(id, admin = True)
+    name = admin['name']
+    where = admin['where']
 
-        if admin['where'] == 'media':
-            if message.text == "⬅️ Orqaga":
-                admin['where'] = 'head_menu'
+    await message.answer("")
 
-                await state.finish()
-                await message.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
-            
-            else:
-                pass
+    
 
 
 
 
-@dp.message_handler()
+@dp.message_handler()   await state.set_state(get_movi.get_title)
 async def core_message_handler(message : types.Message):
     id = message.from_user.id
 

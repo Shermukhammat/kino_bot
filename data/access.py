@@ -9,6 +9,8 @@ class RAM:
         self.db = database
         self.users = database.get_users()
         self.admins = database.get_admins()
+        self.movies = {}
+        self.port = True
 
         self.block = {}
         
@@ -54,6 +56,9 @@ class RAM:
             return respons
         self.block[id] = 0
         return 0
+    
+    def save_movi(self, admin_id, vide_id = None, duration = None):
+        self.movies[admin_id] = {'vide_id' : vide_id, 'duration' : duration, }
 
 
 

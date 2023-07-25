@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from loader import dp, db, ram, bot, ibuttons, dbuttons, my_states
+from loader import dp, db, ram, bot, ibuttons, dbuttons, my_states, get_movi
 
 
 
@@ -45,7 +45,7 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                 await bot.delete_message(chat_id = id, message_id = message_id)
 
             elif text == 'hand':
-                await state.set_state(my_states.movi_add_with_hand)
+                await state.set_state(get_movi.get_video)
                 await bot.send_message(text = "Ok, Kinoyingzni tashlang!", chat_id = id)
 
     else:
