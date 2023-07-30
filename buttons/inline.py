@@ -60,6 +60,10 @@ class Inline_buttons:
         
         return InlineKeyboardMarkup(inline_keyboard = buttons)
     
-        
+    def photo_caption(self):
+        buttons = [[InlineKeyboardButton(text = "xa", callback_data = "yes"), InlineKeyboardButton(text = "yo'q", callback_data = "no")],
+                   [InlineKeyboardButton(text = "Bekor qilish ❌", callback_data = 'delet')]]
+  
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
         
         

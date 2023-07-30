@@ -57,9 +57,18 @@ class RAM:
         self.block[id] = 0
         return 0
     
-    def save_movi(self, admin_id, vide_id = None, duration = None):
-        self.movies[admin_id] = {'vide_id' : vide_id, 'duration' : duration, }
+    def save_movi(self, admin_id, vide_id = None, duration = None, size = None):
+        self.movies[admin_id] = {'vide_id' : vide_id, 'duration' : duration, 'size' : size}
+    
+    def save_title(self, id, title):
+        self.movies[id]['title'] = title
 
+    def save_caption(self, id, caption):
+        self.movies[id]['caption'] = caption
+    
+    def get_movi(self, id):
+        return self.movies[id]
+    
 
 
 if __name__ == '__main__':

@@ -3,6 +3,24 @@ from aiogram.dispatcher import FSMContext
 from loader import dp, db, ram, bot, ibuttons, dbuttons, my_states, get_movi
 
 
+@dp.callback_query_handler(state = get_movi.get_caption)
+
+async def get_caption_query(query : types.CallbackQuery, state : FSMContext):
+    text = query.data
+    id  = query.from_user.id
+    message_id = query.message.message_id
+
+    if text == 'yes':
+        await state.set_state(get_movi.get_caption_photo)
+        await bot.send_message(text = "OK, endi caption photoni tashlang", chat_id = id)
+
+    elif text == 'no':
+        await bot.send_message(text = "Ok, unda videoni caption photosidan foydalanaman!", chat_id = id)
+
+
+    else:
+        await bot.delete_message(chat_id = id, message_id = message_id)  
+
 
 
 @dp.callback_query_handler()
@@ -46,7 +64,7 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
 
             elif text == 'hand':
                 await state.set_state(get_movi.get_video)
-                await bot.send_message(text = "Ok, Kinoyingzni tashlang!", chat_id = id)
+                await bot.send_message(text = "Ok, Kinoyingzni  tashlang!", chat_id = id)
 
     else:
         print(print("Sizniki  utmagan"))

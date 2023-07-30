@@ -11,4 +11,5 @@ class get_movi_from_hand(StatesGroup):
     get_video = State()
     get_title = State()
     get_caption = State()
+    get_caption_photo = State()
 

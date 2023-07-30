@@ -7,18 +7,27 @@ from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_m
 async def get_title(message : types.Message, state : FSMContext):
     id = message.from_user.id
 
-    admin = ram.get_info(id, admin = True)
-    name = admin['name']
-    where = admin['where']
+    ram.save_title(id, message.text)
 
-    await message.answer("")
-
-    
+    await state.set_state(get_movi.get_caption)
+    await message.answer(f"Ok endi kinoni captionni kiritng.")
 
 
+@dp.message_handler(state = get_movi.get_caption)
+async def get_caption(message : types.Message, state : FSMContext):
+    id = message.from_user.id
+
+    ram.save_caption(id, message.text)
+
+    # await state.finish()
+    await message.answer("Kinoga photo caption qo'shishishni xoxlaysizmi?", reply_markup = ibuttons.photo_caption())
+
+    print(ram.movies[id])    
 
 
-@dp.message_handler()   await state.set_state(get_movi.get_title)
+
+
+@dp.message_handler()
 async def core_message_handler(message : types.Message):
     id = message.from_user.id
 
