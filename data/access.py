@@ -10,6 +10,7 @@ class RAM:
         self.users = database.get_users()
         self.admins = database.get_admins()
         self.movies = {}
+        self.admin_a_movi = {}
         self.port = True
 
         self.block = {}
@@ -56,21 +57,34 @@ class RAM:
             return respons
         self.block[id] = 0
         return 0
+
+    def creat_movi(self, id, lang = 'uz'):
+        self.admin_a_movi[id] = {'video_id' : None,
+                                 'caption' : None,
+                                 'title' : None,
+                                 'duration' : None, 
+                                 'size' : None,
+                                 'thumb' : None,
+                                 'lang' : lang}
     
-    def save_movi(self, admin_id, vide_id = None, duration = None, size = None, phot_url = None):
-        self.movies[admin_id] = {'vide_id' : vide_id, 'duration' : duration, 'size' : size, 'photo_url' : phot_url}
+    def update_a_movi_data(self, id, video_id = None, duration = None, size = None, thumb = None):
+        self.admin_a_movi[id]['video_id'] = video_id
+        self.admin_a_movi[id]['duration'] = duration
+        self.admin_a_movi[id]['size'] =  size
+        self.admin_a_movi[id]['thumb'] = thumb
+    
     
     def update_title(self, id, title):
-        self.movies[id]['title'] = title
+        self.admin_a_movi[id]['title'] = title
 
     def update_caption(self, id, caption):
-        self.movies[id]['caption'] = caption
+        self.admin_a_movi[id]['caption'] = caption
 
     def update_phot_url(self, id, photo_url = None):
-        self.movies[id]['photo_url'] = photo_url
+        self.admin_a_movi[id]['thumb'] = photo_url
     
     def get_movi(self, id):
-        return self.movies[id]
+        return self.admin_a_movi[id]
     
 
 

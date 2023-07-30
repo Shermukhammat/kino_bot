@@ -20,4 +20,4 @@ async def catch_phot_caption(message : types.Message, state : FSMContext):
     ram.update_phot_url(id, photo_url = url)
     
     # await bot.send_photo(photo = open('data/pictures/image.jpg', 'rb'), chat_id = id, caption = "Ushlab oldim ...")
-    await message.reply("Caption phot qo'shldi", reply_markup = ibuttons.add_movi(back = True))
+    await message.reply("Caption phot qo'shldi", reply_markup = ibuttons.add_movi())

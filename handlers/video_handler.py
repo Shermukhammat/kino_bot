@@ -28,8 +28,10 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         thumb_url = picsum.save_photo('photo.jpg')
         # print(thumb_url)
 
-    ram.save_movi(admin_id = admin_id, vide_id = video_file_id, duration = duration, size = video_size, phot_url = thumb_url)
+    ram.update_a_movi_data(admin_id, video_id = video_file_id, duration = duration, size = video_size, thumb = thumb_url)
+    # ram.save_movi(admin_id = admin_id, vide_id = video_file_id, duration = duration, size = video_size, phot_url = thumb_url)
 
     # await bot.delete_message(chat_id = admin_id, message_id = message.message_id)
-    await bot.send_video(video = video_file_id, caption = "| o o o", chat_id = admin_id, reply_markup = ibuttons.change_state(head = True, next = 'next1'))
+    await bot.send_video(video = video_file_id, caption = "||| o o o", chat_id = admin_id, reply_markup = ibuttons.change_state(head = True, next = 'next1'))
+
 

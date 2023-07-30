@@ -10,7 +10,7 @@ async def get_title(message : types.Message, state : FSMContext):
     ram.update_title(id, message.text)
     movie = ram.get_movi(id)
     # await state.set_state(get_movi.get_caption)
-    await bot.send_video(video = movie['vide_id'], 
+    await bot.send_video(video = movie['video_id'], 
                          caption = f"| | o o\nkino nomi: `{message.text}`", 
                          chat_id = id,
                          reply_markup = ibuttons.change_state(next = 'next2', back = 'back2'))
@@ -23,7 +23,7 @@ async def get_caption(message : types.Message, state : FSMContext):
     ram.update_caption(id, message.text)
     movie = ram.get_movi(id)
 
-    await bot.send_video(video = movie['vide_id'],
+    await bot.send_video(video = movie['video_id'],
                          chat_id = id,
                          caption = f"Kino nomi: {movie['title']}\n{movie['caption']}",
                          reply_markup = ibuttons.change_state(next = 'next3', back = 'back3'))

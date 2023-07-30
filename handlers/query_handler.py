@@ -1,4 +1,5 @@
 from aiogram import types
+from aiogram.types import InputMediaPhoto
 from aiogram.dispatcher import FSMContext
 from loader import dp, db, ram, bot, ibuttons, dbuttons, my_states, get_movi
 
@@ -74,7 +75,7 @@ async def get_caption_query(query : types.CallbackQuery, state : FSMContext):
     elif query.data == 'add':
         await query.answer("Kino qo'shildi :)")
 
-    elif query.data == 'back4':
+    elif query.data == 'back5':
         await bot.edit_message_reply_markup(chat_id = id, 
                                             message_id = query.message.message_id,
                                             reply_markup = ibuttons.photo_caption())
@@ -94,6 +95,14 @@ async def get_caption_phot_query(query : types.CallbackQuery, state : FSMContext
     if query.data == 'add':
         await state.finish()
         await bot.send_message(chat_id = query.from_user.id, text = "tugadi :) ...")
+    
+    elif query.data == 'back5':
+        await state.set_state(get_movi.get_caption)
+        await bot.edit_message_reply_markup(reply_markup = ibuttons.delet_button(), 
+                                            chat_id = query.from_user.id, 
+                                            message_id = query.message.message_id)
+        await bot.send_message(chat_id = query.from_user.id, text = "kinoga phot caption qo'shishnini xoxlaysizmi?",
+                               reply_markup = ibuttons.photo_caption())
 
 
 @dp.callback_query_handler()
@@ -136,8 +145,45 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                 await bot.delete_message(chat_id = id, message_id = message_id)
 
             elif text == 'hand':
+                # await state.set_state(get_movi.get_video)
+                # await bot.send_message(text = "Ok, Kinoyingzni  tashlang!", chat_id = id)
+                await  bot.edit_message_media(chat_id = id,
+                                              message_id = query.message.message_id,
+                                              media = InputMediaPhoto(media = open('./data/pictures/4.jpg', 'rb'), caption = "|oooo\nKinoyingzni tilni tanlang"),
+                                              reply_markup = ibuttons.chose_lang())
+                # await bot.send_photo(photo = open('./data/pictures/2.jpg', 'rb'),
+                #                      chat_id = id,
+                #                      text = "|oooo\nKinoyingiz tilni tanlang",
+                #                      reply_markup = ibuttons.chose_lang())
+
+            elif text == 'back':
+                await  bot.edit_message_media(chat_id = id,
+                                              message_id = query.message.message_id,
+                                              media = InputMediaPhoto(media = open('./data/pictures/4.jpg', 'rb'), caption = f"{admin['name']} qanday usul bilan kino kiritmoqchisiz?"),
+                                              reply_markup = ibuttons.ask_movi_input())
+            
+            elif text in ['set_uz', 'set_ru', 'set_en']:
+                lang = text[-2:]
+                ram.creat_movi(id, lang = lang)
+                cheet = {'uz' : "O'zbek", 'ru' : "Rus", 'en' : "Ingliz"}
+                # await bot.send_message(chat_id = id,
+                #                        text = f"Siz {cheet[lang]} tilni tanladingiz",
+                #                        reply_markup = ibuttons.next())
+                await query.answer(text = f"Siz {cheet[lang]} tilni tanladingiz")
+                await  bot.edit_message_media(chat_id = id,
+                                              message_id = query.message.message_id,
+                                              media = InputMediaPhoto(media = open('./data/pictures/2.jpg', 'rb'), caption = f"||ooo"),
+                                              reply_markup = ibuttons.change_state(back = 'back2', next = 'next2'))
+        
+            elif text == 'back2':
+                await  bot.edit_message_media(chat_id = id,
+                                              message_id = query.message.message_id,
+                                              media = InputMediaPhoto(media = open('./data/pictures/4.jpg', 'rb'), caption = "|oooo\nKinoyingzni tilni tanlang"),
+                                              reply_markup = ibuttons.chose_lang())
+            
+            elif text == 'next2':
                 await state.set_state(get_movi.get_video)
-                await bot.send_message(text = "Ok, Kinoyingzni  tashlang!", chat_id = id)
+                await bot.send_message(text = "Endi es, Kinoyingzni videosni tashlang!", chat_id = id)
 
     else:
-        print(print("Sizniki  utmagan"))
+        print("Sizniki  utmagan")

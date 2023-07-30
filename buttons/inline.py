@@ -89,10 +89,20 @@ class Inline_buttons:
             buttons = [[InlineKeyboardButton(text = "Kinoni qo'shish", callback_data = 'add')],
                        [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
             return InlineKeyboardMarkup(inline_keyboard = buttons)
-        buttons = [[InlineKeyboardButton(text = "<- orqaga", callback_data = 'back4'), InlineKeyboardButton(text = "Kinoni qo'shish", callback_data = 'add')],
+        buttons = [[InlineKeyboardButton(text = "<- orqaga", callback_data = 'back5'), InlineKeyboardButton(text = "Kinoni qo'shish", callback_data = 'add')],
                        [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
         return InlineKeyboardMarkup(inline_keyboard = buttons)
     
     def delet_button(self):
         buttons = [[InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+    
+    def chose_lang(self):
+        buttons = [[InlineKeyboardButton(text = 'O\'zbekcha', callback_data = 'set_uz'), InlineKeyboardButton(text = 'Ruscha', callback_data = 'set_ru'), InlineKeyboardButton(text = 'Inglizcha', callback_data = 'set_en')],
+                   [InlineKeyboardButton(text = '<- orqaga', callback_data = 'back'), InlineKeyboardButton(text = ' x ', callback_data = 'delet')]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+    
+    def next(self):
+        buttons = [[InlineKeyboardButton(text = "<- orqaga", callback_data = 'back2'), InlineKeyboardButton(text = "Keyingsi ->", callback_data = 'next2')],
+                    [InlineKeyboardButton(text = " x ", callback_data = 'delet')]]
         return InlineKeyboardMarkup(inline_keyboard = buttons)
