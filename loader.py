@@ -1,9 +1,10 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from login import BOT_TOKEN, CHANEL_ID
+from login import BOT_TOKEN, CHANEL_ID, TELEGRAPH_API_KEY
 from data.base import Database
 from data.access import RAM
+from data.picsum import Picsum
 from buttons.defolt import Defolt_buttons
 from buttons.inline import Inline_buttons
 from states import My_States, get_movi_from_hand
@@ -18,3 +19,4 @@ ibuttons = Inline_buttons()
 my_states = My_States()
 
 get_movi = get_movi_from_hand()
+picsum = Picsum(token = TELEGRAPH_API_KEY)

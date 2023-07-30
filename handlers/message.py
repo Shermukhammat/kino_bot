@@ -7,22 +7,29 @@ from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_m
 async def get_title(message : types.Message, state : FSMContext):
     id = message.from_user.id
 
-    ram.save_title(id, message.text)
-
-    await state.set_state(get_movi.get_caption)
-    await message.answer(f"Ok endi kinoni captionni kiritng.")
+    ram.update_title(id, message.text)
+    movie = ram.get_movi(id)
+    # await state.set_state(get_movi.get_caption)
+    await bot.send_video(video = movie['vide_id'], 
+                         caption = f"| | o o\nkino nomi: `{message.text}`", 
+                         chat_id = id,
+                         reply_markup = ibuttons.change_state())
 
 
 @dp.message_handler(state = get_movi.get_caption)
 async def get_caption(message : types.Message, state : FSMContext):
     id = message.from_user.id
 
-    ram.save_caption(id, message.text)
+    ram.update_caption(id, message.text)
+    movie = ram.get_movi(id)
 
-    # await state.finish()
-    await message.answer("Kinoga photo caption qo'shishishni xoxlaysizmi?", reply_markup = ibuttons.photo_caption())
+    await bot.send_video(video = movie['vide_id'],
+                         chat_id = id,
+                         caption = f"Kino nomi: {movie['title']}\n{movie['caption']}\nKinoga phot caption qo'shishni xolaysizmi?",
+                         reply_markup = ibuttons.photo_caption())
+    # await message.answer("Kinoga photo caption qo'shishishni xoxlaysizmi?", reply_markup = ibuttons.photo_caption())
 
-    print(ram.movies[id])    
+    # print(ram.movies[id])    
 
 
 

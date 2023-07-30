@@ -65,5 +65,26 @@ class Inline_buttons:
                    [InlineKeyboardButton(text = "Bekor qilish ❌", callback_data = 'delet')]]
   
         return InlineKeyboardMarkup(inline_keyboard = buttons)
+    
+    def change_state(self, head = False, last = False):
+        if last:
+            buttons = [[InlineKeyboardButton(text = "<- Oldingi", callback_data = 'back')],
+                       [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
         
+            return InlineKeyboardMarkup(inline_keyboard = buttons)
         
+        if head:
+            buttons = [[InlineKeyboardButton(text = "Keyingi ->", callback_data = 'next')],
+                       [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
+        
+            return InlineKeyboardMarkup(inline_keyboard = buttons)
+        
+        buttons = [[InlineKeyboardButton(text = "<- Oldingi", callback_data = 'back'), InlineKeyboardButton(text = "Keyingi ->", callback_data = 'next')],
+                       [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
+        
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+    
+    def add_movi(self):
+        buttons = [[InlineKeyboardButton(text = "<- orqaga", callback_data = 'back'), InlineKeyboardButton(text = "Kinoni qo'shish", callback_data = 'add')],
+                       [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
