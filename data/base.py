@@ -1,21 +1,42 @@
 import sqlite3
 
 class Database:
-    def __init__(self, file_name, users_tabel = 'users', admins_table = 'admins'):
+    def __init__(self, file_name, users_tabel = 'users', admins_table = 'admins', movies = 'movies'):
         self.file = file_name
         self.users = users_tabel
         self.admins = admins_table
+        self.movies = movies
         
         conection = sqlite3.connect(file_name)
         cursor = conection.cursor()
         
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'file_id', 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments');")
         
         print("database conected ...")
         
         conection.commit()
         conection.close()
+
+    def add_user_movi(self, title = None, caption = None, thumb_url = None, file_id = None, duration = None, size = None, coment = None):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        try:
+            caption = caption.replace("'", '"')
+            title = title.replace("'", '"')
+            match = f"INSERT INTO {self.movies} ('file_id', 'title', 'caption', 'file_size', 'duration', 'like', 'dislike', 'coments') VALUES ('{file_id}', '{title}', '{caption}', {size}, '{duration}', 0, 0, '{coment}');"
+            # print(match)
+            cursor.execute(match)
+            print(f"New movi {title} added ...")
+        except:
+            print(f"Can't added {title} ...")
+        
+        conection.commit()
+        conection.close()
+
+
     
     def get_users(self):
         conection = sqlite3.connect(self.file)
@@ -74,5 +95,12 @@ class Database:
 
 if __name__ == '__main__':
     data_base = Database('database.db')
-    data = data_base.get_users()
-    print(data)
+    # data = data_base.get_users()
+    data_base.add_user_movi(title = "Blah", 
+                            caption = "Yaxshi kino",
+                            thumb_url = "thubl htpp/:bfmef d",
+                            file_id = 'file id fjvvehf93hb2480ghi',
+                            duration = '12:20 minut',
+                            size = 100,
+                            coment = "Comentsdmfebs")
+    

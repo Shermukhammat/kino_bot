@@ -11,7 +11,7 @@ async def get_video_query(query : types.CallbackQuery, state : FSMContext):
     if query.data == 'delet':
         await bot.delete_message(chat_id = id, message_id = query.message.message_id)
     
-    elif query.data == 'next':
+    elif query.data == 'next1':
         await state.set_state(get_movi.get_title)
         await bot.send_message(text = "Endi esa kino nomni kiriting", chat_id = id)
     
@@ -23,12 +23,18 @@ async def get_tile_quer(query : types.CallbackQuery, state : FSMContext):
     if query.data == 'delet':
         await bot.delete_message(chat_id = id, message_id = query.message.message_id)
     
-    elif query.data == 'next':
+    elif query.data == 'next2':
         await state.set_state(get_movi.get_caption)
+        await bot.edit_message_reply_markup(reply_markup = ibuttons.delet_button(), 
+                                            chat_id = id, 
+                                            message_id = query.message.message_id)
         await bot.send_message(chat_id = id, text = "Ok endi kinoga caption kiriting")
     
-    elif query.data == 'back':
+    elif query.data == 'back2':
         await state.set_state(get_movi.get_video)
+        await bot.edit_message_reply_markup(reply_markup = ibuttons.delet_button(), 
+                                            chat_id = id, 
+                                            message_id = query.message.message_id)
         await bot.send_message(chat_id = id, text = "Ok Kinoyingzni videyosni tashlang")
     
 
@@ -36,26 +42,42 @@ async def get_tile_quer(query : types.CallbackQuery, state : FSMContext):
 @dp.callback_query_handler(state = get_movi.get_caption)
 
 async def get_caption_query(query : types.CallbackQuery, state : FSMContext):
-    text = query.data
     id  = query.from_user.id
     message_id = query.message.message_id
 
-    # if text == 'yes':
-    #     await state.set_state(get_movi.get_caption_photo)
-    #     await bot.send_message(text = "OK, endi caption photoni tashlang", chat_id = id)
+    if query.data == 'delet':
+        await bot.delete_message(chat_id = id, message_id = query.message.message_id)
 
-    # elif text == 'no':
-    #     await query.answer( "Ok, unda videoni caption photosidan foydalanaman!")
-    #     await bot.edit_message_reply_markup(chat_id = id, 
-    #                                         message_id = query.message.message_id, 
-    #                                         reply_markup = ibuttons.add_movi())
+    elif query.data == 'back3':
+        await state.set_state(get_movi.get_title)
+        await bot.send_message(chat_id = id, text = "Ok endi kinoga title kiriting")
+    
+    elif query.data == 'next3':
+        await bot.send_message(chat_id = id,
+                               text = f"Kinonoga caption phot qo'shishni xoxlaysizmi?",
+                               reply_markup = ibuttons.photo_caption())
+    
+    
+    if query.data == 'yes':
+        await state.set_state(get_movi.get_caption_photo)
+        await bot.send_message(text = "OK, endi caption photoni tashlang", chat_id = id)
+
+    elif query.data == 'no':
+        await query.answer( "Ok, unda videoni caption photosidan foydalanaman!")
+        await bot.edit_message_reply_markup(chat_id = id, 
+                                            message_id = query.message.message_id, 
+                                            reply_markup = ibuttons.add_movi())
 
     # elif text == 'delet':
     #     await bot.delete_message(chat_id = id, message_id = message_id)
     
-    # elif text == 'add':
-    #     await query.answer("Kino qo'shildi :)")
-    #     print("Ushladim")
+    elif query.data == 'add':
+        await query.answer("Kino qo'shildi :)")
+
+    elif query.data == 'back4':
+        await bot.edit_message_reply_markup(chat_id = id, 
+                                            message_id = query.message.message_id,
+                                            reply_markup = ibuttons.photo_caption())
     
     # elif text == 'back':
     #     await state.set_state(get_movi.get_title)
@@ -67,8 +89,11 @@ async def get_caption_query(query : types.CallbackQuery, state : FSMContext):
     #                      reply_markup = ibuttons.photo_caption())
     
 
-    
-       
+@dp.callback_query_handler(state = get_movi.get_caption_photo)
+async def get_caption_phot_query(query : types.CallbackQuery, state : FSMContext):
+    if query.data == 'add':
+        await state.finish()
+        await bot.send_message(chat_id = query.from_user.id, text = "tugadi :) ...")
 
 
 @dp.callback_query_handler()

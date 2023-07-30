@@ -13,7 +13,7 @@ async def get_title(message : types.Message, state : FSMContext):
     await bot.send_video(video = movie['vide_id'], 
                          caption = f"| | o o\nkino nomi: `{message.text}`", 
                          chat_id = id,
-                         reply_markup = ibuttons.change_state())
+                         reply_markup = ibuttons.change_state(next = 'next2', back = 'back2'))
 
 
 @dp.message_handler(state = get_movi.get_caption)
@@ -25,8 +25,8 @@ async def get_caption(message : types.Message, state : FSMContext):
 
     await bot.send_video(video = movie['vide_id'],
                          chat_id = id,
-                         caption = f"Kino nomi: {movie['title']}\n{movie['caption']}\nKinoga phot caption qo'shishni xolaysizmi?",
-                         reply_markup = ibuttons.photo_caption())
+                         caption = f"Kino nomi: {movie['title']}\n{movie['caption']}",
+                         reply_markup = ibuttons.change_state(next = 'next3', back = 'back3'))
     # await message.answer("Kinoga photo caption qo'shishishni xoxlaysizmi?", reply_markup = ibuttons.photo_caption())
 
     # print(ram.movies[id])    
