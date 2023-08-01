@@ -13,3 +13,12 @@ class get_movi_from_hand(StatesGroup):
     get_caption = State()
     get_caption_photo = State()
 
+
+
+class add_movi(StatesGroup):
+    chose_lang = State()
+    set_video = State()
+    set_title = State()
+    set_info = State()
+    set_thum = State()
+

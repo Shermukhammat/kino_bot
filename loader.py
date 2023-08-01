@@ -7,7 +7,7 @@ from data.access import RAM
 from data.picsum import Picsum
 from buttons.defolt import Defolt_buttons
 from buttons.inline import Inline_buttons
-from states import My_States, get_movi_from_hand
+from states import My_States, get_movi_from_hand, add_movi
 
 storage = MemoryStorage()
 bot = Bot(token = BOT_TOKEN)
@@ -17,6 +17,7 @@ ram = RAM(db)
 dbuttons = Defolt_buttons()
 ibuttons = Inline_buttons()
 my_states = My_States()
+movi_add = add_movi()
 
 get_movi = get_movi_from_hand()
 picsum = Picsum(token = TELEGRAPH_API_KEY)

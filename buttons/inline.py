@@ -54,12 +54,32 @@ class Inline_buttons:
             
             return InlineKeyboardMarkup(inline_keyboard = buttons)
     
+    def chose_lang(self, back = 'back'): #⬅️
+        buttons = [[InlineKeyboardButton(text = 'O\'zbekcha', callback_data = 'uz'), InlineKeyboardButton(text = 'Ruscha', callback_data = 'ru'), InlineKeyboardButton(text = 'Inglizcha', callback_data = 'en')],
+                   [InlineKeyboardButton(text = '⬅️ orqaga', callback_data = back)],
+                   [InlineKeyboardButton(text = '❌', callback_data = 'delet')]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+    
     def ask_movi_input(self):
         buttons = [[InlineKeyboardButton(text = "🙏 Qo'lda", callback_data = "hand" ), InlineKeyboardButton(text = "♻️ Avtomatik", callback_data = "avto")],
                    [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
         
         return InlineKeyboardMarkup(inline_keyboard = buttons)
     
+
+    def delet(self, back = 'back'):
+        return InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text = "⬅️ orqaga", callback_data = back)], [InlineKeyboardButton(text = "❌", callback_data = 'delet')]])
+
+    
+
+
+
+
+
+
+
+
+
     def photo_caption(self):
         buttons = [[InlineKeyboardButton(text = "xa", callback_data = "yes"), InlineKeyboardButton(text = "yo'q", callback_data = "no")],
                    [InlineKeyboardButton(text = "Bekor qilish ❌", callback_data = 'delet')]]
@@ -97,10 +117,6 @@ class Inline_buttons:
         buttons = [[InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
         return InlineKeyboardMarkup(inline_keyboard = buttons)
     
-    def chose_lang(self):
-        buttons = [[InlineKeyboardButton(text = 'O\'zbekcha', callback_data = 'set_uz'), InlineKeyboardButton(text = 'Ruscha', callback_data = 'set_ru'), InlineKeyboardButton(text = 'Inglizcha', callback_data = 'set_en')],
-                   [InlineKeyboardButton(text = '<- orqaga', callback_data = 'back'), InlineKeyboardButton(text = ' x ', callback_data = 'delet')]]
-        return InlineKeyboardMarkup(inline_keyboard = buttons)
     
     def next(self):
         buttons = [[InlineKeyboardButton(text = "<- orqaga", callback_data = 'back2'), InlineKeyboardButton(text = "Keyingsi ->", callback_data = 'next2')],

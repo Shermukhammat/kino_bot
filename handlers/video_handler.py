@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram, my_states, get_movi, bot, picsum, ibuttons
+from loader import db, dp, ram, my_states, get_movi, bot, picsum, ibuttons, movi_add
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -12,26 +12,31 @@ def convert(seconds):
     
     return "%d:%02d:%02d" % (hour, minutes, seconds)
 
-@dp.message_handler(content_types = ContentTypes.VIDEO, state = get_movi.get_video)
+@dp.message_handler(content_types = ContentTypes.VIDEO, state = movi_add.set_video)
 async def get_movi_from_hand(message : types.Message, state : FSMContext):
-    admin_id = message.from_user.id
-    admin = ram.get_info(admin_id, admin = True)
+    id = message.from_user.id
+    if ram.check_admin(id):
+        admin = ram.get_info(id, admin = True)
     
-    video_size = int((message.video.file_size / 1024) / 1024)
-    video_file_id = message.video.file_id
-    caption = message.caption 
+        size = int((message.video.file_size / 1024) / 1024)
+        file_id = message.video.file_id 
+        caption = message.caption 
+        duration = convert(message.video.duration)
 
-    media = await bot.download_file_by_id(message.video.thumb.file_id)
-    duration = convert(message.video.duration)
-    with open("photo.jpg", "wb") as file:
-        file.write(media.getbuffer())
+        media = await bot.download_file_by_id(message.video.thumb.file_id)
+        with open("photo.jpg", "wb") as file:
+            file.write(media.getbuffer())
         thumb_url = picsum.save_photo('photo.jpg')
-        # print(thumb_url)
 
-    ram.update_a_movi_data(admin_id, video_id = video_file_id, duration = duration, size = video_size, thumb = thumb_url)
+
+        ram.update_movi_data(id, admin = True, video_id = file_id, duration = duration, thumb = thumb_url, size = size)
+        await state.set_state(movi_add.set_title)
+        await bot.send_animation(chat_id = id,
+                                 animation = open("./data/pictures/add_movi/input_title.mp4", 'rb'),
+                                 caption = "Kino nomni kiriting",
+                                 reply_markup = ibuttons.delet(back = 'back3'))
     # ram.save_movi(admin_id = admin_id, vide_id = video_file_id, duration = duration, size = video_size, phot_url = thumb_url)
-
     # await bot.delete_message(chat_id = admin_id, message_id = message.message_id)
-    await bot.send_video(video = video_file_id, caption = "||| o o o", chat_id = admin_id, reply_markup = ibuttons.change_state(head = True, next = 'next1'))
+        
 
 
