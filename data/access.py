@@ -61,6 +61,7 @@ class RAM:
     def creat_movi(self, id, lang = 'uz', admin = False):
         if admin:
             self.admin_movi[id] = {'video_id' : None,
+                                   'message_id' : None,
                               'caption' : None,
                               'title' : None,
                               'duration' : None, 
@@ -68,22 +69,28 @@ class RAM:
                               'thumb' : None,
                               'lang' : lang}
         
+        
     def delet_movi(self, id, admin = False):
-        if admin:
-            if self.admin_movi.get(id):
+        if admin and self.admin_movi.get(id) != None:
                 del self.admin_movi[id]
         
     
-    def update_movi_data(self, id, video_id = None, duration = None, size = None, thumb = None, admin = False):
-        if admin:
+    def update_movi_data(self, id, video_id = None, message_id = None, duration = None, size = None, thumb = None, admin = False):
+        if admin and self.admin_movi.get(id) != None:
+            self.admin_movi[id]['message_id'] = message_id
             self.admin_movi[id]['video_id'] = video_id
             self.admin_movi[id]['duration'] = duration
             self.admin_movi[id]['size'] =  size
             self.admin_movi[id]['thumb'] = thumb
     
     def set_title(self, id, title = None, admin = False):
-        if admin:
+        if admin and self.admin_movi.get(id) != None:
+            # print(title)
             self.admin_movi[id]['title'] = title
+    
+    def set_info(self, id, caption = None, admin = False):
+        if admin and self.admin_movi.get(id) != None:
+            self.admin_movi[id]['caption'] = caption
         
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title

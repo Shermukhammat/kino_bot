@@ -22,6 +22,7 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         file_id = message.video.file_id 
         caption = message.caption 
         duration = convert(message.video.duration)
+        message_id = message.message_id
 
         media = await bot.download_file_by_id(message.video.thumb.file_id)
         with open("photo.jpg", "wb") as file:
@@ -29,10 +30,10 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         thumb_url = picsum.save_photo('photo.jpg')
 
 
-        ram.update_movi_data(id, admin = True, video_id = file_id, duration = duration, thumb = thumb_url, size = size)
+        ram.update_movi_data(id, admin = True, message_id = message_id, duration = duration, thumb = thumb_url, size = size)
         await state.set_state(movi_add.set_title)
-        await bot.send_animation(chat_id = id,
-                                 animation = open("./data/pictures/add_movi/input_title.mp4", 'rb'),
+        await bot.send_photo(chat_id = id,
+                                 photo = open("./data/pictures/add_movi/3.jpg", 'rb'),
                                  caption = "Kino nomni kiriting",
                                  reply_markup = ibuttons.delet(back = 'back3'))
     # ram.save_movi(admin_id = admin_id, vide_id = video_file_id, duration = duration, size = video_size, phot_url = thumb_url)

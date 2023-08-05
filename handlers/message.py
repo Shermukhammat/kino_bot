@@ -1,6 +1,6 @@
 from aiogram.dispatcher import FSMContext
 from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi, movi_add
-
+from aiogram.types import InputMediaPhoto
 
 
 # @dp.message_handler(state = get_movi.get_title)
@@ -39,9 +39,23 @@ async def get_title(message : types.Message, state : FSMContext):
             ram.set_title(message.from_user.id, title = message.text, admin = True)
 
             await state.set_state(movi_add.set_info)
-            await bot.send_animation(chat_id = message.from_user.id,
-                                     animation = open("", 'rb'),
-                                    reply_markup = ibuttons.delet(back = 'back4'))
+            await bot.send_photo(chat_id = message.from_user.id,
+                                 photo = open("./data/pictures/add_movi/4.jpg", 'rb'),
+                                 caption = "Kino haqida malumot kiritasizmi?",
+                                 reply_markup = ibuttons.ask_button(back = 'back4', admin = True, yes = 'yes_info', skip = 'skip_info'))
+
+
+@dp.message_handler(state = movi_add.set_info)
+async def set_info_message_handler(message: types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        if message.text not in ["Ishchi suz"]:
+            ram.set_info(id, caption = message.text, admin = True)
+            await state.set_state(movi_add.set_thum)
+            await bot.send_photo(chat_id = message.from_user.id,
+                                 photo = open('./data/pictures/add_movi/5.jpg', 'rb'), 
+                                 caption = "Kinoga caption rasim kirtasizmi?",
+                                 reply_markup = ibuttons.ask_button(back = 'back_set_info', admin = True))
+            
 
 
 @dp.message_handler()
@@ -110,10 +124,10 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             
             elif message.text == "🎬 Kino qo'shish":
                 # await message.answer(f"{admin['name']} qanday usul bilan kino kiritmoqchisiz?", reply_markup = ibuttons.input_movi())
-                await bot.send_animation(animation = open('./data/pictures/add_movi/chose_input_type.mp4', 'rb'),
-                                         chat_id = id,
-                                         caption = "Qanday usul bilan kino kiritmoqchisiz?",
-                                         reply_markup = ibuttons.ask_movi_input())
+                await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
+                                    chat_id = id,
+                                    caption = "Qanday usul bilan kino kiritmoqchisiz?",
+                                    reply_markup = ibuttons.ask_movi_input())
 
     else:
         pass

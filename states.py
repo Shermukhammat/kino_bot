@@ -21,4 +21,5 @@ class add_movi(StatesGroup):
     set_title = State()
     set_info = State()
     set_thum = State()
+    set_save = State()
 
