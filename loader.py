@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-from login import BOT_TOKEN, CHANEL_ID, TELEGRAPH_API_KEY
+from login import BOT_TOKEN, CHANEL_ID, TELEGRAPH_API_KEY, DISCUSS_CHANEL_ID
 from data.base import Database
 from data.access import RAM
 from data.picsum import Picsum

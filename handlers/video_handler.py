@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram, my_states, get_movi, bot, picsum, ibuttons, movi_add
+from loader import db, dp, ram, my_states, get_movi, bot, picsum, ibuttons, movi_add, CHANEL_ID
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -42,3 +42,25 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         
 
 
+
+
+@dp.message_handler(content_types = ContentTypes.VIDEO)
+async def get_movi_from_hand(message : types.Message, state : FSMContext):
+    if ram.check_user(message.message_id):
+        size = int((message.video.file_size / 1024) / 1024)
+        file_id = message.video.file_id 
+        caption = message.caption 
+        duration = convert(message.video.duration)
+        message_id = message.message_id
+        
+        # creating thumb photo url
+        media = await bot.download_file_by_id(message.video.thumb.file_id)
+        with open("./data/pictures/photo.jpg", "wb") as file:
+            file.write(media.getbuffer())
+        thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
+
+        
+
+        await bot.copy_message(chat_id = CHANEL_ID,
+                               from_chat_id = message.message_id,
+                               message_id = mes)

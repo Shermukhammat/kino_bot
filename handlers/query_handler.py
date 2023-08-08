@@ -155,7 +155,12 @@ async def set_save_query_handler(query : types.CallbackQuery, state : FSMContext
                 while True:
                     n+=1
                     if ram.port:
-                        
+                        # Saving movi
+
+
+
+
+
                         await bot.send_message(chat_id = query.from_user.id, text = "Kino muvafqiyali yuklandi")
                         break
                     else:

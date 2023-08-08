@@ -71,12 +71,12 @@ class RAM:
                               'thumb' : None,
                               'lang' : lang}
         
-        
+       
     def delet_movi(self, id, admin = False):
         if admin and self.admin_movi.get(id) != None:
                 del self.admin_movi[id]
         
-    
+
     def update_movi_data(self, id, video_id = None, message_id = None, duration = None, size = None, thumb = None, admin = False):
         if admin and self.admin_movi.get(id) != None:
             self.admin_movi[id]['message_id'] = message_id
@@ -98,7 +98,9 @@ class RAM:
         if admin and self.admin_movi.get(id) != None:
             self.admin_movi[id]['thumb'] = url
             
-        
+
+    def save_movi(self, id, admin = True, message_id = None, caption = None, thum_url = None):
+        pass   
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title
 

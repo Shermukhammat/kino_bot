@@ -1,5 +1,5 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi, movi_add
+from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi, movi_add, DISCUSS_CHANEL_ID
 from aiogram.types import InputMediaPhoto
 
 
@@ -61,6 +61,16 @@ async def set_info_message_handler(message: types.Message, state : FSMContext):
 @dp.message_handler()
 async def core_message_handler(message : types.Message, state : FSMContext):
     id = message.from_user.id
+    
+    # chat = await bot.get_chat("@kino_bot_discuss")
+    # print(chat.id)
+
+    
+    # data = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
+    #                      photo = open("./data/pictures/photo.jpg", "rb"),
+    #                      caption = "Yaxshi kino 1")
+    
+    # print(data.url)
 
     if ram.check_user(id):
         # {'name': 'SHermukhammad', 'lang': 'uz', 'where': 'none', 'action': 'none', 'registred': '17.07.2023 13:47'}

@@ -12,21 +12,21 @@ class Database:
         
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
-        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'file_id', 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments');")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang');")
         
         print("database conected ...")
         
         conection.commit()
         conection.close()
 
-    def add_user_movi(self, title = None, caption = None, thumb_url = None, file_id = None, duration = None, size = None, coment = None):
+    def add_movi(self, title = None, caption = None, message_id = None, duration = None, size = None, coment_url = None, thum_url = None, lang = 'uz'):
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
 
         try:
             caption = caption.replace("'", '"')
             title = title.replace("'", '"')
-            match = f"INSERT INTO {self.movies} ('file_id', 'title', 'caption', 'file_size', 'duration', 'like', 'dislike', 'coments') VALUES ('{file_id}', '{title}', '{caption}', {size}, '{duration}', 0, 0, '{coment}');"
+            match = f"INSERT INTO {self.movies} ('id', 'title', 'caption', 'file_size', 'duration', 'like', 'dislike', 'coments', 'thum_url', 'lang') VALUES ({message_id}, '{title}', '{caption}', {size}, '{duration}', 0, 0, '{coment_url}', '{thum_url}', '{lang}');"
             # print(match)
             cursor.execute(match)
             print(f"New movi {title} added ...")
@@ -35,6 +35,33 @@ class Database:
         
         conection.commit()
         conection.close()
+
+    
+    def get_movies(self):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        movies = {}
+
+        match = f"SELECT * FROM {self.movies};"
+        for row in cursor.execute(match):
+            # print(row)
+            id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
+            movies[id] = {'id' : id, 
+                          'title' : title, 
+                          'caption' : caption, 
+                          'size' : file_size,
+                          'duration' : duration,
+                          'like' : like,
+                          'dislike' : dislike,
+                          'coments' : coments,
+                          'thum_url' : thum_url,
+                          'lang' : lang}
+            
+
+        conection.commit()
+        conection.close()
+        
+        return movies
 
 
     
@@ -96,11 +123,12 @@ class Database:
 if __name__ == '__main__':
     data_base = Database('database.db')
     # data = data_base.get_users()
-    data_base.add_user_movi(title = "Blah", 
-                            caption = "Yaxshi kino",
-                            thumb_url = "thubl htpp/:bfmef d",
-                            file_id = 'file id fjvvehf93hb2480ghi',
-                            duration = '12:20 minut',
-                            size = 100,
-                            coment = "Comentsdmfebs")
+    # data_base.add_movi(title = "y'axs'hi \"kino3",
+    #                    caption = "Yaxshi title2",
+    #                    message_id = 18,
+    #                    duration = '20:00',
+    #                    size = 100,
+    #                    coment_url = "htpp/telegram/17",
+    #                    thum_url = "htpp:/telegraph.org/1345")
+    print(data_base.get_movies())
     
