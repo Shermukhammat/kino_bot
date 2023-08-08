@@ -40,9 +40,9 @@ async def get_title(message : types.Message, state : FSMContext):
 
             await state.set_state(movi_add.set_info)
             await bot.send_photo(chat_id = message.from_user.id,
-                                 photo = open("./data/pictures/add_movi/4.jpg", 'rb'),
+                                 photo = open("./data/pictures/add_movi/ask_input_info.jpg", 'rb'),
                                  caption = "Kino haqida malumot kiritasizmi?",
-                                 reply_markup = ibuttons.ask_button(back = 'back4', admin = True, yes = 'yes_info', skip = 'skip_info'))
+                                 reply_markup = ibuttons.ask_button(back = 'back_title', admin = True, yes = 'yes_info', skip = 'skip_info'))
 
 
 @dp.message_handler(state = movi_add.set_info)
@@ -52,9 +52,9 @@ async def set_info_message_handler(message: types.Message, state : FSMContext):
             ram.set_info(id, caption = message.text, admin = True)
             await state.set_state(movi_add.set_thum)
             await bot.send_photo(chat_id = message.from_user.id,
-                                 photo = open('./data/pictures/add_movi/5.jpg', 'rb'), 
+                                 photo = open('./data/pictures/add_movi/ask_thum.jpg', 'rb'), 
                                  caption = "Kinoga caption rasim kirtasizmi?",
-                                 reply_markup = ibuttons.ask_button(back = 'back_set_info', admin = True))
+                                 reply_markup = ibuttons.ask_button(back = 'back_set_info', admin = True, yes = 'yes_thum', skip = 'skip_thum'))
             
 
 
@@ -123,7 +123,6 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                 await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
             
             elif message.text == "🎬 Kino qo'shish":
-                # await message.answer(f"{admin['name']} qanday usul bilan kino kiritmoqchisiz?", reply_markup = ibuttons.input_movi())
                 await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
                                     chat_id = id,
                                     caption = "Qanday usul bilan kino kiritmoqchisiz?",

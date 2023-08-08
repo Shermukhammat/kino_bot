@@ -57,7 +57,9 @@ class RAM:
             return respons
         self.block[id] = 0
         return 0
-
+    
+    
+    
     def creat_movi(self, id, lang = 'uz', admin = False):
         if admin:
             self.admin_movi[id] = {'video_id' : None,
@@ -91,6 +93,11 @@ class RAM:
     def set_info(self, id, caption = None, admin = False):
         if admin and self.admin_movi.get(id) != None:
             self.admin_movi[id]['caption'] = caption
+            
+    def set_thum(self, id, url = None, admin = True):
+        if admin and self.admin_movi.get(id) != None:
+            self.admin_movi[id]['thumb'] = url
+            
         
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title
@@ -101,8 +108,13 @@ class RAM:
     # def update_phot_url(self, id, photo_url = None):
     #     self.admin_a_movi[id]['thumb'] = photo_url
     
-    def get_movi(self, id):
-        return self.admin_a_movi[id]
+    def get_movi(self, id, admin = True):
+        if admin:
+            if self.admin_movi.get(id):
+                return self.admin_movi[id]
+            return {}
+        return {}
+            
     
 
 

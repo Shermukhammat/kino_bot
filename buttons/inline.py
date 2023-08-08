@@ -77,10 +77,10 @@ class Inline_buttons:
         return InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text = "⬅️ orqaga", callback_data = back)], [InlineKeyboardButton(text = "❌", callback_data = 'delet')]])
 
     
-    def save_movi(self, admin = True):
+    def save_movi(self, admin = True, back = None):
         if admin:
-            buttons = [[InlineKeyboardButton(text = "Saqlash", callback_data = "save")],
-                       [InlineKeyboardButton(text = "⬅️ orqaga", callback_data = "back_thum")],
+            buttons = [[InlineKeyboardButton(text = "📥 Saqlash", callback_data = "save"), InlineKeyboardButton(text = "🗑 O'chrish", callback_data = 'delet_movi')],
+                       [InlineKeyboardButton(text = "⬅️ orqaga", callback_data = back)],
                        [InlineKeyboardButton(text = "❌", callback_data = 'delet')]]
             return InlineKeyboardMarkup(inline_keyboard = buttons)
 
