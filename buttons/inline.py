@@ -85,6 +85,12 @@ class Inline_buttons:
             return InlineKeyboardMarkup(inline_keyboard = buttons)
 
 
+    def movi_buttons(self, url : str, last : str = ""):
+        buttons = [[InlineKeyboardButton(text = "👍", callback_data = "like"), InlineKeyboardButton(text = "👎", callback_data = 'dislike')],
+                       [InlineKeyboardButton(text = "💬 Fikirlar", callback_data = "comment", url = url)],
+                       [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
+                       [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
 
 
 
