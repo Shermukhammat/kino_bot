@@ -40,13 +40,13 @@ class Database:
     def get_movies(self):
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
-        movies = {}
+        movies = []
 
         match = f"SELECT * FROM {self.movies};"
         for row in cursor.execute(match):
             # print(row)
             id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
-            movies[id] = {'id' : id, 
+            movi =  {'id' : id, 
                           'title' : title, 
                           'caption' : caption, 
                           'size' : file_size,
@@ -56,6 +56,7 @@ class Database:
                           'coments' : coments,
                           'thum_url' : thum_url,
                           'lang' : lang}
+            movies.append(movi)
             
 
         conection.commit()

@@ -9,11 +9,14 @@ class RAM:
         self.db = database
         self.users = database.get_users()
         self.admins = database.get_admins()
+        self.movies = database.get_movies()
+        self.movies_title = [movi['title'] for movi in self.movies]
         self.admin_movi = {}
-        self.admin_a_movi = {}
+        self.user_movi = {}
+        # self.admin_a_movi = {}
         self.port = True
-
         self.block = {}
+        
         
     def check_user(self, id):
         if self.users.get(id) != None:
@@ -59,17 +62,32 @@ class RAM:
         return 0
     
     
+    def add_search_movi(self, message_id =  None, title = None, caption = None, size = None, duration = None, coments = None, thum_url = None, lang = 'uz'):
+        data = {'id' : message_id, 
+                'title' : title, 
+                'caption' : caption, 
+                'size' : size,
+                'duration' : duration,
+                'like' : 0,
+                'dislike' : 0,
+                'coments' : coments,
+                'thum_url' : thum_url,
+                'lang' : lang}
+        
+        self.movies.append(data)
+        self.movies_title.append(title)
+        
+
     
     def creat_movi(self, id, lang = 'uz', admin = False):
         if admin:
-            self.admin_movi[id] = {'video_id' : None,
-                                   'message_id' : None,
-                              'caption' : None,
-                              'title' : None,
-                              'duration' : None, 
-                              'size' : None,
-                              'thumb' : None,
-                              'lang' : lang}
+            self.admin_movi[id] = {'message_id' : None,
+                                   'caption' : None,
+                                   'title' : None,
+                                   'duration' : None, 
+                                   'size' : None,
+                                   'thumb' : None,
+                                   'lang' : lang}
         
        
     def delet_movi(self, id, admin = False):

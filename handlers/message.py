@@ -67,7 +67,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
 
     
     # data = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
-    #                      photo = open("./data/pictures/photo.jpg", "rb"),
+    #                      photo="https://picsum.photos/200",
     #                      caption = "Yaxshi kino 1")
     
     # print(data.url)
