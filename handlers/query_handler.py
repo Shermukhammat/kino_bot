@@ -233,6 +233,77 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
         elif text == 'less':
             await bot.edit_message_reply_markup(chat_id = id, message_id = message_id, reply_markup = ibuttons.menu())
     
+        
+        # Like va Dislikega jovob beruvchi qisim
+        text = text.split('.')
+        if len(text) == 3:
+            state, index, action = text[-1], int(text[-2]), text[-3]
+            movi = ram.movies[index]
+            if state == 'firs':
+                if action == 'like':
+                    db.like_movi(id = movi['id'], like = movi['like'] + 1)
+                    ram.like_movi(index)
+                    await query.answer("Sizniki Like bosdi")
+                    await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                                             dislike_state = True,  
+                                                                                             id = index, 
+                                                                                             like = movi['like'], 
+                                                                                             dislike = movi['dislike'],
+                                                                                             admin = False))
+                if action == 'dislike':
+                    db.dislike_movi(id = movi['id'], dislike = movi['dislike']+1)
+                    ram.dislike_movi(index)
+                    await query.answer("Sizniki DisLike bosdi")
+                    await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                                             like_state = True,  
+                                                                                             id = index, 
+                                                                                             like = movi['like'], 
+                                                                                             dislike = movi['dislike'],
+                                                                                             admin = False))
+            elif state == 'dis':
+                if action == 'dislike':
+                    ram.like_movi(index, incres = False)
+                    db.like_movi(id = movi['id'], like = movi['dislike'] - 1)
+
+                    db.dislike_movi(id = movi['id'], dislike = movi['dislike']+1)
+                    ram.dislike_movi(index)
+                    await query.answer("Sizniki DisLike bosdi")
+                    await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                                             like_state = True,  
+                                                                                             id = index, 
+                                                                                             like = movi['like'], 
+                                                                                             dislike = movi['dislike'],
+                                                                                             admin = False))
+                if action == 'like':
+                    await query.answer("Sizniki Like Bosgan")
+            
+            elif state == 'lik':
+                # print(action)
+                if action == 'like':
+                    ram.dislike_movi(index, incres = False)
+                    db.dislike_movi(id = movi['id'], dislike = movi['dislike']-1)
+
+                    db.like_movi(id = movi['id'], like = movi['dislike']+1)
+                    ram.like_movi(index)
+                    await query.answer("Sizniki DisLike bosdi")
+                    await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                                             dislike_state = True,  
+                                                                                             id = index, 
+                                                                                             like = movi['like'], 
+                                                                                             dislike = movi['dislike'],
+                                                                                             admin = False))
+
+                if action == 'dislike':
+                    await query.answer("Sizniki Dislike Bosgan")
+
 
     
     elif ram.check_admin(id):
