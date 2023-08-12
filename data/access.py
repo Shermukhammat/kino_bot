@@ -77,7 +77,18 @@ class RAM:
         self.movies.append(data)
         self.movies_title.append(title)
         
-
+    def like_movi(self, index : int, incres : bool = True):
+        if incres:
+            self.movies[index]['like'] += 1
+        else:
+            self.movies[index]['like'] -= 1
+    
+    def dislike_movi(self, index : int, incres : bool = True):
+        if incres:
+            self.movies[index]['dislike'] += 1
+        else:
+            self.movies[index]['dislike'] -= 1
+        
     
     def creat_movi(self, id, lang = 'uz', admin = False):
         if admin:
@@ -103,6 +114,8 @@ class RAM:
             self.admin_movi[id]['size'] =  size
             self.admin_movi[id]['thumb'] = thumb
     
+            
+
     def set_title(self, id, title = None, admin = False):
         if admin and self.admin_movi.get(id) != None:
             # print(title)

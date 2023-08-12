@@ -107,18 +107,18 @@ class Inline_buttons:
             
             # State 1
             if first_state:
-                like_callback_data = f"like.{id}"
-                dislike_callback_data = f'dislike.{id}'
+                like_callback_data = f"like.{id}.firs"
+                dislike_callback_data = f'dislike.{id}.firs'
             
             # State 2
             elif dislike_state:
-                like_callback_data = f"like"
-                dislike_callback_data = f'dislike.{id}'
+                like_callback_data = f"like.{id}.dis"
+                dislike_callback_data = f'dislike.{id}.dis'
             
             # State 3
             elif like_state:
-                like_callback_data = f"like.{id}"
-                dislike_callback_data = f'dislike'
+                like_callback_data = f"like.{id}.lik"
+                dislike_callback_data = f'dislike.{id}.lik'
             
             buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), InlineKeyboardButton(text = f" ⭐️ ", callback_data = f'favorite.{id}')],
                           [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f"🗑 O'chrish", callback_data = f'delet.{id}')],

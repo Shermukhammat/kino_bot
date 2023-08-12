@@ -69,10 +69,7 @@ class Database:
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
         
-        if incres:
-            cursor.execute(f"UPDATE {self.movies} SET like = {like} WHERE id == {id};")
-        else:
-            cursor.execute(f"UPDATE {self.movies} SET like = {like} WHERE id == {id};")
+        cursor.execute(f"UPDATE {self.movies} SET like = {like} WHERE id == {id};")
             
         conection.commit()
         conection.close()

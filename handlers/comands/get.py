@@ -35,5 +35,6 @@ async def admin(message : types.Message):
                                                                             first_state = True,  
                                                                             id = index, 
                                                                             like = movi['like'], 
-                                                                            dislike = movi['dislike']))
+                                                                            dislike = movi['dislike'],
+                                                                            admin = False))
         
