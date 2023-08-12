@@ -71,6 +71,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
     #                      caption = "Yaxshi kino 1")
     
     # print(data.url)
+    # await bot.send_video(chat_id = message.from_user.id, video = "http://88.99.56.141/Kinolar/Meg%202%20X%20480p%20O'zbek%20tilida%20(asilmedia.net).mp4")
 
     if ram.check_user(id):
         # {'name': 'SHermukhammad', 'lang': 'uz', 'where': 'none', 'action': 'none', 'registred': '17.07.2023 13:47'}

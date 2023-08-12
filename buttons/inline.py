@@ -85,12 +85,75 @@ class Inline_buttons:
             return InlineKeyboardMarkup(inline_keyboard = buttons)
 
 
-    def movi_buttons(self, url : str, last : str = ""):
-        buttons = [[InlineKeyboardButton(text = "👍", callback_data = "like"), InlineKeyboardButton(text = "👎", callback_data = 'dislike')],
-                       [InlineKeyboardButton(text = "💬 Fikirlar", callback_data = "comment", url = url)],
-                       [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
-                       [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
-        return InlineKeyboardMarkup(inline_keyboard = buttons)
+    def movi_buttons(self, coments_url : str, like : int = 0, dislike : int = 0, id : int = 0, last : str = "", dislike_state : bool = False, like_state : bool = False,first_state : bool = False, admin : bool = True, random : bool = False):
+        """_summary_
+
+        Args:
+            coments_url (str): _description_
+            like (int, optional): _description_. Defaults to 0.
+            dislike (int, optional): _description_. Defaults to 0.
+            id (int, optional): _description_. Defaults to 0.
+            last (str, optional): _description_. Defaults to "".
+            dislike_state (bool, optional): _description_. Defaults to False.
+            first_state (bool, optional): _description_. Defaults to False.
+            admin (bool, optional): _description_. Defaults to True.
+            random (bool, optional): _description_. Defaults to False.
+
+        Returns:
+            _type_: _description_
+        """
+        
+        if admin:
+            
+            # State 1
+            if first_state:
+                like_callback_data = f"like.{id}"
+                dislike_callback_data = f'dislike.{id}'
+            
+            # State 2
+            elif dislike_state:
+                like_callback_data = f"like"
+                dislike_callback_data = f'dislike.{id}'
+            
+            # State 3
+            elif like_state:
+                like_callback_data = f"like.{id}"
+                dislike_callback_data = f'dislike'
+            
+            buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), InlineKeyboardButton(text = f" ⭐️ ", callback_data = f'favorite.{id}')],
+                          [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f"🗑 O'chrish", callback_data = f'delet.{id}')],
+                          [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
+                          [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
+            return InlineKeyboardMarkup(inline_keyboard = buttons)
+        
+        else:
+            if first_state:
+                like_callback_data = f"like.{id}"
+                dislike_callback_data = f'dislike.{id}'
+            
+            # State 2
+            elif dislike_state:
+                like_callback_data = f"like"
+                dislike_callback_data = f'dislike.{id}'
+            
+            # State 3
+            elif like_state:
+                like_callback_data = f"like.{id}"
+                dislike_callback_data = f'dislike'
+            
+            buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), InlineKeyboardButton(text = f" ⭐️ ", callback_data = f'favorite.{id}')],
+                          [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f" ⚠️ SHikoyat", callback_data = f'information.{id}')],
+                          [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
+                          [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
+            return InlineKeyboardMarkup(inline_keyboard = buttons)
+            
+
+
+
+
+
+
+
 
 
 

@@ -14,7 +14,7 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang');")
         
-        print("database conected ...")
+        print("database conected ...", end = '\r')
         
         conection.commit()
         conection.close()
@@ -63,6 +63,30 @@ class Database:
         conection.close()
         
         return movies
+    
+    def like_movi(self, id : int = 0, like : int = 0, incres : bool = True):
+        #UPDATE movies SET 'like' = 10 WHERE id == 2766;
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        
+        if incres:
+            cursor.execute(f"UPDATE {self.movies} SET like = {like} WHERE id == {id};")
+        else:
+            cursor.execute(f"UPDATE {self.movies} SET like = {like} WHERE id == {id};")
+            
+        conection.commit()
+        conection.close()
+    
+    def dislike_movi(self, id : int = 0, dislike : int = 0):
+        #UPDATE movies SET 'like' = 10 WHERE id == 2766;
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        
+        cursor.execute(f"UPDATE {self.movies} SET dislike = {dislike} WHERE id == {id};")
+        
+        conection.commit()
+        conection.close()
+    
 
 
     

@@ -49,13 +49,14 @@ class Google:
 
 
 if __name__ == '__main__':
-    db = Database("./data/database.db")
-    ram = RAM(db)
+    pass
+    # db = Database("./data/database.db")
+    # ram = RAM(db)
     
-    google = Google(ram = ram)
-    indexs = google.search_movies(match = "sev", limt = 1)
-    for index in indexs:
-        print(ram.movies_title[index])
+    # google = Google(ram = ram)
+    # indexs = google.search_movies(match = "sev", limt = 1)
+    # for index in indexs:
+    #     print(ram.movies_title[index])
     
     
     

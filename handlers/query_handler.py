@@ -243,7 +243,7 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
         if admin['where'] == 'none':
             admin['where'] = 'head_menu'
             # await query.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
-            await bot.send_message(text = "salom", chat_id = id, reply_markup = dbuttons.menu(admin = True))
+            await bot.send_message(text = "Bosh menu", chat_id = id, reply_markup = dbuttons.menu(admin = True))
 
         # elif admin['where'] == 'head_menu':
         #     pass
@@ -258,7 +258,40 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                                               message_id = query.message.message_id,
                                               media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinoyingzni tilni tanlang"),
                                               reply_markup = ibuttons.chose_lang(back = 'back_media'))
+        
+        text = text.split('.')
+        if len(text) == 2:
+            if text[0] == 'like':
+                index = int(text[1])
+                movi = ram.movies[index]
 
+                db.like_movi(id = movi['id'], like = movi['like'] + 1)
+                await query.answer("Sizniki Like bosdi")
+                await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                    message_id = query.message.message_id,
+                                                    reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                                        dislike_state = True,  
+                                                                                        id = index, 
+                                                                                        like = movi['like']+1, 
+                                                                                        dislike = movi['dislike']))
+ 
+            elif text[0] == 'dislike':
+                index = int(text[1])
+                movi = ram.movies[index]
 
+                db.dislike_movi(id = movi['id'], dislike = movi['dislike'] + 1)
+                
+  
+                await query.answer("Sizniki Dislike bosdi")
+                await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                    message_id = query.message.message_id,
+                                                    reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                                        dislike_state = True,  
+                                                                                        id = index, 
+                                                                                        like = movi['like'], 
+                                                                                        dislike = movi['dislike']+1))
+
+       
+        
     else:
-        print("Sizniki  utmagan")
+        await query.answer("Sizniki ruyxatdan utmaga")
