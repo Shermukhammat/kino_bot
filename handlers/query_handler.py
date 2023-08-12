@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from loader import dp, db, ram, bot, ibuttons, dbuttons, my_states, get_movi, movi_add, DISCUSS_CHANEL_ID, CHANEL_ID
 import time
 import asyncio
-
+from random import randint
 
 
 
@@ -232,8 +232,44 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
 
         elif text == 'less':
             await bot.edit_message_reply_markup(chat_id = id, message_id = message_id, reply_markup = ibuttons.menu())
-    
-        
+
+        elif text == 'random':
+            index = randint(0, len(ram.movies)-1)
+            movi = ram.movies[index]
+
+            await bot.copy_message(chat_id = query.from_user.id,
+                                   from_chat_id = CHANEL_ID,
+                                   message_id = movi['id'],
+                                   reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                            first_state = True,  
+                                                                            id = index, 
+                                                                            like = movi['like'], 
+                                                                            dislike = movi['dislike'],
+                                                                            admin = False,
+                                                                            randomly = True))
+        elif text == 'random2':
+            index = randint(0, len(ram.movies)-1)
+            movi = ram.movies[index]
+
+            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                message_id = query.message.message_id,
+                                                reply_markup = None)
+            await bot.copy_message(chat_id = query.from_user.id,
+                                   from_chat_id = CHANEL_ID,
+                                   message_id = movi['id'],
+                                   reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                                                            first_state = True,  
+                                                                            id = index, 
+                                                                            like = movi['like'], 
+                                                                            dislike = movi['dislike'],
+                                                                            admin = False,
+                                                                            randomly = True))
+            
+
+
+
+
+
         # Like va Dislikega jovob beruvchi qisim
         text = text.split('.')
         if len(text) == 3:
@@ -303,6 +339,7 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
 
                 if action == 'dislike':
                     await query.answer("Sizniki Dislike Bosgan")
+
 
 
     
