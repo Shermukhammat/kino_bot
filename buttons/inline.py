@@ -136,7 +136,6 @@ class Inline_buttons:
             
             buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), InlineKeyboardButton(text = f" ⭐️ ", callback_data = f'favorite.{id}')],
                           [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f" ⚠️ SHikoyat", callback_data = f'information.{id}')],
-                          [InlineKeyboardButton(text = "🎲 Tasodifiy", callback_data = "random")],
                           [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
                           [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
 

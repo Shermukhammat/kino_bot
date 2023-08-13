@@ -1,7 +1,8 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram, my_states, get_movi, bot, picsum, ibuttons, movi_add, CHANEL_ID
+from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, add_movi_avto
+import csv
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -44,28 +45,34 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
 
 
 
-# @dp.message_handler(content_types = ContentTypes.VIDEO)
-# async def video_handler(message : types.Message, state : FSMContext):
-#     if ram.check_admin(message.from_user.id):
-#         size = int((message.video.file_size / 1024) / 1024)
-#         file_id = message.video.file_id 
-#         caption = message.caption 
-#         duration = convert(message.video.duration)
-#         message_id = message.message_id
+@dp.message_handler(content_types = ContentTypes.VIDEO, state = add_movi_avto.input_movies)
+async def get_movi_from_hand(message : types.Message, state : FSMContext):
+    id = message.from_user.id
+    if ram.check_admin(id):
+        admin = ram.get_info(id, admin = True)
+    
+        size = int((message.video.file_size / 1024) / 1024)
+        file_id = message.video.file_id 
+        caption = message.caption
+        duration = convert(message.video.duration)
+        message_id = message.message_id 
         
-#         # creating thumb photo url
-#         media = await bot.download_file_by_id(message.video.thumb.file_id)
-#         with open("./data/pictures/photo.jpg", "wb") as file:
-#             file.write(media.getbuffer())
-#         thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
+        caption = caption.replace(",", "0ver0")
+        # with open("movies.csv", 'w') as file:
+        #     file.write(f"{caption},{size}\n")
 
-        
 
-#         movi_data = await bot.copy_message(chat_id = CHANEL_ID,
-#                                from_chat_id = message.from_user.id,
-#                                message_id = message.message_id,
-#                                caption = "yaxshi kino 999\n@kino_qidruvchi_robot")
-        
-#         message_id = movi_data.message_id
-        
+        with open('movies.csv', 'a', newline='\n') as csvfile:
+            writer = csv.writer(csvfile)
+            new_row = [caption, size]  # Replace with the actual values for the new row
+            writer.writerow(new_row)
+
+        # creating thumb photo url
+        # media = await bot.download_file_by_id(message.video.thumb.file_id)
+        # with open("./data/pictures/photo.jpg", "wb") as file:
+        #     file.write(media.getbuffer())
+        # thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
+
+
+
         

@@ -12,6 +12,7 @@ class RAM:
         self.movies = database.get_movies()
         self.movies_title = [movi['title'] for movi in self.movies]
         self.admin_movi = {}
+        self.admin_movies = {}
         self.user_movi = {}
         # self.admin_a_movi = {}
         self.port = True
@@ -131,7 +132,17 @@ class RAM:
             
 
     def save_movi(self, id, admin = True, message_id = None, caption = None, thum_url = None):
-        pass   
+        pass
+
+
+    def admin_movies_set_lang(self, lang : str = 'uz', admin_id : int = None):
+        if self.admin_movie.get(admin_id):
+            self.admin_movies[admin_id]['lang'] = lang
+        else:
+            self.admin_movies[admin_id] = {'movies' : [], 'lang' : lang}
+    
+    def admin_movies_add_movi(self, admin_id : int = None, movi_id : int = None):
+        pass
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title
 

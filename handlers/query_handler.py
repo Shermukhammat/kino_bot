@@ -1,13 +1,46 @@
 from aiogram import types
 from aiogram.types import InputMediaPhoto, InputMediaAnimation
 from aiogram.dispatcher import FSMContext
-from loader import dp, db, ram, bot, ibuttons, dbuttons, my_states, get_movi, movi_add, DISCUSS_CHANEL_ID, CHANEL_ID
+from loader import dp, db, ram, bot, ibuttons, dbuttons, movi_add, add_movi_avto, DISCUSS_CHANEL_ID, CHANEL_ID
 import time
 import asyncio
 from random import randint
 
+cheet = {'uz' : "o'zbek", 'en' : "ingliz", 'ru' : "rus"}
 
+@dp.callback_query_handler(state = add_movi_avto.input_movies)
+async def chose_lang_query(query : types.CallbackQuery, state : FSMContext):
+    if ram.check_admin(query.from_user.id):
+        if query.data == "back_chose_lang":
+            await state.set_state(add_movi_avto.chose_lang)
+            await bot.edit_message_media(chat_id = query.from_user.id,
+                                         message_id = query.message.message_id,
+                                         media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinolarni qaysi tilda kiritmoqchisiz?"),
+                                         reply_markup = ibuttons.chose_lang(back = 'back_media'))  
 
+        elif query.data == 'delet':
+            await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+
+@dp.callback_query_handler(state = add_movi_avto.chose_lang)
+async def chose_lang_query(query : types.CallbackQuery, state : FSMContext):
+    if ram.check_admin(query.from_user.id):
+        if query.data in ['uz', 'en', 'ru']:
+            await query.answer(f"Siz {cheet[query.data]} tilni tanladingiz")
+
+            await state.set_state(add_movi_avto.input_movies)
+            await bot.edit_message_media(chat_id = query.from_user.id,
+                                         message_id = query.message.message_id,
+                                         media = InputMediaPhoto(open('./data/pictures/add_movi/send_movi.jpg', 'rb'), caption = "Kinolaringzni tashlang"),
+                                         reply_markup = ibuttons.delet(back = 'back_chose_lang'))
+        
+        elif query.data == 'back_media':
+            await state.finish()
+            await bot.edit_message_media(chat_id = query.from_user.id,
+                                         message_id = query.message.message_id,
+                                         media = InputMediaPhoto(open('./data/pictures/add_movi/select_input_type.jpg', 'rb'), caption = "Qanday usul bilan kino kiritmoqchisiz?"),
+                                         reply_markup = ibuttons.ask_movi_input())
+        elif query.data == 'delet':
+            await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
 
 @dp.callback_query_handler(state = movi_add.chose_lang)
 async def chose_lang_query(query : types.CallbackQuery, state : FSMContext):
@@ -15,7 +48,7 @@ async def chose_lang_query(query : types.CallbackQuery, state : FSMContext):
         if query.data in ['uz', 'en', 'ru']:
             ram.creat_movi(query.from_user.id, lang = query.data, admin = True) # Creating movi in ram
 
-            cheet = {'uz' : "o'zbek", 'en' : "ingliz", 'ru' : "rus"}
+            
             await query.answer(f"Siz {cheet[query.data]} tilni tanladingiz")
             await state.set_state(movi_add.set_video)
             await bot.edit_message_media(chat_id = query.from_user.id,
@@ -366,6 +399,12 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                                               message_id = query.message.message_id,
                                               media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinoyingzni tilni tanlang"),
                                               reply_markup = ibuttons.chose_lang(back = 'back_media'))
+            elif text == 'avto':
+                await state.set_state(add_movi_avto.chose_lang)
+                await  bot.edit_message_media(chat_id = id,
+                                              message_id = query.message.message_id,
+                                              media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinolarni qaysi tilda kiritmoqchisiz?"),
+                                              reply_markup = ibuttons.chose_lang(back = 'back_media'))
         
         text = text.split('.')
         # print(text)
@@ -435,36 +474,6 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                 
 
 
-            # if text[0] == 'like':
-            #     index = int(text[1])
-            #     movi = ram.movies[index]
-
-            #     db.like_movi(id = movi['id'], like = movi['like'] + 1)
-            #     await query.answer("Sizniki Like bosdi")
-            #     await bot.edit_message_reply_markup(chat_id = query.from_user.id,
-            #                                         message_id = query.message.message_id,
-            #                                         reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
-            #                                                                             dislike_state = True,  
-            #                                                                             id = index, 
-            #                                                                             like = movi['like']+1, 
-            #                                                                             dislike = movi['dislike']))
- 
-            # elif text[0] == 'dislike':
-            #     index = int(text[1])
-            #     movi = ram.movies[index]
-
-            #     db.dislike_movi(id = movi['id'], dislike = movi['dislike'] + 1)
-                
-  
-            #     await query.answer("Sizniki Dislike bosdi")
-            #     await bot.edit_message_reply_markup(chat_id = query.from_user.id,
-            #                                         message_id = query.message.message_id,
-            #                                         reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
-            #                                                                             dislike_state = True,  
-            #                                                                             id = index, 
-            #                                                                             like = movi['like'], 
-            #                                                                             dislike = movi['dislike']+1))
-        
        
         
     else:

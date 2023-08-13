@@ -23,3 +23,6 @@ class add_movi(StatesGroup):
     set_thum = State()
     set_save = State()
 
+class Add_Movi_Avto(StatesGroup):
+    chose_lang = State()
+    input_movies = State()
