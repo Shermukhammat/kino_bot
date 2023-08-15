@@ -26,3 +26,7 @@ class add_movi(StatesGroup):
 class Add_Movi_Avto(StatesGroup):
     chose_lang = State()
     input_movies = State()
+
+
+class Main_States(StatesGroup):
+    input_avto_movi = State()

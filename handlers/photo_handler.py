@@ -25,3 +25,4 @@ async def catch_phot_caption(message : types.Message, state : FSMContext):
                          photo = open("./data/pictures/add_movi/save_movi.jpg", 'rb'),
                          caption = f"Caption phot qo'shldi", 
                          reply_markup = ibuttons.save_movi(back = 'back_set_thum'))
+    

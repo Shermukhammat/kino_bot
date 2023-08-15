@@ -136,13 +136,19 @@ class RAM:
 
 
     def admin_movies_set_lang(self, lang : str = 'uz', admin_id : int = None):
-        if self.admin_movie.get(admin_id):
+        if self.admin_movies.get(admin_id):
             self.admin_movies[admin_id]['lang'] = lang
         else:
             self.admin_movies[admin_id] = {'movies' : [], 'lang' : lang}
     
-    def admin_movies_add_movi(self, admin_id : int = None, movi_id : int = None):
-        pass
+    def admin_movies_add(self, admin_id : int = None, movi_id : int = None, caption : str = None, duration : str = None, size : int = None, thumbl_url : str = None):
+        if self.admin_movies.get(admin_id):
+            data = {'message_id' : movi_id,
+                    'caption' : caption,
+                    'duration' : duration, 
+                    'size' : size,
+                    'thumb' : thumbl_url}
+            self.admin_movies[admin_id]['lang']['movies'].append(data)
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title
 

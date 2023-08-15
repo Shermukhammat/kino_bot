@@ -39,3 +39,19 @@ class Defolt_buttons:
                        [KeyboardButton(text = "💾♻️ Saqlash"), KeyboardButton(text = "🗑♻️ O'chrish")],
                        [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]]
             return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+        
+    def chose_movi_input_type(self, admin : bool = True):
+        if admin:
+            buttons = [[KeyboardButton(text = '♻️ Avtomatik'), KeyboardButton(text = "👊 Qo'lda")],
+                       [KeyboardButton(text = "⬅️ Orqaga")]]
+            return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+        
+    def chose_lang(self):
+        buttons = [[KeyboardButton(text = "🇺🇿 O'zbekcha"), KeyboardButton(text = "🇷🇺 Ruscha"), KeyboardButton(text = "🇬🇧 Inglizcha")],
+                   [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]]
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+    
+    def avto_input_movi_menu(self):
+        buttons = [[KeyboardButton(text = "🛠 Ishlov berish")],
+                   [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]]
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)

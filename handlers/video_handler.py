@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, add_movi_avto
+from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, add_movi_avto, main_states
 import csv
 
 def convert(seconds):
@@ -45,33 +45,31 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
 
 
 
-@dp.message_handler(content_types = ContentTypes.VIDEO, state = add_movi_avto.input_movies)
+@dp.message_handler(content_types = ContentTypes.VIDEO, state = main_states.input_avto_movi)
 async def get_movi_from_hand(message : types.Message, state : FSMContext):
     id = message.from_user.id
     if ram.check_admin(id):
         admin = ram.get_info(id, admin = True)
     
         size = int((message.video.file_size / 1024) / 1024)
-        file_id = message.video.file_id 
-        caption = message.caption
-        duration = convert(message.video.duration)
-        message_id = message.message_id 
+
+        if size >= 300:
+            file_id = message.video.file_id 
+            caption = message.caption
+            duration = convert(message.video.duration)
+            message_id = message.message_id 
         
-        caption = caption.replace(",", "0ver0")
-        # with open("movies.csv", 'w') as file:
-        #     file.write(f"{caption},{size}\n")
 
+            # creating thumb photo url
+            media = await bot.download_file_by_id(message.video.thumb.file_id)
+            with open("./data/pictures/photo.jpg", "wb") as file:
+                file.write(media.getbuffer())
+            thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
 
-        with open('movies.csv', 'a', newline='\n') as csvfile:
-            writer = csv.writer(csvfile)
-            new_row = [caption, size]  # Replace with the actual values for the new row
-            writer.writerow(new_row)
-
-        # creating thumb photo url
-        # media = await bot.download_file_by_id(message.video.thumb.file_id)
-        # with open("./data/pictures/photo.jpg", "wb") as file:
-        #     file.write(media.getbuffer())
-        # thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
+            ram.admin_movies_add(admin_id = id)
+        
+        else:
+            await message.answer("Film xajmi 300 Mb dan kam")
 
 
 

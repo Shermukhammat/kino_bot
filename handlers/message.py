@@ -1,5 +1,5 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi, movi_add, DISCUSS_CHANEL_ID
+from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi, movi_add, DISCUSS_CHANEL_ID, main_states
 from aiogram.types import InputMediaPhoto
 
 
@@ -55,6 +55,24 @@ async def set_info_message_handler(message: types.Message, state : FSMContext):
                                  photo = open('./data/pictures/add_movi/ask_thum.jpg', 'rb'), 
                                  caption = "Kinoga caption rasim kirtasizmi?",
                                  reply_markup = ibuttons.ask_button(back = 'back_set_info', admin = True, yes = 'yes_thum', skip = 'skip_thum'))
+        
+
+@dp.message_handler(state = main_states.input_avto_movi)
+async def input_avto_movi_message_handler(message: types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        admin = ram.get_info(message.from_user.id, admin = True)
+        if message.text == "⬅️ Orqaga":
+            await state.finish()
+            admin['where'] = 'chose_alang'
+            await bot.send_photo(chat_id = message.from_user.id,
+                                 photo = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), 
+                                 caption = "Kinolarni qaysi tilda kiritmoqchisiz?",
+                                 reply_markup = dbuttons.chose_lang())
+        
+        elif message.text == "🪓 Bekor qilish":
+            await state.finish()
+            admin['where'] = 'media'
+            await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
             
 
 
@@ -134,10 +152,45 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                 await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
             
             elif message.text == "🎬 Kino qo'shish":
+                admin['where'] = 'chose_mtype'
                 await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
                                     chat_id = id,
                                     caption = "Qanday usul bilan kino kiritmoqchisiz?",
-                                    reply_markup = ibuttons.ask_movi_input())
+                                    reply_markup = dbuttons.chose_movi_input_type())
+        
+        elif admin['where'] == 'chose_mtype':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'media'
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+
+            elif message.text == '♻️ Avtomatik':
+                admin['where'] = 'chose_alang'
+                await bot.send_photo(chat_id = message.from_user.id,
+                                         photo = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), 
+                                         caption = "Kinolarni qaysi tilda kiritmoqchisiz?",
+                                         reply_markup = dbuttons.chose_lang())
+        
+        elif admin['where'] == 'chose_alang':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'chose_mtype'
+                await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
+                                    chat_id = id,
+                                    caption = "Qanday usul bilan kino kiritmoqchisiz?",
+                                    reply_markup = dbuttons.chose_movi_input_type())
+            
+            elif message.text == "🪓 Bekor qilish":
+                admin['where'] = 'media'
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+            
+            elif message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
+                cheet = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}
+                ram.admin_movies_set_lang(lang = cheet[message.text], admin_id = message.from_user.id)
+
+                await state.set_state(main_states.input_avto_movi)
+                await bot.send_photo(chat_id = message.from_user.id,
+                                     photo = open('./data/pictures/add_movi/send_movi.jpg', 'rb'), 
+                                     caption = "Kinolaringzni tashlang",
+                                     reply_markup = dbuttons.avto_input_movi_menu())
 
     else:
         pass
