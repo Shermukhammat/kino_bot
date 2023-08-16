@@ -12,6 +12,7 @@ class RAM:
         self.movies = database.get_movies()
         self.movies_title = [movi['title'] for movi in self.movies]
         self.admin_movi = {}
+        self.admins_input_movi_lang = {}
         self.admin_movies = {}
         self.user_movi = {}
         # self.admin_a_movi = {}
@@ -136,19 +137,23 @@ class RAM:
 
 
     def admin_movies_set_lang(self, lang : str = 'uz', admin_id : int = None):
-        if self.admin_movies.get(admin_id):
-            self.admin_movies[admin_id]['lang'] = lang
-        else:
-            self.admin_movies[admin_id] = {'movies' : [], 'lang' : lang}
+        self.admins_input_movi_lang[admin_id] = lang
+
     
     def admin_movies_add(self, admin_id : int = None, movi_id : int = None, caption : str = None, duration : str = None, size : int = None, thumbl_url : str = None):
-        if self.admin_movies.get(admin_id):
+        if self.admins_input_movi_lang.get(admin_id):
             data = {'message_id' : movi_id,
                     'caption' : caption,
                     'duration' : duration, 
                     'size' : size,
-                    'thumb' : thumbl_url}
-            self.admin_movies[admin_id]['lang']['movies'].append(data)
+                    'thumb' : thumbl_url,
+                    'lang' : self.admins_input_movi_lang[admin_id]}
+            
+            if self.admin_movies.get(admin_id):
+                self.admin_movies[admin_id].append(data)
+            else:
+               self.admin_movies[admin_id] = [data]
+            
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title
 

@@ -12,21 +12,21 @@ class Database:
         
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
-        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang');")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang', 'mode');")
         
         print("database conected ...", end = '\r')
         
         conection.commit()
         conection.close()
 
-    def add_movi(self, title = None, caption = None, message_id = None, duration = None, size = None, coment_url = None, thum_url = None, lang = 'uz'):
+    def add_movi(self, title = None, caption = None, message_id = None, duration = None, size = None, coment_url = None, thum_url = None, lang = 'uz', mode : str = 'hand'):
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
 
         try:
             caption = caption.replace("'", '"')
             title = title.replace("'", '"')
-            match = f"INSERT INTO {self.movies} ('id', 'title', 'caption', 'file_size', 'duration', 'like', 'dislike', 'coments', 'thum_url', 'lang') VALUES ({message_id}, '{title}', '{caption}', {size}, '{duration}', 0, 0, '{coment_url}', '{thum_url}', '{lang}');"
+            match = f"INSERT INTO {self.movies} ('id', 'title', 'caption', 'file_size', 'duration', 'like', 'dislike', 'coments', 'thum_url', 'lang', 'mode') VALUES ({message_id}, '{title}', '{caption}', {size}, '{duration}', 0, 0, '{coment_url}', '{thum_url}', '{lang}', '{mode}');"
             # print(match)
             cursor.execute(match)
             print(f"New movi {title} added ...")

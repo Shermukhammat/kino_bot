@@ -1,8 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, add_movi_avto, main_states
-import csv
+from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, main_states, title_finder, info_cleaner
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -54,19 +53,29 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         size = int((message.video.file_size / 1024) / 1024)
 
         if size >= 300:
-            file_id = message.video.file_id 
+            # file_id = message.video.file_id 
             caption = message.caption
-            duration = convert(message.video.duration)
-            message_id = message.message_id 
-        
+    
+            
+            title = title_finder(caption)
+            if title:
+                duration = convert(message.video.duration)
+                message_id = message.message_id
 
-            # creating thumb photo url
-            media = await bot.download_file_by_id(message.video.thumb.file_id)
-            with open("./data/pictures/photo.jpg", "wb") as file:
-                file.write(media.getbuffer())
-            thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
 
-            ram.admin_movies_add(admin_id = id)
+                # creating thumb photo url
+                media = await bot.download_file_by_id(message.video.thumb.file_id)
+                with open("./data/pictures/photo.jpg", "wb") as file:
+                    file.write(media.getbuffer())
+                thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
+                info = info_cleaner(caption, bot = "@kino_qidiruvchi_robot")
+
+                ram.admin_movies_add(admin_id = id, 
+                                     movi_id = message_id, 
+                                     caption = info, 
+                                     duration = duration,
+                                     size = size,
+                                     thumbl_url = thumb_url)
         
         else:
             await message.answer("Film xajmi 300 Mb dan kam")
