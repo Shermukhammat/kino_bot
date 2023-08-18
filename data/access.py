@@ -153,7 +153,18 @@ class RAM:
                 self.admin_movies[admin_id].append(data)
             else:
                self.admin_movies[admin_id] = [data]
+    
+    def get_admin_movies(self, id : int):
+        if self.admin_movies.get(id):
+            return self.admin_movies[id]
+        else:
+            return []
+
+    def clean_admin_movies(self, id : int):
+        if self.admin_movies.get(id):
+            self.admin_movies[id] = []
             
+
     # def update_title(self, id, title):
     #     self.admin_a_movi[id]['title'] = title
 

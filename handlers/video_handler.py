@@ -62,7 +62,6 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
                 duration = convert(message.video.duration)
                 message_id = message.message_id
 
-
                 # creating thumb photo url
                 media = await bot.download_file_by_id(message.video.thumb.file_id)
                 with open("./data/pictures/photo.jpg", "wb") as file:
@@ -76,9 +75,14 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
                                      duration = duration,
                                      size = size,
                                      thumbl_url = thumb_url)
+                
+                # print(ram.admin_movies)
+                await message.reply("Kino savatga qo'shildi")
+            else:
+                await message.reply("ℹ️❌ kinoni nomi captiondan topilmadi")
         
         else:
-            await message.answer("Film xajmi 300 Mb dan kam")
+            await message.reply("Film xajmi 300 Mb dan kam")
 
 
 

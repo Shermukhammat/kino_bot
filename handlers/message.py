@@ -1,7 +1,8 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, db, ram, bot, dbuttons, ibuttons, my_states, get_movi, movi_add, DISCUSS_CHANEL_ID, main_states
+from loader import types, dp, db, ram, bot, dbuttons, ibuttons, movi_add, DISCUSS_CHANEL_ID, main_states, CHANEL_ID, info_cleaner, title_finder
 from aiogram.types import InputMediaPhoto
-
+import asyncio
+from random import randint 
 
 # @dp.message_handler(state = get_movi.get_title)
 # async def get_title(message : types.Message, state : FSMContext):
@@ -56,7 +57,7 @@ async def set_info_message_handler(message: types.Message, state : FSMContext):
                                  caption = "Kinoga caption rasim kirtasizmi?",
                                  reply_markup = ibuttons.ask_button(back = 'back_set_info', admin = True, yes = 'yes_thum', skip = 'skip_thum'))
         
-
+n = 0
 @dp.message_handler(state = main_states.input_avto_movi)
 async def input_avto_movi_message_handler(message: types.Message, state : FSMContext):
     if ram.check_admin(message.from_user.id):
@@ -73,6 +74,66 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
             await state.finish()
             admin['where'] = 'media'
             await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+        
+        elif message.text == "🛠 Ishlov berish":
+            movies = ram.get_admin_movies(message.from_user.id)
+
+            if len(movies) != 0:
+                ram.clean_admin_movies(message.from_user.id)
+                await state.finish()
+                admin['where'] = 'media'
+                await message.answer(f"Kinolarga ishlov berish boshlandi. Kinolar soni {len(movies)} ta\n📂 Media menyusi", reply_markup = dbuttons.media())
+
+                # Starting movi add to dataset
+                
+                
+                global n
+                for movi in movies:
+                    if n >= 20:
+                        # sleep_time = randint()
+                        await message.answer("Kinolar soni 20 taga yetdi! 30 sonyadan keyin proses davom etadi")
+                        await asyncio.sleep(30)
+                        n = 0
+                    n+=1
+
+                    # FIND DATA AND CLEN INFO
+                    title = title_finder(movi['caption'])
+                    caption = info_cleaner(movi['caption'], bot = "@kino_qidiruvchi_robot")
+
+                    # COPY THE MOVI
+                    data = await bot.copy_message(message_id = movi['message_id'],
+                                                      chat_id = CHANEL_ID,
+                                                      from_chat_id = message.from_user.id,
+                                                      caption = caption)
+                    
+                    data2 = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
+                                                    photo = movi['thumb'],
+                                                    caption = caption)
+                    
+                    db.add_movi(title = title,
+                                caption = caption,
+                                message_id = data.message_id,
+                                duration = movi['duration'],
+                                size = movi['size'],
+                                coment_url = data2.url,
+                                thum_url = movi['thumb'],
+                                lang = movi['lang'],
+                                mode = 'avto')
+                    
+                    ram.add_search_movi(message_id = data.message_id,
+                                        title = title,
+                                        caption = caption,
+                                        size = movi['size'],
+                                        duration = movi['duration'],
+                                        coments = data2.url,
+                                        thum_url = movi['thumb'])
+                
+                await message.answer("Ishlov berish tugadi")
+
+
+
+            else:
+                await message.reply("Iltimos avval kino tashlang")
             
 
 
