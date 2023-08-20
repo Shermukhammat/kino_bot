@@ -8,8 +8,10 @@ class RAM:
     def __init__(self, database = None):
         self.db = database
         self.users = database.get_users()
+        self.users_count = len(self.users)
         self.admins = database.get_admins()
         self.movies = database.get_movies()
+        self.movies_count = len(self.movies)
         self.movies_title = [movi['title'] for movi in self.movies]
         self.admin_movi = {}
         self.admins_input_movi_lang = {}
@@ -19,7 +21,12 @@ class RAM:
         self.port = True
         self.block = {}
         
-        
+
+    def get_bot_info(self):
+        return f"Bot Foydalanuvchilar soni : {self.users_count}\nJami kinolar soni {self.movies_count}\nJami Seryallar soni : coming son ...\n\n@kino_qidiruvchi_robot"
+
+
+
     def check_user(self, id):
         if self.users.get(id) != None:
             return True
@@ -35,6 +42,7 @@ class RAM:
         # print(data)
         if False == admin:
             self.users[id] = data
+            self.users_count += 1
             self.db.registir(id = id, name = name, registred = now(), lang = lang)
         else:
             del self.users[id]
@@ -42,11 +50,14 @@ class RAM:
             self.db.registir(id = id, name = name, registred = now(), lang = lang, admin = True)
         
     
-    def get_info(self, id, admin = False):
+    def get_info(self, id, admin = True):
         if not admin:
             return self.users[id]
         else:
             return self.admins[id]
+    
+    def get_user(self, id : int = None):
+        return self.users[id]
 
     def bloc_user(self, id):
         respons = self.block.get(id)
@@ -78,6 +89,7 @@ class RAM:
         
         self.movies.append(data)
         self.movies_title.append(title)
+        self.movies_count += 1
         
     def like_movi(self, index : int, incres : bool = True):
         if incres:

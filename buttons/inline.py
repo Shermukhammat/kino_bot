@@ -54,6 +54,15 @@ class Inline_buttons:
             
             return InlineKeyboardMarkup(inline_keyboard = buttons)
     
+    def manual_menu(self, admin : bool = False, back : str = 'back'):
+        if admin:
+            pass
+        
+        buttons = [[InlineKeyboardButton(text = "⬅️ Orqaga", callback_data = back)],
+                   [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = "")]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+    
+
     def chose_lang(self, back = 'back'): #⬅️
         buttons = [[InlineKeyboardButton(text = 'O\'zbekcha', callback_data = 'uz'), InlineKeyboardButton(text = 'Ruscha', callback_data = 'ru'), InlineKeyboardButton(text = 'Inglizcha', callback_data = 'en')],
                    [InlineKeyboardButton(text = '⬅️ orqaga', callback_data = back)],

@@ -4,59 +4,144 @@ from aiogram.types import InputMediaPhoto
 import asyncio
 from random import randint 
 
-# @dp.message_handler(state = get_movi.get_title)
-# async def get_title(message : types.Message, state : FSMContext):
-    # id = message.from_user.id
-
-    # ram.update_title(id, message.text)
-    # movie = ram.get_movi(id)
-    # # await state.set_state(get_movi.get_caption)
-    # await bot.send_video(video = movie['video_id'], 
-    #                      caption = f"| | o o\nkino nomi: `{message.text}`", 
-    #                      chat_id = id,
-    #                      reply_markup = ibuttons.change_state(next = 'next2', back = 'back2'))
 
 
-# @dp.message_handler(state = get_movi.get_caption)
-# async def get_caption(message : types.Message, state : FSMContext):
-    # id = message.from_user.id
-
-    # ram.update_caption(id, message.text)
-    # movie = ram.get_movi(id)
-
-    # await bot.send_video(video = movie['video_id'],
-    #                      chat_id = id,
-    #                      caption = f"Kino nomi: {movie['title']}\n{movie['caption']}",
-    #                      reply_markup = ibuttons.change_state(next = 'next3', back = 'back3'))
-    # await message.answer("Kinoga photo caption qo'shishishni xoxlaysizmi?", reply_markup = ibuttons.photo_caption())
-
-    # print(ram.movies[id])    
-
+@dp.message_handler(state = movi_add.set_video)
+async def set_video_mesage_handler(message : types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        admin = ram.get_info(message.from_user.id, admin = True)
+        if message.text == "⬅️ Orqaga":
+            await state.finish()
+            admin['where'] = 'chose_hlang'
+            await message.answer("Kinoyingzni tilni tanlang", reply_markup = dbuttons.chose_lang())
+        
+        elif message.text == "🪓 Bekor qilish":
+                await state.finish()
+                admin['where'] = 'media'
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
 
 @dp.message_handler(state = movi_add.set_title)
 async def get_title(message : types.Message, state : FSMContext):
     if ram.check_admin(message.from_user.id):
-        if message.text not in ["Ishchi so'zla"]:
+        if message.text == "⬅️ Orqaga":
+            await state.set_state(movi_add.set_video)
+            await message.answer("Kinoyingzni tashlang", reply_markup = dbuttons.input_video())
+            
+        elif message.text == "🪓 Bekor qilish":
+                admin = ram.get_info(message.from_user.id, admin = True)
+                admin['where'] = 'media'
+                await state.finish()
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+        
+        else:
             ram.set_title(message.from_user.id, title = message.text, admin = True)
-
             await state.set_state(movi_add.set_info)
-            await bot.send_photo(chat_id = message.from_user.id,
-                                 photo = open("./data/pictures/add_movi/ask_input_info.jpg", 'rb'),
-                                 caption = "Kino haqida malumot kiritasizmi?",
-                                 reply_markup = ibuttons.ask_button(back = 'back_title', admin = True, yes = 'yes_info', skip = 'skip_info'))
+            await message.answer("Kino haqida malumot kiritasizmi?", reply_markup = dbuttons.back(skip = True))
 
 
 @dp.message_handler(state = movi_add.set_info)
 async def set_info_message_handler(message: types.Message, state : FSMContext):
     if ram.check_admin(message.from_user.id):
-        if message.text not in ["Ishchi suz"]:
-            ram.set_info(id, caption = message.text, admin = True)
-            await state.set_state(movi_add.set_thum)
-            await bot.send_photo(chat_id = message.from_user.id,
-                                 photo = open('./data/pictures/add_movi/ask_thum.jpg', 'rb'), 
-                                 caption = "Kinoga caption rasim kirtasizmi?",
-                                 reply_markup = ibuttons.ask_button(back = 'back_set_info', admin = True, yes = 'yes_thum', skip = 'skip_thum'))
+        if message.text == "⬅️ Orqaga":
+            await state.set_state(movi_add.set_title)
+            await message.answer("titleni qaytadan kiriting", reply_markup = dbuttons.back())
+            
+        elif message.text == "🪓 Bekor qilish":
+                admin = ram.get_info(message.from_user.id, admin = True)
+                admin['where'] = 'media'
+                await state.finish()
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
         
+        elif message.text == "O'tkazish ➡️":
+            await state.set_state(movi_add.set_thum)
+            await message.answer("Ok, kinoga Caption phot qo'shasizmi", reply_markup = dbuttons.back(skip = True))
+
+        else:
+            await state.set_state(movi_add.set_thum)
+            await message.answer("Ok, kinoga Caption phot qo'shasizmi", reply_markup = dbuttons.back(skip = True))
+            ram.set_info(id = message.from_user.id, admin = True, caption = message.text)
+    
+
+@dp.message_handler(state = movi_add.set_thum)
+async def set_thum_message_handler(message: types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        if message.text == "⬅️ Orqaga":
+            await state.set_state(movi_add.set_info)
+            await message.answer("Kino haqida malumot kiritasizmi?", reply_markup = dbuttons.back(skip = True))
+            
+        elif message.text == "🪓 Bekor qilish":
+                admin = ram.get_info(message.from_user.id, admin = True)
+                admin['where'] = 'media'
+                await state.finish()
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+        
+        elif message.text == "O'tkazish ➡️":
+            await state.set_state(movi_add.set_save)
+            await message.answer("Oxirgi qadam", reply_markup = dbuttons.save_movi()) #"🗃 Saqlash"
+
+        # else:
+        #     await state.set_state(movi_add.set_thum)
+        #     await message.answer("Ok, kinoga Caption phot qo'shasizmi")
+        #     ram.set_info(id = message.from_user.id, admin = True, caption = message.text)
+
+
+
+@dp.message_handler(state = movi_add.set_save)
+async def set_thum_message_handler(message: types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        if message.text == "⬅️ Orqaga":
+            await state.set_state(movi_add.set_thum)
+            await message.answer("Kinoga caption photoni qaytadan kiriting", reply_markup = dbuttons.back(skip = True))
+            
+        elif message.text == "🪓 Bekor qilish":
+                admin = ram.get_info(message.from_user.id, admin = True)
+                admin['where'] = 'media'
+                await state.finish()
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+        
+        elif message.text == "🗃 Saqlash":
+            movi_data = ram.get_movi(message.from_user.id)    
+            
+            # Creating comment url and Checking caption    
+            if movi_data['caption'] == None:
+                movi_data['caption'] = movi_data['title'] + "\n@kino_qidiruvchi_robot"
+
+            data2 = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
+                                        photo = movi_data['thumb'],
+                                        caption = movi_data['caption'])
+            commens_url = data2.url
+                        
+            
+                        
+            data = await bot.copy_message(message_id = movi_data['message_id'],
+                                         chat_id = CHANEL_ID,
+                                         from_chat_id = message.from_user.id,
+                                         caption = movi_data['caption'])          
+                        
+            db.add_movi(title = movi_data['title'],
+                        caption = movi_data['caption'],
+                        message_id = data.message_id,
+                        duration = movi_data['duration'],
+                        size = movi_data['size'],
+                        lang = movi_data['lang'],
+                        thum_url = movi_data['thumb'],
+                        coment_url = commens_url)
+                        
+            ram.add_search_movi(message_id = data.message_id, 
+                                title = movi_data['title'],
+                                caption = movi_data['caption'],
+                                size = movi_data['size'],
+                                duration = movi_data['duration'],
+                                coments = commens_url,
+                                thum_url = movi_data['thumb'],
+                                lang = movi_data['lang'])
+
+            admin = ram.get_info(message.from_user.id, admin = True)
+            admin['where'] = 'media'
+            await state.finish()
+            await message.answer("Kino muvvafaqiyatli datbasga saqlandi", reply_markup = dbuttons.media())
+        
+
 n = 0
 @dp.message_handler(state = main_states.input_avto_movi)
 async def input_avto_movi_message_handler(message: types.Message, state : FSMContext):
@@ -139,7 +224,7 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
 
 @dp.message_handler()
 async def core_message_handler(message : types.Message, state : FSMContext):
-    id = message.from_user.id
+    id = message.from_user.id 
     
     # chat = await bot.get_chat("@kino_bot_discuss")
     # print(chat.id)
@@ -154,7 +239,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
 
     if ram.check_user(id):
         # {'name': 'SHermukhammad', 'lang': 'uz', 'where': 'none', 'action': 'none', 'registred': '17.07.2023 13:47'}
-        user = ram.get_info(id)
+        user = ram.get_info(id, admin = False)
         name = user['name']
         where = user['where']
 
@@ -230,6 +315,10 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                                          photo = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), 
                                          caption = "Kinolarni qaysi tilda kiritmoqchisiz?",
                                          reply_markup = dbuttons.chose_lang())
+            
+            elif message.text == "👊 Qo'lda":
+                admin['where'] = 'chose_hlang'
+                await message.answer("Ok endi kinoyingzni tilni tanlang", reply_markup = dbuttons.chose_lang())
         
         elif admin['where'] == 'chose_alang':
             if message.text == "⬅️ Orqaga":
@@ -252,9 +341,23 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                                      photo = open('./data/pictures/add_movi/send_movi.jpg', 'rb'), 
                                      caption = "Kinolaringzni tashlang",
                                      reply_markup = dbuttons.avto_input_movi_menu())
+                
 
+        elif admin['where'] == 'chose_hlang':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'chose_mtype'
+                await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
+                                    chat_id = id,
+                                    caption = "Qanday usul bilan kino kiritmoqchisiz?",
+                                    reply_markup = dbuttons.chose_movi_input_type())
+            
+            elif message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
+                cheet = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}
+                ram.creat_movi(id = message.from_user.id, lang = cheet[message.text], admin = True)
+
+                await state.set_state(movi_add.set_video)
+                await message.answer("Endi kinoyingzni tashlang", reply_markup = dbuttons.input_video())
     else:
-        pass
+        await message.answer(f"Assalomu alaykum {message.from_user.first_name}, Xush kelibsiz", reply_markup = dbuttons.menu())
+        ram.registr(id = message.from_user.id, name = message.from_user.first_name)
 
-
-# @dp.message_handler(state = [])

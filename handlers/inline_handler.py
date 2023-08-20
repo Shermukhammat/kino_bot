@@ -9,7 +9,7 @@ from loader import db, dp, ram, google
 
 async def search(message : types.InlineQuery):
     if len(message.query) > 1:
-        indexs = google.search_movies(match = message.query, limt = 5)
+        indexs = google.search_movies(match = message.query.lower(), limt = 10)
         
         answers = []
         for index in indexs:

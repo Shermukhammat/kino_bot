@@ -55,3 +55,16 @@ class Defolt_buttons:
         buttons = [[KeyboardButton(text = "🛠 Ishlov berish")],
                    [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]]
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+    
+    def input_video(self):
+        buttons = [[KeyboardButton(text = "! yordam")],
+                   [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]]
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+    
+    def back(self, skip : bool = False):
+        if skip:
+            return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "O'tkazish ➡️")], [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]], resize_keyboard = True)
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]], resize_keyboard = True)
+    
+    def save_movi(self):
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "🗃 Saqlash")], [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]], resize_keyboard = True)

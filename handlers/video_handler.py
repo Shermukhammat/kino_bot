@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, main_states, title_finder, info_cleaner
+from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, main_states, title_finder, info_cleaner, dbuttons
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -33,10 +33,8 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
 
         ram.update_movi_data(id, admin = True, message_id = message_id, duration = duration, thumb = thumb_url, size = size)
         await state.set_state(movi_add.set_title)
-        await bot.send_photo(chat_id = id,
-                                 photo = open("./data/pictures/add_movi/input_title.jpg", 'rb'),
-                                 caption = "Kino nomni kiriting",
-                                 reply_markup = ibuttons.delet(back = 'back_set_video'))
+        await bot.send_message(chat_id = id, text = "Kino nomni kiriting", reply_markup = dbuttons.back(), reply_to_message_id = message.message_id)
+    
     # ram.save_movi(admin_id = admin_id, vide_id = video_file_id, duration = duration, size = video_size, phot_url = thumb_url)
     # await bot.delete_message(chat_id = admin_id, message_id = message.message_id)
         

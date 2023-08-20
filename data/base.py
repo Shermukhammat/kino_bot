@@ -95,7 +95,7 @@ class Database:
         match = f"SELECT * FROM {self.users};"
         for row in cursor.execute(match):
             id, name, lang, registred_time = row[0], row[1], row[2], row[3]
-            users_data[id] = {'name' : name, 'lang' : lang, 'where' : 'none', 'action' : 'none', 'registred' : registred_time}
+            users_data[id] = {'name' : name, 'lang' : lang, 'where' : 'none',  'iwhere' : 'none', 'action' : 'none', 'registred' : registred_time}
             # print(row) 
         conection.commit()
         conection.close()
@@ -110,7 +110,7 @@ class Database:
         match = f"SELECT * FROM {self.admins};"
         for row in cursor.execute(match):
             id, name, lang, registred_time = row[0], row[1], row[2], row[3]
-            admins_data[id] = {'name' : name, 'lang' : lang, 'where' : 'none', 'action' : 'none', 'registred' : registred_time}
+            admins_data[id] = {'name' : name, 'lang' : lang, 'where' : 'none', 'iwhere' : 'none', 'action' : 'none', 'registred' : registred_time}
             # print(row) 
         conection.commit()
         conection.close()
@@ -138,7 +138,6 @@ class Database:
 
         conection.commit()
         conection.close()
-    
     
 
 

@@ -1,6 +1,6 @@
 from aiogram  import types
 from aiogram.dispatcher import FSMContext
-from loader import dp, db, ram, get_movi, bot, picsum, ibuttons, movi_add
+from loader import dp, db, ram, get_movi, bot, picsum, ibuttons, movi_add, dbuttons
 
 
 
@@ -21,8 +21,11 @@ async def catch_phot_caption(message : types.Message, state : FSMContext):
     # await bot.send_photo(photo = open('data/pictures/image.jpg', 'rb'), chat_id = id, caption = "Ushlab oldim ...")
     
     await state.set_state(movi_add.set_save)
-    await bot.send_photo(chat_id = message.from_user.id,
-                         photo = open("./data/pictures/add_movi/save_movi.jpg", 'rb'),
-                         caption = f"Caption phot qo'shldi", 
-                         reply_markup = ibuttons.save_movi(back = 'back_set_thum'))
+    await message.reply("Caption phot qo'shldi, oxirgi qadam kinoni saqlaymizmi?", reply_markup = dbuttons.save_movi())
+
+
+    # await bot.send_photo(chat_id = message.from_user.id,
+    #                      photo = open("./data/pictures/add_movi/save_movi.jpg", 'rb'),
+    #                      caption = f"Caption phot qo'shldi", 
+    #                      reply_markup = ibuttons.save_movi(back = 'back_set_thum'))
     
