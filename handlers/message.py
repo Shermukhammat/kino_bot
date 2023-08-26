@@ -5,6 +5,18 @@ import asyncio
 from random import randint 
 
 
+@dp.message_handler(state = main_states.admin_login)
+async def admin_login_message(message : types.Message, state : FSMContext):
+    if ram.user_login(message.from_user.id):
+        if '0000' == message.text:
+            await message.answer("sizniki endi admin")
+        else:
+            await message.answer("xato kod")
+    else:
+        await message.answer("Keyinroq urinib ko'ring")
+        await state.finish()
+
+
 
 @dp.message_handler(state = movi_add.set_video)
 async def set_video_mesage_handler(message : types.Message, state : FSMContext):

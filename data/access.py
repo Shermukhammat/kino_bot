@@ -8,6 +8,7 @@ class RAM:
     def __init__(self, database = None):
         self.db = database
         self.users = database.get_users()
+        self.blocked = {}
         self.users_count = len(self.users)
         self.admins = database.get_admins()
         self.movies = database.get_movies()
@@ -59,6 +60,19 @@ class RAM:
     def get_user(self, id : int = None):
         return self.users[id]
 
+    
+    def user_login(self, id : int, count : bool = False):
+        if count:
+            return self.blocked.get(id)
+    
+        if self.blocked.get(id):
+            self.blocked[id] += 1
+            if self.blocked[id] >= 3:
+                return False
+            return True
+        self.blocked[id] = 1
+        return True
+    
     def bloc_user(self, id):
         respons = self.block.get(id)
         if respons != None:

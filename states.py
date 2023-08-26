@@ -29,4 +29,7 @@ class Add_Movi_Avto(StatesGroup):
 
 
 class Main_States(StatesGroup):
+    admin_login = State()
     input_avto_movi = State()
+    
+    
