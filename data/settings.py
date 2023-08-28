@@ -24,7 +24,10 @@ if __name__ == '__main__':
     # set.data['pasword'] = '0000'
     # set.update()
 
-    # set.data['forced_chanels'].append('@kino_bot_discuss')
+    # set.data['forced_chanels'] = {}https://t.me/sexiiwbeyw
+    # set.data['forced_chanels']['@kino_bot_discuss'] = 'https://t.me/Kino_bot_news'
+    # set.data['forced_chanels']['@sexiiwbeyw'] = 'https://t.me/sexiiwbeyw'
+
     print(set.data)
 
     # set.update()

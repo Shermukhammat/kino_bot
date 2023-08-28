@@ -152,6 +152,13 @@ class Inline_buttons:
             
 
 
+    def subscribe_chanels(self, chanels : dict):
+        buttons = [] 
+        for text, url in chanels.items():
+            buttons.append([InlineKeyboardButton(text = text, url = url)])
+        buttons.append([InlineKeyboardButton(text = "📎 Tekshrish", callback_data = 'check')])
+
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
 
 
 

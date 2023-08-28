@@ -110,6 +110,7 @@ Games
                                                                             dislike = movi['dislike'],
                                                                             admin = False,
                                                                             randomly = True))
+        
         elif text == 'random2':
             index = randint(0, len(ram.movies)-1)
             movi = ram.movies[index]
@@ -128,8 +129,9 @@ Games
                                                                             admin = False,
                                                                             randomly = True))
             
-
-
+        elif text == 'check':
+            await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+            await bot.send_message(chat_id = query.from_user.id, text = "Bosh menu", reply_markup = dbuttons.menu())
 
 
 
