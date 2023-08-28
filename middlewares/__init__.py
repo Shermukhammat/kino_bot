@@ -1,6 +1,10 @@
+from aiogram import Dispatcher
+
+
 from loader import dp
-from . import  midle_checksub.Br
-from midle_checksub import Bro
+from .midle_checksub import  Bro
+from .throttling import ThrottlingMiddleware
 
 if __name__ == 'middlewares':
-    dp.middleware.setup(Bro)
+    dp.middleware.setup(ThrottlingMiddleware())
+    dp.middleware.setup(Bro())

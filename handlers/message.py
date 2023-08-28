@@ -264,8 +264,8 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
 async def core_message_handler(message : types.Message, state : FSMContext):
     id = message.from_user.id 
     
-    status = await check_sub(id, '@kino_bot_discuss')
-    print(status)
+    # status = await check_sub(id, '@kino_bot_discuss')
+    # print(status)
     # but = Bot.get_current()
     # member = await but.get_chat_member(chat_id = "@kino_bot_discuss", user_id = 5850618492+1) #user_id = 5850618492, -1001942423128
     # print(member)
