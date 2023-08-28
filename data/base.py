@@ -139,6 +139,14 @@ class Database:
         conection.commit()
         conection.close()
     
+    def delet_admin(self, id : int):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        
+        cursor.execute(f"DELETE  FROM {self.admins} WHERE id == {id};")
+
+        conection.commit()
+        conection.close()
 
 
 if __name__ == '__main__':

@@ -1,21 +1,46 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, db, ram, bot, dbuttons, ibuttons, movi_add, DISCUSS_CHANEL_ID, main_states, CHANEL_ID, info_cleaner, title_finder
+from loader import types, dp, db, ram, bot, dbuttons, ibuttons, movi_add, DISCUSS_CHANEL_ID, main_states, CHANEL_ID, info_cleaner, title_finder, setting, check_sub
 from aiogram.types import InputMediaPhoto
 import asyncio
 from random import randint 
+from aiogram  import Bot
+
+@dp.message_handler(state = main_states.log_out_admin)
+async def admin_logout_mesage_handler(message : types.Message, state : FSMContext):
+    if message.text ==  "⬅️ Orqaga":
+        await state.finish()
+        await message.answer("Admin panel", reply_markup = dbuttons.menu(admin = True))
+    
+    elif message.text == "🚶 Chiqish":
+        await state.finish()
+        ram.logout(message.from_user.id, name = message.from_user.first_name, admin = True)
+        await message.answer("Bosh menu", reply_markup = dbuttons.menu())
+
 
 
 @dp.message_handler(state = main_states.admin_login)
-async def admin_login_message(message : types.Message, state : FSMContext):
-    if ram.user_login(message.from_user.id):
-        if '0000' == message.text:
-            await message.answer("sizniki endi admin")
-        else:
-            await message.answer("xato kod")
-    else:
-        await message.answer("Keyinroq urinib ko'ring")
+async def admin_login_mesage_handler(message : types.Message, state : FSMContext):
+    if message.text == "⬅️ Orqaga":
         await state.finish()
+        await message.answer('Bosh menu', reply_markup = dbuttons.menu())
+    
+    elif ram.admin_login(message.from_user.id) < 3:
+        if message.text == setting.data['pasword']:
+            ram.registr(id =  message.from_user.id, name = message.from_user.first_name, admin = True)
+            await state.finish()
+            await message.answer("Admin panel", reply_markup = dbuttons.menu(admin = True))
+        else:
+            if ram.admin_login(message.from_user.id, block = True) == 3:
+                await state.finish()
+                await message.answer("ko'd xat Siz blocklandingiz", reply_markup = dbuttons.menu())
 
+            else:
+                await message.reply(f"Ko'd xato sizda {3 - ram.block[message.from_user.id]} ta urinish qoldi", reply_markup = dbuttons.quite_admin_login())
+    
+    else:
+        await state.finish()
+        await message.answer("Iltimos keyinroq urinib ko'ring", dbuttons.menu())
+            
 
 
 @dp.message_handler(state = movi_add.set_video)
@@ -234,10 +259,18 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
             
 
 
+
 @dp.message_handler()
 async def core_message_handler(message : types.Message, state : FSMContext):
     id = message.from_user.id 
     
+    status = await check_sub(id, '@kino_bot_discuss')
+    print(status)
+    # but = Bot.get_current()
+    # member = await but.get_chat_member(chat_id = "@kino_bot_discuss", user_id = 5850618492+1) #user_id = 5850618492, -1001942423128
+    # print(member)
+
+
     # chat = await bot.get_chat("@kino_bot_discuss")
     # print(chat.id)
 

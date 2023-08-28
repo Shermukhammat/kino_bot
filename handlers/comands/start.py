@@ -1,11 +1,18 @@
-from loader import types, dp, ram
+from loader import types, dp, ram, bot
+# from aiogram import Bot
+
 
 @dp.message_handler(commands = 'start')
 async def start(message : types.Message):
     id = message.from_user.id
     
+    # bot = Bot.get_current()
+    # bot.get_current()
+    # bot.get
+
+
     if ram.check_user(id):
-        user = ram.get_info(id)
+        user = ram.get_info(id, admin = False)
         await message.answer(f"Foydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}")
     
     elif ram.check_admin(id):

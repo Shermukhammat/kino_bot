@@ -68,3 +68,8 @@ class Defolt_buttons:
     
     def save_movi(self):
         return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "🗃 Saqlash")], [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]], resize_keyboard = True)
+    
+    def quite_admin_login(self):
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga")]], resize_keyboard = True)
+    def admin_logout(self):
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🚶 Chiqish")]], resize_keyboard = True)

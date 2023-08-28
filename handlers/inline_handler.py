@@ -4,9 +4,6 @@ from loader import db, dp, ram, google
 
 
 @dp.inline_handler()
-
-
-
 async def search(message : types.InlineQuery):
     if len(message.query) > 1:
         indexs = google.search_movies(match = message.query.lower(), limt = 10)
@@ -24,7 +21,7 @@ async def search(message : types.InlineQuery):
 
         await message.answer(answers)
     
-    
+   
 
 if __name__ == '__main__':
     pass

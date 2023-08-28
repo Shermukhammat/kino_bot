@@ -8,7 +8,6 @@ class RAM:
     def __init__(self, database = None):
         self.db = database
         self.users = database.get_users()
-        self.blocked = {}
         self.users_count = len(self.users)
         self.admins = database.get_admins()
         self.movies = database.get_movies()
@@ -51,6 +50,16 @@ class RAM:
             self.db.registir(id = id, name = name, registred = now(), lang = lang, admin = True)
         
     
+    def logout(self, id : int, name : str = None, lang : str = 'uz',  admin : bool = False):
+        data = {'name' : name, 'lang' : lang, 'where' : 'none', 'action' : 'none', 'registred' : now()}
+        if admin:
+            del self.admins[id]
+            self.users[id] = data
+            
+            self.db.delet_admin(id)
+            self.db.registir(id = id, name = name, registred = now(), lang = lang)
+        
+    
     def get_info(self, id, admin = True):
         if not admin:
             return self.users[id]
@@ -60,19 +69,7 @@ class RAM:
     def get_user(self, id : int = None):
         return self.users[id]
 
-    
-    def user_login(self, id : int, count : bool = False):
-        if count:
-            return self.blocked.get(id)
-    
-        if self.blocked.get(id):
-            self.blocked[id] += 1
-            if self.blocked[id] >= 3:
-                return False
-            return True
-        self.blocked[id] = 1
-        return True
-    
+    #del
     def bloc_user(self, id):
         respons = self.block.get(id)
         if respons != None:
@@ -81,12 +78,29 @@ class RAM:
         self.block[id] = 1
         return 1
     
+    #del
     def user_block_count(self, id):
         respons = self.block.get(id)
         if respons != None:
             return respons
         self.block[id] = 0
         return 0
+    
+    def admin_login(self, id : int, block : bool = False):
+        if block:
+            if self.block.get(id):
+                self.block[id] += 1
+            else:
+                self.block[id] = 1
+
+            return self.block[id]
+        
+        elif self.block.get(id):
+            return self.block[id]
+        return 0
+
+
+
     
     
     def add_search_movi(self, message_id =  None, title = None, caption = None, size = None, duration = None, coments = None, thum_url = None, lang = 'uz'):
