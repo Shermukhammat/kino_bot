@@ -37,4 +37,23 @@ async def admin(message : types.Message):
                                                                             like = movi['like'], 
                                                                             dislike = movi['dislike'],
                                                                             admin = False))
+    # elif len(index) > 1 and index[0] == '#' and index[1:].isnumeric():
+    #     index = int(index[1:])
         
+    #     if ram.check_user(message.from_user.id) and index < len(ram.top):
+    #         movi = ram.top[index]
+        
+    #         await bot.copy_message(chat_id = message.from_user.id,
+    #                                    message_id = movi['id'],
+    #                                    from_chat_id = CHANEL_ID,
+    #                                    reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
+    #                                                                         first_state = True,  
+    #                                                                         id = index, 
+    #                                                                         like = movi['like'], 
+    #                                                                         dislike = movi['dislike'],
+    #                                                                         admin = False))
+
+    #     elif ram.check_admin(message.from_user.id):
+    #         pass
+                          
+    

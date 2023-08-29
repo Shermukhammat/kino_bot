@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.types import InputMediaPhoto, InputMediaAnimation, InputMediaVideo
 from aiogram.dispatcher import FSMContext
-from loader import dp, db, ram, bot, ibuttons, dbuttons, movi_add, add_movi_avto, DISCUSS_CHANEL_ID, CHANEL_ID
+from loader import dp, db, ram, bot, ibuttons, dbuttons, movi_add, add_movi_avto, DISCUSS_CHANEL_ID, CHANEL_ID, setting, main_states
 import time
 import asyncio
 from random import randint
@@ -135,6 +135,7 @@ Games
 
 
 
+
         # Like va Dislikega jovob beruvchi qisim
         text = text.split('.')
         if len(text) == 3:
@@ -182,7 +183,7 @@ Games
                                                                                              dislike = movi['dislike'],
                                                                                              admin = False))
                 if action == 'like':
-                    await query.answer("Sizniki Like Bosgan")
+                    await query.answer("Sizniki Like bosdi")
             
             elif state == 'lik':
                 # print(action)
@@ -203,9 +204,13 @@ Games
                                                                                              admin = False))
 
                 if action == 'dislike':
-                    await query.answer("Sizniki Dislike Bosgan")
+                    await query.answer("Sizniki dislike bosdi")
 
+        elif len(text) == 2:
+            command, value = text[0], text[1]
 
+            if command == 'chremove':
+                setting.data['forced_chanels']
 
     
     elif ram.check_admin(id):
@@ -238,6 +243,22 @@ Games
                                               media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinolarni qaysi tilda kiritmoqchisiz?"),
                                               reply_markup = ibuttons.chose_lang(back = 'back_media'))
         
+
+        elif admin['where'] == 'settings':
+            if text == 'chanel_add':
+                await state.set_state(main_states.input_chanle)
+                await bot.delete_message(chat_id = id, message_id = query.message.message_id)
+                await bot.send_message(chat_id = id, text = "Iltimos birinchi botni kanalga qo'shinv va kanalni user nameini kiriting maslan @kanal", reply_markup = dbuttons.quite_admin_login())
+            
+        
+            elif text == 'delet':
+                await bot.delete_message(chat_id = id, message_id = query.message.message_id)
+        
+        elif text == 'delet':
+             await bot.delete_message(chat_id = id, message_id = query.message.message_id)
+        
+
+
         text = text.split('.')
         # print(text)
         if len(text) == 3:
@@ -305,7 +326,14 @@ Games
                     await query.answer("Sizniki Dislike Bosgan")
                 
 
+        elif len(text) == 2:
+            command, value = text[0], text[1]
 
+            if command == 'chremove':
+                del setting.data['forced_chanels'][value]
+                setting.update()
+                #ibuttons.chanels(setting.data['forced_chanels'].keys())
+                await bot.edit_message_reply_markup(chat_id = id, message_id = query.message.message_id, reply_markup = ibuttons.chanels(setting.data['forced_chanels'].keys()))
        
         
     else:

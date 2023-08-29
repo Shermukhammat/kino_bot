@@ -10,14 +10,15 @@ class Defolt_buttons:
             buttons = [[KeyboardButton(text="🎛 Menu"), KeyboardButton(text = "⚙️ Sozlamalar")]]
             return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
         else:
-            buttons =[[KeyboardButton(text = "🎛 Menu")],
-                      [KeyboardButton(text = "📂 Media"), KeyboardButton(text = "📦 Review")],
-                      [KeyboardButton(text = "✉️ Xabarlar"), KeyboardButton(text = "⚙️ Sozlamalar")]]
+            buttons =[[KeyboardButton(text = "🔍 Kino Izlash")],
+                      [KeyboardButton(text = "📂 Media"), KeyboardButton(text = "✉️ Xabarlar")],
+                      [KeyboardButton(text = "  ------  "), KeyboardButton(text = "⚙️ Sozlamalar")],
+                      [KeyboardButton(text = "📈 Xisobot")]]
             return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     
     
     def media(self):
-        buttons = [[KeyboardButton(text = "🔥 Primyeralarni taxrirlash")],
+        buttons = [[KeyboardButton(text = "⚡️ Primyeralar")],
                    [KeyboardButton(text = "🎬 Kino qo'shish"), KeyboardButton(text = "📺 Serial qo'shish")],
                    [KeyboardButton(text = "⬅️ Orqaga")]]
         
@@ -71,5 +72,23 @@ class Defolt_buttons:
     
     def quite_admin_login(self):
         return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga")]], resize_keyboard = True)
+    
     def admin_logout(self):
         return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🚶 Chiqish")]], resize_keyboard = True)
+    
+    def settings(self, admin : bool = True, mute : bool = False):
+        if admin:
+            if mute:
+                mute_button = "🔇 Bildrishnoma"
+            
+            else:
+                mute_button = "🔉 Bildrishnoma"
+            
+            buttons = [[KeyboardButton(text = "🤖 Bot Info")],
+                       [KeyboardButton(text = "📡 Kanallar"), KeyboardButton(text = "📓 Qo'lanma")],
+                       [KeyboardButton(text = "🔐 Parol"), KeyboardButton(text = mute_button)],
+                       [KeyboardButton(text = "⬅️ Orqaga")]]
+            return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+        
+        else:
+            pass

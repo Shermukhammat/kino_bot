@@ -20,6 +20,17 @@ class RAM:
         # self.admin_a_movi = {}
         self.port = True
         self.block = {}
+
+    def get_top_movies_index(self, limit : int = 10):
+        likes =  [movi['like'] for movi in self.movies]
+        indexs = []
+        for n in range(limit):
+            index = likes.index(max(likes))
+            likes[index] = 0
+            indexs.append(index)
+        
+        return indexs
+
         
 
     def get_bot_info(self):
@@ -148,14 +159,14 @@ class RAM:
                 del self.admin_movi[id]
         
 
-    def update_movi_data(self, id, video_id = None, message_id = None, duration = None, size = None, thumb = None, admin = False):
+    def update_movi_data(self, id, video_id = None, message_id = None, duration = None, size = None, thumb = None, admin = False, info = None):
         if admin and self.admin_movi.get(id) != None:
             self.admin_movi[id]['message_id'] = message_id
             self.admin_movi[id]['video_id'] = video_id
             self.admin_movi[id]['duration'] = duration
             self.admin_movi[id]['size'] =  size
             self.admin_movi[id]['thumb'] = thumb
-    
+            self.admin_movi[id]['caption'] = info
             
 
     def set_title(self, id, title = None, admin = False):

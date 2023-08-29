@@ -13,11 +13,36 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang', 'mode');")
-        
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS saved (user_id, movie_id);")
+
         print("database conected ...", end = '\r')
         
         conection.commit()
         conection.close()
+
+    def save_movi(self, user_id : int = None, movie_id : int = None):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        try:
+            match = f"INSERT INTO saved ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+            # print(match)
+            cursor.execute(match)
+        except:
+            print(f"Can't save movie, id : {movie_id} ...")
+        
+        conection.commit()
+        conection.close()
+
+    def get_saved(self, id : int):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        match = f"SELECT * FROM saved WHERE user_id == {id};"
+        for row in cursor.execute(match):
+            print(row)
+        conection.commit()
+        conection.close()
+
 
     def add_movi(self, title = None, caption = None, message_id = None, duration = None, size = None, coment_url = None, thum_url = None, lang = 'uz', mode : str = 'hand'):
         conection = sqlite3.connect(self.file)
@@ -36,7 +61,36 @@ class Database:
         conection.commit()
         conection.close()
 
-    
+    def get_top_movies(self, limit : int = 10):
+        #SELECT * FROM movies ORDER BY like DESC LIMIT 10;
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        movies = []
+
+        match = f"SELECT * FROM {self.movies} ORDER BY like DESC LIMIT {limit};"
+        for row in cursor.execute(match):
+            # print(row)
+            id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
+            movi =  {'id' : id, 
+                          'title' : title, 
+                          'caption' : caption, 
+                          'size' : file_size,
+                          'duration' : duration,
+                          'like' : like,
+                          'dislike' : dislike,
+                          'coments' : coments,
+                          'thum_url' : thum_url,
+                          'lang' : lang}
+            
+            movies.append(movi)
+            
+
+        conection.commit()
+        conection.close()
+
+        return movies
+
+
     def get_movies(self):
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()

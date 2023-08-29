@@ -14,7 +14,7 @@ class Setting:
         js = open(self.file, 'w')
         js.write(json.dumps(self.data))
 
-        print("Settings updated           ", end = '\r')
+        # print("Settings updated           ", end = '\r')
 
 
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     # set.data['forced_chanels'] = {}https://t.me/sexiiwbeyw
     # set.data['forced_chanels']['@kino_bot_discuss'] = 'https://t.me/Kino_bot_news'
     # set.data['forced_chanels']['@sexiiwbeyw'] = 'https://t.me/sexiiwbeyw'
-
+    set.data['bot_url'] = '@kino_qidiruvchi_robot'
     print(set.data)
 
-    # set.update()
+    set.update()

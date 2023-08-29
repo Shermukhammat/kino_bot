@@ -1,7 +1,8 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
-from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, main_states, title_finder, info_cleaner, dbuttons
+from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, main_states, title_finder, info_cleaner, dbuttons, setting
+import re
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -21,6 +22,9 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         size = int((message.video.file_size / 1024) / 1024)
         file_id = message.video.file_id 
         caption = message.caption 
+        caption = re.sub(r'.*\B@(?=\w{5,32}\b)[a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*.*', "", caption)
+        caption = re.sub(r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)", "", caption).strip() + "\n\n" + setting.data['bot_url']
+
         duration = convert(message.video.duration)
         message_id = message.message_id
         
@@ -31,7 +35,7 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
         thumb_url = picsum.save_photo('./data/pictures/photo.jpg')
 
 
-        ram.update_movi_data(id, admin = True, message_id = message_id, duration = duration, thumb = thumb_url, size = size)
+        ram.update_movi_data(id, admin = True, message_id = message_id, duration = duration, thumb = thumb_url, size = size, info = caption)
         await state.set_state(movi_add.set_title)
         await bot.send_message(chat_id = id, text = "Kino nomni kiriting", reply_markup = dbuttons.back(), reply_to_message_id = message.message_id)
     

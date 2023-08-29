@@ -32,3 +32,4 @@ class Main_States(StatesGroup):
     input_avto_movi = State()
     admin_login = State()
     log_out_admin = State()
+    input_chanle = State()

@@ -4,6 +4,32 @@ from aiogram.types import InputMediaPhoto
 import asyncio
 from random import randint 
 from aiogram  import Bot
+import re
+
+@dp.message_handler(state = main_states.input_chanle)
+async def inpt_chanel_message_handler(message : types.Message, state : FSMContext):
+    if message.text ==  "⬅️ Orqaga":
+        await state.finish()
+        await message.answer("Sozlamalar", reply_markup = dbuttons.settings(admin = True))
+    
+    elif re.search(r"^@", message.text):
+        try: 
+            admins = await bot.get_chat_administrators(chat_id = message.text.strip())
+            for admin in admins:
+                if admin.user.id == 6331798502:
+                    setting.data['forced_chanels'][message.text.strip()] = "https://t.me/" + message.text.strip()[1:]
+                    setting.update()
+
+                    await state.finish()
+                    await message.answer("Kanal muvafaqiyatli qo'shildi", reply_markup = dbuttons.settings(admin = True))
+                    return
+            
+            await message.answer("Ilimos botni birinchi admin qiling")
+        except:
+            await message.answer("ERROR")
+    else:
+        await message.answer("Ilitmos kanal user nameni to'gri kiriting")
+
 
 @dp.message_handler(state = main_states.log_out_admin)
 async def admin_logout_mesage_handler(message : types.Message, state : FSMContext):
@@ -325,18 +351,30 @@ async def core_message_handler(message : types.Message, state : FSMContext):
 
         if admin['where'] == 'none':
             admin['where'] = 'head_menu'
-            await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
+            await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", reply_markup = dbuttons.menu(admin = True))
 
 
 
         elif admin['where'] == 'head_menu':
-            if message.text == '🎛 Menu':
-                await message.answer(f"📓 Bosh menu:\n\nAdmin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = ibuttons.menu())   
+            if message.text == "🔍 Kino Izlash":
+                pass
 
             elif message.text == "📂 Media":
                 admin['where'] = 'media'
                 await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+            
+            elif message.text == "⚙️ Sozlamalar":
+                admin['where'] = 'settings'
+                await message.answer("Sozlamalar", reply_markup = dbuttons.settings())
         
+        elif admin['where'] == 'settings':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'head_menu'
+                await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
+
+            if message.text == "📡 Kanallar":
+                await message.answer("Hozirda majvjud jami kanallar ", reply_markup = ibuttons.chanels(setting.data['forced_chanels'].keys()))
+
         elif admin['where'] == 'media':
             if message.text == "⬅️ Orqaga":
                 admin['where'] = 'head_menu'
@@ -344,10 +382,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             
             elif message.text == "🎬 Kino qo'shish":
                 admin['where'] = 'chose_mtype'
-                await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
-                                    chat_id = id,
-                                    caption = "Qanday usul bilan kino kiritmoqchisiz?",
-                                    reply_markup = dbuttons.chose_movi_input_type())
+                await message.answer("Qanday usul bilan kino kiritmoqchisiz?", reply_markup = dbuttons.chose_movi_input_type())
         
         elif admin['where'] == 'chose_mtype':
             if message.text == "⬅️ Orqaga":
@@ -363,7 +398,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             
             elif message.text == "👊 Qo'lda":
                 admin['where'] = 'chose_hlang'
-                await message.answer("Ok endi kinoyingzni tilni tanlang", reply_markup = dbuttons.chose_lang())
+                await message.answer("Ok, Endi kinoyingzni tilni tanlang", reply_markup = dbuttons.chose_lang())
         
         elif admin['where'] == 'chose_alang':
             if message.text == "⬅️ Orqaga":
@@ -391,10 +426,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
         elif admin['where'] == 'chose_hlang':
             if message.text == "⬅️ Orqaga":
                 admin['where'] = 'chose_mtype'
-                await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
-                                    chat_id = id,
-                                    caption = "Qanday usul bilan kino kiritmoqchisiz?",
-                                    reply_markup = dbuttons.chose_movi_input_type())
+                await message.answer("Qanday usul bilan kino kiritmoqchisiz?", reply_markup = dbuttons.chose_movi_input_type())
             
             elif message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
                 cheet = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}
