@@ -314,8 +314,14 @@ async def core_message_handler(message : types.Message, state : FSMContext):
         name = user['name']
         where = user['where']
 
-        if user['where'] == 'none':
+        if message.text == '🎛 Menu':
             user['where'] = 'head_menu'
+            await message.answer(f"Foydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.menu())
+
+        elif user['where'] == 'none':
+            user['where'] = 'head_menu'
+            # mes = await message.answer(f"menu", reply_markup = dbuttons.menu())
+            # await bot.delete_message(message_id = mes.message_id, chat_id = id)
             await message.answer(f"Foydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}", reply_markup = dbuttons.menu())
 
 

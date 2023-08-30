@@ -15,7 +15,10 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang', 'mode');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS saved (user_id, movie_id);")
 
-        print("database conected ...", end = '\r')
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS liked (user_id, movie_id);")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS disliked (user_id, movie_id);")
+
+        # print("database conected ...", end = '\r')
         
         conection.commit()
         conection.close()
@@ -34,14 +37,86 @@ class Database:
         conection.commit()
         conection.close()
 
+    def delet_saved(self, user_id : int = None, movie_id : int = None):
+        #DELETE  FROM {self.users} WHERE id == {id};
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        try:
+            match = f"DELETE FROM saved WHERE user_id == {user_id} AND movie_id == {movie_id};"
+            # print(match)
+            cursor.execute(match)
+        except:
+            print(f"Can't deleted movie, id : {movie_id} user id : {user_id} ...")
+        
+        conection.commit()
+        conection.close()
+
+
+    def get_saved_len(self, id : int):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        n = 0
+        match = f"SELECT movie_id FROM saved WHERE user_id == {id};"
+        for row in cursor.execute(match):
+            n+=1
+        conection.commit()
+        conection.close()
+        return n
+
+
     def get_saved(self, id : int):
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
-        match = f"SELECT * FROM saved WHERE user_id == {id};"
+        ids = []
+        match = f"SELECT movie_id FROM saved WHERE user_id == {id};"
         for row in cursor.execute(match):
-            print(row)
+            ids.append(row[0])
+
+        movies = []
+        for idd in ids:
+            match = f"SELECT * FROM {self.movies} WHERE id == {idd};"
+            for row in cursor.execute(match):
+                id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
+                movi =  {'id' : id, 
+                          'title' : title, 
+                          'caption' : caption, 
+                          'size' : file_size,
+                          'duration' : duration,
+                          'like' : like,
+                          'dislike' : dislike,
+                          'coments' : coments,
+                          'thum_url' : thum_url,
+                          'lang' : lang}
+                movies.append(movi)
+        
         conection.commit()
         conection.close()
+
+        return movies
+
+    def get_movi(self, id : int):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        match = f"SELECT * FROM {self.movies} WHERE id == {id};"
+        for row in cursor.execute(match):
+                id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
+                movi =  {'id' : id, 
+                          'title' : title, 
+                          'caption' : caption, 
+                          'size' : file_size,
+                          'duration' : duration,
+                          'like' : like,
+                          'dislike' : dislike,
+                          'coments' : coments,
+                          'thum_url' : thum_url,
+                          'lang' : lang}
+                return movi
+        
+        conection.commit()
+        conection.close()
+
 
 
     def add_movi(self, title = None, caption = None, message_id = None, duration = None, size = None, coment_url = None, thum_url = None, lang = 'uz', mode : str = 'hand'):
@@ -118,6 +193,42 @@ class Database:
         
         return movies
     
+    
+    def is_saved(self, user_id : int = None, movie_id : int = None):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        
+        for row in cursor.execute(f"SELECT * FROM saved WHERE user_id == {user_id} AND movie_id == {movie_id};"):
+            conection.commit()
+            conection.close()
+
+            return True
+
+        conection.commit()
+        conection.close()
+
+        return False
+
+    def is_like(self, user_id : int = None, movie_id : int = None):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        
+        for row in cursor.execute(f"SELECT * FROM liked WHERE user_id == {user_id} AND movie_id == {movie_id};"):
+            conection.commit()
+            conection.close()
+
+            return 'like'
+        
+        for row in cursor.execute(f"SELECT * FROM disliked WHERE user_id == {user_id} AND movie_id == {movie_id};"):
+            conection.commit()
+            conection.close()
+
+            return 'dislike'
+        
+        conection.commit()
+        conection.close()
+
+
     def like_movi(self, id : int = 0, like : int = 0, incres : bool = True):
         #UPDATE movies SET 'like' = 10 WHERE id == 2766;
         conection = sqlite3.connect(self.file)
@@ -204,7 +315,7 @@ class Database:
 
 
 if __name__ == '__main__':
-    data_base = Database('database.db')
+    data_base = Database('data/database.db')
     # data = data_base.get_users()
     # data_base.add_movi(title = "y'axs'hi \"kino3",
     #                    caption = "Yaxshi title2",
@@ -213,5 +324,6 @@ if __name__ == '__main__':
     #                    size = 100,
     #                    coment_url = "htpp/telegram/17",
     #                    thum_url = "htpp:/telegraph.org/1345")
-    print(data_base.get_movies())
-    
+    # print(data_base.get_movies())
+
+    print(data_base.is_like(user_id = 1661189380, movie_id = 2805))    

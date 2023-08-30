@@ -11,6 +11,7 @@ class RAM:
         self.users_count = len(self.users)
         self.admins = database.get_admins()
         self.movies = database.get_movies()
+        self.movies_dict = {movi['id'] : movi for movi in self.movies}
         self.movies_count = len(self.movies)
         self.movies_title = [movi['title'] for movi in self.movies]
         self.admin_movi = {}
@@ -225,12 +226,10 @@ class RAM:
     # def update_phot_url(self, id, photo_url = None):
     #     self.admin_a_movi[id]['thumb'] = photo_url
     
-    def get_movi(self, id, admin = True):
-        if admin:
-            if self.admin_movi.get(id):
-                return self.admin_movi[id]
-            return {}
-        return {}
+    def get_movi(self, index : int):
+        if self.movies_count > index:
+            return self.movies[index]
+        
             
     
 
