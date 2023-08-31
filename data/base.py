@@ -229,7 +229,7 @@ class Database:
         conection.close()
 
 
-    def like_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False):
+    def like_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False, incres : bool = True):
         #UPDATE movies SET 'like' = 10 WHERE id == 2766;
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
