@@ -272,30 +272,26 @@ Games
         name = admin['name']
         where = admin['where']
 
+        
+
+        if text == 'more':
+            await bot.edit_message_text(text = f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", 
+                                        reply_markup = ibuttons.more_menu(admin = True),
+                                        chat_id = query.from_user.id,
+                                        message_id = query.message.message_id)
+            
+        
+        elif text == 'less':
+            await bot.edit_message_text(text = f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", 
+                                        reply_markup = ibuttons.menu(admin = True),
+                                        chat_id = query.from_user.id,
+                                        message_id = query.message.message_id)
+
         if admin['where'] == 'none':
             admin['where'] = 'head_menu'
             # await query.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
-            await bot.send_message(text = "Bosh menu", chat_id = id, reply_markup = dbuttons.menu(admin = True))
-
-        # elif admin['where'] == 'head_menu':
-        #     pass
-
-        elif admin['where'] == 'media':
-            if text == 'delet':
-                await bot.delete_message(chat_id = id, message_id = message_id)
-
-            elif text == 'hand':
-                await state.set_state(movi_add.chose_lang)
-                await  bot.edit_message_media(chat_id = id,
-                                              message_id = query.message.message_id,
-                                              media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinoyingzni tilni tanlang"),
-                                              reply_markup = ibuttons.chose_lang(back = 'back_media'))
-            elif text == 'avto':
-                await state.set_state(add_movi_avto.chose_lang)
-                await  bot.edit_message_media(chat_id = id,
-                                              message_id = query.message.message_id,
-                                              media = InputMediaPhoto(media = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), caption = "Kinolarni qaysi tilda kiritmoqchisiz?"),
-                                              reply_markup = ibuttons.chose_lang(back = 'back_media'))
+            data = await bot.send_message(text = "Bosh menu", chat_id = id, reply_markup = dbuttons.menu(admin = True))
+            # await bot.del(chat_id = query.from_user.id, message_id = data.message_id)
         
 
         elif admin['where'] == 'settings':

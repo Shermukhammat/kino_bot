@@ -10,7 +10,7 @@ class Defolt_buttons:
             buttons = [[KeyboardButton(text="🎛 Menu"), KeyboardButton(text = "⚙️ Sozlamalar")]]
             return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
         else:
-            buttons =[[KeyboardButton(text = "🔍 Kino Izlash")],
+            buttons =[[KeyboardButton(text = "🎛 Menu")],
                       [KeyboardButton(text = "📂 Media"), KeyboardButton(text = "✉️ Xabarlar")],
                       [KeyboardButton(text = "  ------  "), KeyboardButton(text = "⚙️ Sozlamalar")],
                       [KeyboardButton(text = "📈 Xisobot")]]

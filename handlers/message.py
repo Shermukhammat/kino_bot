@@ -362,8 +362,8 @@ async def core_message_handler(message : types.Message, state : FSMContext):
 
 
         elif admin['where'] == 'head_menu':
-            if message.text == "🔍 Kino Izlash":
-                pass
+            if message.text == "🎛 Menu":
+                await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", reply_markup = ibuttons.menu(admin = True))
 
             elif message.text == "📂 Media":
                 admin['where'] = 'media'

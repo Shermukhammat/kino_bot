@@ -19,7 +19,10 @@ class Inline_buttons:
             return InlineKeyboardMarkup(inline_keyboard = buttons)
         
         else:
-            pass
+            buttons = [[InlineKeyboardButton(text = "📄 Qo'lanma", callback_data = "manual"), InlineKeyboardButton(text = "⬇️ Ko'proq", callback_data = "more")],
+                        [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = "")]]
+        
+            return InlineKeyboardMarkup(inline_keyboard = buttons)
 
     def more_menu(self, admin = False):
         if not admin:
