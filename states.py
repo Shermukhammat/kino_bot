@@ -33,3 +33,4 @@ class Main_States(StatesGroup):
     admin_login = State()
     log_out_admin = State()
     input_chanle = State()
+    primyer = State()

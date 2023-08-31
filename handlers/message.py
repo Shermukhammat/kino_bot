@@ -389,6 +389,11 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             elif message.text == "🎬 Kino qo'shish":
                 admin['where'] = 'chose_mtype'
                 await message.answer("Qanday usul bilan kino kiritmoqchisiz?", reply_markup = dbuttons.chose_movi_input_type())
+            
+            elif message.text == "⚡️ Primyeralar":
+                await state.set_state(main_states.primyer) #"⬅️ Orqaga"
+                await message.answer("Primyeralr menyusi", reply_markup = dbuttons.primyer())
+                await message.answer("Jami primyeralar soni : 0", reply_markup = ibuttons)
         
         elif admin['where'] == 'chose_mtype':
             if message.text == "⬅️ Orqaga":

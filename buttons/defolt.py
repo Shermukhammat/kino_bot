@@ -25,6 +25,10 @@ class Defolt_buttons:
         
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     
+    def primyer(self):
+        buttons = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]] 
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+    
     def add_movi(self, mode = 'none'):
         if mode == 'none':
             buttons = [[KeyboardButton(text = "♻️ Avtomatik"), KeyboardButton(text = "👊 Qo'lda")],

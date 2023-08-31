@@ -195,7 +195,14 @@ class Inline_buttons:
 
 
 
-
+    def primyer_editor(self, buttons : list):
+        but = [[InlineKeyboardButton(text = "Qo'shish", callback_data = "yes"), InlineKeyboardButton(text = "Olib tashlash", callback_data = "no")],
+               [InlineKeyboardButton(text = "Bekor qilish ❌", callback_data = 'delet')]]
+        
+        for button in buttons[::-1]:
+            but
+  
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
 
 
 
