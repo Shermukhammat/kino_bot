@@ -147,22 +147,27 @@ Games
         if len(text) == 3:
             state, movi_id, action = text[-1], int(text[-2]), text[-3]
             # movi = ram.movies[index]
-            print(state)
+            
             if state == 'firs':
                 if action == 'like':
+                    movi = ram.movies_dict.get(movi_id)
+                    if movi:
+                        # movi = db.get_movi(id = movi_id)
 
-                    # movi = db.get_movi(id = movi_id)
-                    db.like_movi(id = movi['id'], like = movi['like'] + 1)
-                    ram.like_movi(index)
-                    await query.answer("Sizniki Like bosdi")
-                    await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+
+                        db.like_movi(id = movi['id'], like = movi['like'] + 1)
+                        # ram.like_movi(index)
+                        buttons = query.message.reply_markup
+                        buttons[0][0] = types.InlineKeyboardButton(text = "", callback_data = f"dislike.{movi_id}.like")
+                        await query.answer("Sizniki Like bosdi")
+                        await bot.edit_message_reply_markup(chat_id = query.from_user.id,
                                                         message_id = query.message.message_id,
-                                                        reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
-                                                                                             dislike_state = True,  
-                                                                                             id = index, 
-                                                                                             like = movi['like'], 
-                                                                                             dislike = movi['dislike'],
-                                                                                             admin = False))
+                                                        reply_markup = buttons)
+                        #                                                                      dislike_state = True,  
+                        #                                                                      id = index, 
+                        #                                                                      like = movi['like'], 
+                        #                                                                      dislike = movi['dislike'],
+                        #                                                                      admin = False))
                 # if action == 'dislike':
                 #     db.dislike_movi(id = movi['id'], dislike = movi['dislike']+1)
                 #     ram.dislike_movi(index)
@@ -212,8 +217,8 @@ Games
             #                                                                                  dislike = movi['dislike'],
             #                                                                                  admin = False))
 
-                if action == 'dislike':
-                    await query.answer("Sizniki dislike bosdi")
+                # if action == 'dislike':
+                #     await query.answer("Sizniki dislike bosdi")
 
         elif len(text) == 2:
             command, value = text[0], text[1]
