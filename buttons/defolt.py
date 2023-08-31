@@ -18,7 +18,8 @@ class Defolt_buttons:
     
     
     def media(self):
-        buttons = [[KeyboardButton(text = "⚡️ Primyeralar")],
+        buttons = [[KeyboardButton(text = " ------------- ")],
+                   [KeyboardButton(text = "⚡️ Primyeralar"), KeyboardButton(text = "🧮 Kodli kinolar")],
                    [KeyboardButton(text = "🎬 Kino qo'shish"), KeyboardButton(text = "📺 Serial qo'shish")],
                    [KeyboardButton(text = "⬅️ Orqaga")]]
         
