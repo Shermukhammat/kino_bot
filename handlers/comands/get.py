@@ -48,34 +48,32 @@ async def admin(message : types.Message):
     if index.isnumeric():
         index = int(index)
         if ram.check_admin(message.from_user.id):
-            if index <= len(ram.movies):
-                movi = ram.movies[index]
+            if index < ram.movies_count:
+                movi = ram.get_movi(index = index)
+
+                state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
+                saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = True, id = movi['id'])
         
                 await bot.copy_message(chat_id = message.from_user.id,
                                        message_id = movi['id'],
                                        from_chat_id = CHANEL_ID,
-                                       reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'],
-                                                                            admin = True,
-                                                                            first_state = True,  
-                                                                            id = index, 
-                                                                            like = movi['like'], 
-                                                                            dislike = movi['dislike']))
+                                       reply_markup = buttons)
+
                 
             
         if ram.check_user(message.from_user.id):
-            movi = ram.get_movi(index = index)
-            # movi = ram.movies_dict.get(index)
+            if index < ram.movies_count:
+                movi = ram.get_movi(index = index)
+                # movi = ram.movies_dict.get(index)
             
-            # print(ram.movies_dict)
-            # if movi:
+                # print(ram.movies_dict)
 
-            state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
-            # print(state)
-            saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
-                # print(saved)
-            buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
+                state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
+                saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
         
-            await bot.copy_message(chat_id = message.from_user.id,
+                await bot.copy_message(chat_id = message.from_user.id,
                                        message_id = movi['id'],
                                        from_chat_id = CHANEL_ID,
                                        reply_markup = buttons)
@@ -96,8 +94,5 @@ async def admin(message : types.Message):
     #                                                                         like = movi['like'], 
     #                                                                         dislike = movi['dislike'],
     #                                                                         admin = False))
-
-    #     elif ram.check_admin(message.from_user.id):
-    #         pass
-                          
+        
     

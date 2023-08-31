@@ -63,10 +63,7 @@ class Inline_buttons:
             
             return InlineKeyboardMarkup(inline_keyboard = buttons)
     
-    def manual_menu(self, admin : bool = False, back : str = 'back'):
-        if admin:
-            pass
-        
+    def manual_menu(self, back : str = 'back'):        
         buttons = [[InlineKeyboardButton(text = "⬅️ Orqaga", callback_data = back)],
                    [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = "")]]
         return InlineKeyboardMarkup(inline_keyboard = buttons)
