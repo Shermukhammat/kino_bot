@@ -70,6 +70,7 @@ async def admin(message : types.Message):
             # if movi:
 
             state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
+            # print(state)
             saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
                 # print(saved)
             buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])

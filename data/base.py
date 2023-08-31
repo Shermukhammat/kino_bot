@@ -229,23 +229,37 @@ class Database:
         conection.close()
 
 
-    def like_movi(self, id : int = 0, like : int = 0, incres : bool = True):
+    def like_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False):
         #UPDATE movies SET 'like' = 10 WHERE id == 2766;
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
-        
-        cursor.execute(f"UPDATE {self.movies} SET like = {like} WHERE id == {id};")
+
+        if remove:
+            match = f"DELETE FROM liked WHERE user_id == {user_id} AND movie_id == {movie_id};"
+            cursor.execute(match)
+            cursor.execute(f"UPDATE {self.movies} SET like = {like_count - 1} WHERE id == {movie_id};")
+        else:
+            match = f"INSERT INTO liked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+            cursor.execute(match)
+            cursor.execute(f"UPDATE {self.movies} SET like = {like_count + 1} WHERE id == {movie_id};")
             
         conection.commit()
         conection.close()
     
-    def dislike_movi(self, id : int = 0, dislike : int = 0):
+    def dislike_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False):
         #UPDATE movies SET 'like' = 10 WHERE id == 2766;
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
-        
-        cursor.execute(f"UPDATE {self.movies} SET dislike = {dislike} WHERE id == {id};")
-        
+
+        if remove:
+            match = f"DELETE FROM disliked WHERE user_id == {user_id} AND movie_id == {movie_id};"
+            cursor.execute(match)
+            cursor.execute(f"UPDATE {self.movies} SET dislike = {like_count - 1} WHERE id == {movie_id};")
+        else:
+            match = f"INSERT INTO disliked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+            cursor.execute(match)
+            cursor.execute(f"UPDATE {self.movies} SET dislike = {like_count + 1} WHERE id == {movie_id};")
+            
         conection.commit()
         conection.close()
     
