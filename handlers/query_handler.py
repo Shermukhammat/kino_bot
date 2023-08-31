@@ -23,7 +23,10 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
             await bot.edit_message_reply_markup(chat_id = query.from_user.id, 
                                                 message_id = query.message.message_id, 
                                                 reply_markup = ibuttons.more_menu())
-
+        
+        if text == 'delet':
+            await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+        
         elif text == 'less':
             await bot.edit_message_reply_markup(chat_id = query.from_user.id, 
                                                 message_id = query.message.message_id, 
@@ -106,34 +109,38 @@ Games
             index = randint(0, len(ram.movies)-1)
             movi = ram.movies[index]
 
+            state = db.is_like(user_id = query.from_user.id, movie_id = movi['id'])
+            saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
+            buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
+        
+
             await bot.copy_message(chat_id = query.from_user.id,
                                    from_chat_id = CHANEL_ID,
                                    message_id = movi['id'],
-                                   reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
-                                                                            first_state = True,  
-                                                                            id = index, 
-                                                                            like = movi['like'], 
-                                                                            dislike = movi['dislike'],
-                                                                            admin = False,
-                                                                            randomly = True))
+                                   reply_markup = buttons)
+                                #    ibuttons.movi_buttons(coments_url = movi['coments'], 
+                                #                                             first_state = True,  
+                                #                                             id = index, 
+                                #                                             like = movi['like'], 
+                                #                                             dislike = movi['dislike'],
+                                #                                             admin = False,
+                                #                                             randomly = True))
         
         elif text == 'random2':
             index = randint(0, len(ram.movies)-1)
             movi = ram.movies[index]
-
+            
+            state = db.is_like(user_id = query.from_user.id, movie_id = movi['id'])
+            saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
+            buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
+            
             await bot.edit_message_reply_markup(chat_id = query.from_user.id,
                                                 message_id = query.message.message_id,
                                                 reply_markup = None)
             await bot.copy_message(chat_id = query.from_user.id,
                                    from_chat_id = CHANEL_ID,
                                    message_id = movi['id'],
-                                   reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'], 
-                                                                            first_state = True,  
-                                                                            id = index, 
-                                                                            like = movi['like'], 
-                                                                            dislike = movi['dislike'],
-                                                                            admin = False,
-                                                                            randomly = True))
+                                   reply_markup = buttons)
             
         elif text == 'check':
             await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
@@ -147,7 +154,7 @@ Games
         if len(text) == 3:
             state, movi_id, action = text[-1], int(text[-2]), text[-3]
             # movi = ram.movies[index]
-            print(state)
+            # print(state)
 
             # Foydalanuvchi like va dislike bosmagan bo'lsa
             if state == 'firs':
