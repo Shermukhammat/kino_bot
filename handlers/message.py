@@ -6,6 +6,28 @@ from random import randint
 from aiogram  import Bot
 import re
 
+
+
+@dp.message_handler(state = main_states.input_serie_lang)
+async def get_serie_lang(message : types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        if message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
+            lang = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}[message.text]
+            # await state.set_state(movi_add.set_video)
+            await message.answer("Iltimos seriyal nomini kiriting")
+            
+        elif message.text == "⬅️ Orqaga":
+                admin = ram.get_info(message.from_user.id, admin = True)
+                admin['where'] = 'media'
+                await state.finish()
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+        
+        else:
+            ram.set_title(message.from_user.id, title = message.text, admin = True)
+            await state.set_state(movi_add.set_info)
+            await message.answer("Kino haqida malumot kiritasizmi?", reply_markup = dbuttons.back(skip = True))
+
+
 @dp.message_handler(state = main_states.input_chanle)
 async def inpt_chanel_message_handler(message : types.Message, state : FSMContext):
     if message.text ==  "⬅️ Orqaga":
@@ -390,10 +412,13 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                 admin['where'] = 'chose_mtype'
                 await message.answer("Qanday usul bilan kino kiritmoqchisiz?", reply_markup = dbuttons.chose_movi_input_type())
             
-            elif message.text == "⚡️ Primyeralar":
-                await state.set_state(main_states.primyer) #"⬅️ Orqaga"
-                await message.answer("Primyeralr menyusi", reply_markup = dbuttons.primyer())
-                await message.answer("Jami primyeralar soni : 0", reply_markup = ibuttons)
+            # elif message.text == "⚡️ Primyeralar":
+            #     await state.set_state(main_states.primyer) #"⬅️ Orqaga"
+            #     await message.answer("Primyeralr menyusi", reply_markup = dbuttons.primyer())
+            #     await message.answer("Jami primyeralar soni : 0", reply_markup = ibuttons)
+            elif message.text == "📺 Serial qo'shish":
+                await state.set_state(main_states.input_serie_lang)
+                await message.answer("Seriyal tilni tanlang", reply_markup = dbuttons.chose_lang()) 
         
         elif admin['where'] == 'chose_mtype':
             if message.text == "⬅️ Orqaga":

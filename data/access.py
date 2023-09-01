@@ -18,7 +18,7 @@ class RAM:
         self.admins_input_movi_lang = {}
         self.admin_movies = {}
         self.user_movi = {}
-        # self.admin_a_movi = {}
+        self.input_series = {}
         self.port = True
         self.block = {}
 
@@ -216,19 +216,33 @@ class RAM:
         if self.admin_movies.get(id):
             self.admin_movies[id] = []
             
-
-    # def update_title(self, id, title):
-    #     self.admin_a_movi[id]['title'] = title
-
-    # def update_caption(self, id, caption):
-    #     self.admin_a_movi[id]['caption'] = caption
-
-    # def update_phot_url(self, id, photo_url = None):
-    #     self.admin_a_movi[id]['thumb'] = photo_url
     
     def get_movi(self, index : int):
         if self.movies_count > index:
             return self.movies[index]
+
+    
+    def creat_serie(self, lang : str = 'uz', id : int = None):
+        data = {'id' : None,
+                'lang' : lang,
+                'title' : None,
+                'parts_id' :{},
+                'thumb' : None}
+        self.input_series[id] = data 
+    
+    def series_set_title(self, title : str = None, id : int = None):
+        if self.input_series.get(id):
+            self.input_series[id]['title'] = title
+    
+    def series_set_info(self, message_id : int = None, user_id : int = None, thumbl : str = None):
+        if self.input_series.get(id):
+            self.input_series[user_id]['id'] = message_id
+            self.input_series[user_id]['thumb'] = thumbl
+    
+    def series_set_part(self, part : int = None, message_id : int = None, user_id : int = None):
+        if self.input_series.get(id):
+            self.input_series[user_id]['parts_id'][part] = message_id
+    
         
             
     

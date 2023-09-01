@@ -244,7 +244,7 @@ Games
                 setting.data['forced_chanels']
 
             elif command == 'favorite':
-                if db.get_saved_len(id = id) < 5:
+                if db.get_saved_len(id = id) < 45:
                     buttons = query.message.reply_markup.inline_keyboard
                     buttons[0][2] = types.InlineKeyboardButton(text = "🌟", callback_data = f"fremov.{value}")
 

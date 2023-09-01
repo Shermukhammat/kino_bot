@@ -54,7 +54,7 @@ class Defolt_buttons:
         
     def chose_lang(self):
         buttons = [[KeyboardButton(text = "🇺🇿 O'zbekcha"), KeyboardButton(text = "🇷🇺 Ruscha"), KeyboardButton(text = "🇬🇧 Inglizcha")],
-                   [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🪓 Bekor qilish")]]
+                   [KeyboardButton(text = "⬅️ Orqaga")]]
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     
     def avto_input_movi_menu(self):
