@@ -29,6 +29,17 @@ class Defolt_buttons:
         buttons = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]] 
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     
+    def seri_input_menu(self, save : bool = False):
+        if save:
+            buttons = [[KeyboardButton(text = "🧩 Oldingi qism")],
+                       [KeyboardButton(text = "💾♻️ Saqlash"), KeyboardButton(text = "🗑♻️ Tozalash")],
+                       [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]]
+            return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+        
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]], resize_keyboard = True)
+
+
+    
     def add_movi(self, mode = 'none'):
         if mode == 'none':
             buttons = [[KeyboardButton(text = "♻️ Avtomatik"), KeyboardButton(text = "👊 Qo'lda")],

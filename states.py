@@ -36,5 +36,7 @@ class Main_States(StatesGroup):
     primyer = State()
 
     input_serie_lang = State()
+    input_serie_title = State()
     input_serie_info = State()
     input_series = State()
+    input_series_part = State()

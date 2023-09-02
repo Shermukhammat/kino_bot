@@ -227,6 +227,7 @@ class RAM:
                 'lang' : lang,
                 'title' : None,
                 'parts_id' :{},
+                'last_part' : None,
                 'thumb' : None}
         self.input_series[id] = data 
     
@@ -235,12 +236,12 @@ class RAM:
             self.input_series[id]['title'] = title
     
     def series_set_info(self, message_id : int = None, user_id : int = None, thumbl : str = None):
-        if self.input_series.get(id):
+        if self.input_series.get(user_id):
             self.input_series[user_id]['id'] = message_id
             self.input_series[user_id]['thumb'] = thumbl
     
     def series_set_part(self, part : int = None, message_id : int = None, user_id : int = None):
-        if self.input_series.get(id):
+        if self.input_series.get(user_id):
             self.input_series[user_id]['parts_id'][part] = message_id
     
         

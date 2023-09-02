@@ -6,6 +6,43 @@ from random import randint
 from aiogram  import Bot
 import re
 
+#"🧩 Oldingi qism"
+@dp.message_handler(state = main_states.input_series_part)
+async def input_series_part_mesage(message : types.Message, state : FSMContext):
+    if message.text == "⬅️ Orqaga":
+        await state.set_state(main_states.input_serie_info)
+        await message.answer("Endi esa kino haqida caption photo bilan kino haqida malumot kiriting!", reply_markup = dbuttons.back())
+
+    elif message.text == "🧩 Oldingi qism":
+        if ram.input_series.get(message.from_user.id):
+            last = ram.input_series[message.from_user.id]['last_part']
+            if last <= 1:
+                ram.input_series[message.from_user.id]['last_part'] = None
+                await message.answer("Iltimos 1-qismni kiriting")
+            else:
+                ram.input_series[message.from_user.id]['last_part'] -= 1
+                await message.answer(f"Iltimos {ram.input_series[message.from_user.id]['last_part'] + 1}-qismni  kiriting")
+
+@dp.message_handler(state = main_states.input_serie_info)
+async def input_seroie_info(message : types.Message, state : FSMContext):
+    if message.text == "⬅️ Orqaga":
+        await state.set_state(main_states.input_serie_title)
+        await message.answer("seriyal nomini kiriting", reply_markup = dbuttons.back())
+    
+        
+
+
+@dp.message_handler(state = main_states.input_serie_title)
+async def get_series_title(message : types.Message, state : FSMContext):
+    if ram.check_admin(message.from_user.id):
+        if message.text == "⬅️ Orqaga":
+            await state.set_state(main_states.input_serie_lang)
+            await message.answer("Seriyal tilni tanlang", reply_markup = dbuttons.chose_lang())
+
+        else:
+            ram.series_set_title(id = message.from_user.id, title = message.text)
+            await state.set_state(main_states.input_serie_info)
+            await message.answer("Endi esa kino haqida caption photo bilan kino haqida malumot kiriting!", reply_markup = dbuttons.back())
 
 
 @dp.message_handler(state = main_states.input_serie_lang)
@@ -13,19 +50,19 @@ async def get_serie_lang(message : types.Message, state : FSMContext):
     if ram.check_admin(message.from_user.id):
         if message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
             lang = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}[message.text]
-            # await state.set_state(movi_add.set_video)
-            await message.answer("Iltimos seriyal nomini kiriting")
+            ram.creat_serie(lang = lang, id = message.from_user.id)
+
+            await state.set_state(main_states.input_serie_title)
+            await message.answer("Ok endi seriyal nomini kiriting", reply_markup = dbuttons.back())
             
         elif message.text == "⬅️ Orqaga":
                 admin = ram.get_info(message.from_user.id, admin = True)
                 admin['where'] = 'media'
                 await state.finish()
                 await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+
         
-        else:
-            ram.set_title(message.from_user.id, title = message.text, admin = True)
-            await state.set_state(movi_add.set_info)
-            await message.answer("Kino haqida malumot kiritasizmi?", reply_markup = dbuttons.back(skip = True))
+        
 
 
 @dp.message_handler(state = main_states.input_chanle)
