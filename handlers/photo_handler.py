@@ -37,7 +37,7 @@ async def catch_series_info_phot(message : types.Message, state : FSMContext):
     url = picsum.save_photo('data/pictures/image.jpg')
 
     ram.series_set_info(message_id = message.message_id, user_id = message.from_user.id,
-                        thumbl = url)
+                        thumbl = url, caption = info)
     
     await state.set_state(main_states.input_series_part)
     await message.answer("Endi esa 1-qism videosni tashlang", reply_markup = dbuttons.seri_input_menu())

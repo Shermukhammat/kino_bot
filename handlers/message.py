@@ -6,7 +6,7 @@ from random import randint
 from aiogram  import Bot
 import re
 
-#"🧩 Oldingi qism"
+
 @dp.message_handler(state = main_states.input_series_part)
 async def input_series_part_mesage(message : types.Message, state : FSMContext):
     if message.text == "⬅️ Orqaga":
@@ -22,14 +22,87 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
             else:
                 ram.input_series[message.from_user.id]['last_part'] -= 1
                 await message.answer(f"Iltimos {ram.input_series[message.from_user.id]['last_part'] + 1}-qismni  kiriting")
+    
+    elif message.text == "🗑♻️ Tozalash":
+        if ram.input_series.get(message.from_user.id):
+            ram.input_series[message.from_user.id]['last_part'] = None
+            ram.input_series[message.from_user.id]['parts_id'] = {}
+
+            await message.answer("Xamma qismlar o'chrildi! 1-qismni tashlang")
+    
+    elif message.text ==  "🏠 Bosh sahifa":
+        await state.finish()
+        admin = ram.get_info(message.from_user.id, admin = True)
+        admin['where'] = 'head_menu'
+
+        await message.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
+
+    elif message.text == "💾♻️ Saqlash":
+        user_id = message.from_user.id
+        data = ram.input_series[user_id] #['title']
+
+        # Make coments
+        coment = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID, 
+                                      photo = data['thumb'], 
+                                      caption = data['caption'] + "\n\n" + setting.data['bot_url'])
+
+        coment_url = coment.url
+
+
+        # Send movi info to data CHANEL
+        mes_data = await bot.send_photo(chat_id = CHANEL_ID, 
+                                      photo = data['thumb'], 
+                                      caption = data['caption'] + "\n\n" + setting.data['bot_url'])
+        
+        
+        # Copy parts to data CHANEL print
+        part = {'uz' : ' - qisim', 'ru' : 'часть', 'en' : 'episode'}
+        parts_id = {}
+
+        for part_num, part_id in data['parts_id'].items():
+            part_data = await bot.copy_message(chat_id = CHANEL_ID, 
+                                               from_chat_id = user_id,
+                                               message_id = part_id, 
+                                               caption = f"{data['title']} {part_num} {part.get(data['lang'])}")
+            
+            parts_id[part_num] = part_data.message_id
+
+        
+        # Save data to database
+        db.add_seri(title = data['title'], 
+                    message_id = mes_data.message_id,
+                    coment_url = coment_url,
+                    thumb = data['thumb'],
+                    lang = data['lang'],
+                    parts_id = parts_id)
+
+
+        #Back media menu
+        admin = ram.get_info(message.from_user.id, admin = True)
+        admin['where'] = 'media'
+        await state.finish()
+        await message.answer("Media menyusi", reply_markup = dbuttons.media())
+
+
+
+        
+
+
+
 
 @dp.message_handler(state = main_states.input_serie_info)
 async def input_seroie_info(message : types.Message, state : FSMContext):
     if message.text == "⬅️ Orqaga":
         await state.set_state(main_states.input_serie_title)
-        await message.answer("seriyal nomini kiriting", reply_markup = dbuttons.back())
+        await message.answer("Seriyal nomini kiriting", reply_markup = dbuttons.back())
     
-        
+    elif message.text ==  "🏠 Bosh sahifa":
+        await state.finish()
+        admin = ram.get_info(message.from_user.id, admin = True)
+        admin['where'] = 'head_menu'
+
+        await message.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
+    
 
 
 @dp.message_handler(state = main_states.input_serie_title)
@@ -60,6 +133,7 @@ async def get_serie_lang(message : types.Message, state : FSMContext):
                 admin['where'] = 'media'
                 await state.finish()
                 await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+
 
         
         
@@ -261,7 +335,7 @@ async def set_thum_message_handler(message: types.Message, state : FSMContext):
             admin = ram.get_info(message.from_user.id, admin = True)
             admin['where'] = 'media'
             await state.finish()
-            await message.answer("Kino muvvafaqiyatli datbasga saqlandi", reply_markup = dbuttons.media())
+            await message.answer("Kino muvvafaqiyatli databasega saqlandi", reply_markup = dbuttons.media())
         
 
 n = 0

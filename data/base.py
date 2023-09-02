@@ -13,7 +13,10 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.users} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.admins} ('id' INTEGER , 'name', 'lang', 'registred');")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.movies} ('id' INTEGER PRIMARY KEY, 'title', 'caption', 'file_size' INTEGER, 'duration', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang', 'mode');")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS series ('id' INTEGER PRIMARY KEY, 'title', 'like' INTEGER, 'dislike' INTEGER, 'coments', 'thum_url', 'lang');")
+        
         cursor.execute(f"CREATE TABLE IF NOT EXISTS saved (user_id, movie_id);")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS parts (serie_id, part_id, part_num);")
 
         cursor.execute(f"CREATE TABLE IF NOT EXISTS liked (user_id, movie_id);")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS disliked (user_id, movie_id);")
@@ -135,6 +138,47 @@ class Database:
         
         conection.commit()
         conection.close()
+
+    def add_seri(self, title = None, message_id : int = None, coment_url : str = None, thumb : str = None, lang : str = 'uz', parts_id : dict = {}, like = 0, dislike = 0):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        try:
+            for part, id in parts_id.items():
+                cursor.execute(f"INSERT INTO parts ('serie_id', 'part_id', 'part_num') VALUES ({message_id}, {id}, {part});")
+            title = title.replace("'", '"')
+            match = f"INSERT INTO series ('id', 'title', 'like' , 'dislike', 'coments', 'thum_url', 'lang') VALUES ({message_id}, '{title}', {like}, {dislike}, '{coment_url}', '{thumb}', '{lang}');"
+            # print(match)
+            cursor.execute(match)
+            print(f"New serire {title} added ...")
+        except:
+            print(f"Can't added serie {title} ...")
+        
+        conection.commit()
+        conection.close()
+    
+    def get_series(self):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+        series = []
+
+        match = f"SELECT * FROM series;"
+        for row in cursor.execute(match):
+            id, title, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6]
+            seri =  {'id' : id, 
+                     'title' : title, 
+                     'like' : like,
+                     'dislike' : dislike,
+                     'coments' : coments,
+                     'thum_url' : thum_url,
+                     'lang' : lang}
+            series.append(seri)
+            
+
+        conection.commit()
+        conection.close()
+
+        return series
 
     def get_top_movies(self, limit : int = 10):
         #SELECT * FROM movies ORDER BY like DESC LIMIT 10;
@@ -340,4 +384,7 @@ if __name__ == '__main__':
     #                    thum_url = "htpp:/telegraph.org/1345")
     # print(data_base.get_movies())
 
-    print(data_base.is_like(user_id = 1661189380, movie_id = 2805))    
+    # print(data_base.is_like(user_id = 1661189380, movie_id = 2805))   
+    data_base.add_seri(title = 'arkein', message_id = 3, coment_url = 'coment', thumb = 'www.thum.org', lang = 'en', parts_id = {1 : 11, 2 : 12, 3 : 13, 4 : 14, 5 : 15, 6 : 16})
+    for ser in data_base.get_series():
+        print(ser)

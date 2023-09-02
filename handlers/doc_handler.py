@@ -15,7 +15,7 @@ async def handle_document(message: types.Message):
             await message.reply(f"{ram.input_series[message.from_user.id]['last_part']} - qisim qo'shiildi", 
                                 reply_markup = dbuttons.seri_input_menu(save = True))
             
-            print(ram.input_series[message.from_user.id], "\n\n\n")
+            # print(ram.input_series[message.from_user.id], "\n\n\n")
             
         else:
             ram.input_series[message.from_user.id]['last_part'] = 1
