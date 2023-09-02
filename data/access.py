@@ -10,8 +10,12 @@ class RAM:
         self.users = database.get_users()
         self.users_count = len(self.users)
         self.admins = database.get_admins()
+
         self.movies = database.get_movies()
+        for seri in database.get_series():
+            self.movies.append(seri)
         self.movies_dict = {movi['id'] : movi for movi in self.movies}
+        
         self.movies_count = len(self.movies)
         self.movies_title = [movi['title'] for movi in self.movies]
         self.admin_movi = {}

@@ -163,16 +163,26 @@ class Database:
         series = []
 
         match = f"SELECT * FROM series;"
-        for row in cursor.execute(match):
+        rows = cursor.execute(match)
+        for row in rows.fetchall():
             id, title, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6]
-            seri =  {'id' : id, 
+            parts_id = {}
+            for row2 in cursor.execute(f"SELECT part_id, part_num FROM parts WHERE serie_id == {id};"):
+                part_id, part_num = row2[0], row2[1]
+                parts_id[part_num] = part_id
+                # parts (serie_id, part_id, part_num)
+
+            seri =  {'id' : id,
                      'title' : title, 
                      'like' : like,
                      'dislike' : dislike,
                      'coments' : coments,
                      'thum_url' : thum_url,
-                     'lang' : lang}
+                     'parts_id' : parts_id,
+                     'lang' : lang,
+                     'type' : 'seri'}
             series.append(seri)
+        
             
 
         conection.commit()
@@ -219,6 +229,7 @@ class Database:
         for row in cursor.execute(match):
             # print(row)
             id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
+            
             movi =  {'id' : id, 
                           'title' : title, 
                           'caption' : caption, 
@@ -228,7 +239,8 @@ class Database:
                           'dislike' : dislike,
                           'coments' : coments,
                           'thum_url' : thum_url,
-                          'lang' : lang}
+                          'lang' : lang,
+                          'type' : 'movi'}
             movies.append(movi)
             
 
@@ -385,6 +397,6 @@ if __name__ == '__main__':
     # print(data_base.get_movies())
 
     # print(data_base.is_like(user_id = 1661189380, movie_id = 2805))   
-    data_base.add_seri(title = 'arkein', message_id = 3, coment_url = 'coment', thumb = 'www.thum.org', lang = 'en', parts_id = {1 : 11, 2 : 12, 3 : 13, 4 : 14, 5 : 15, 6 : 16})
+    # data_base.add_seri(title = 'arkein', message_id = 3, coment_url = 'coment', thumb = 'www.thum.org', lang = 'en', parts_id = {1 : 11, 2 : 12, 3 : 13, 4 : 14, 5 : 15, 6 : 16})
     for ser in data_base.get_series():
         print(ser)

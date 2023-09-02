@@ -75,6 +75,8 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
                     thumb = data['thumb'],
                     lang = data['lang'],
                     parts_id = parts_id)
+        
+        
 
 
         #Back media menu
