@@ -233,6 +233,7 @@ class RAM:
                 'lang' : lang,
                 'title' : None,
                 'parts_id' :{},
+                'last_message_id' : None,
                 'last_part' : None,
                 'thumb' : None,
                 'caption' : None}

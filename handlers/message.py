@@ -5,6 +5,8 @@ import asyncio
 from random import randint 
 from aiogram  import Bot
 import re
+import time
+import asyncio
 
 
 @dp.message_handler(state = main_states.input_series_part)
@@ -41,6 +43,26 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
         user_id = message.from_user.id
         data = ram.input_series[user_id] #['title']
 
+
+        # Sort parts
+        parts_id = [id for id in data['parts_id'].values()]
+        parts_id.sort()
+        
+        sorted_part = {}
+        n = 0
+        for id in parts_id:
+            n += 1
+            sorted_part[n] = id
+        
+        data['parts_id'] = sorted_part 
+
+        print(data)
+        await message.answer("Seriyal yuklanishi boshland")
+        
+
+        
+        
+
         # Make coments
         coment = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID, 
                                       photo = data['thumb'], 
@@ -59,7 +81,15 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
         part = {'uz' : ' - qisim', 'ru' : 'часть', 'en' : 'episode'}
         parts_id = {}
 
+        n = 0
         for part_num, part_id in data['parts_id'].items():
+            n += 1
+            if n > 18:
+                await message.answer("Qismlar soni 18 tadan oshib ketdi 1 daqialik uyqu rejimi yoqildi")
+                await asyncio.sleep(60) 
+                await message.answer("Yuklash boshlandi")
+                n = 0
+            
             part_data = await bot.copy_message(chat_id = CHANEL_ID, 
                                                from_chat_id = user_id,
                                                message_id = part_id, 
@@ -486,6 +516,9 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                     
             
     elif ram.check_admin(id):
+        # await state.set_state(main_states.input_series_part)
+
+
         admin = ram.get_info(id, admin = True)
         name = admin['name']
         where = admin['where']
