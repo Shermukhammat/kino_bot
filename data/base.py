@@ -104,7 +104,20 @@ class Database:
         conection.commit()
         conection.close()
 
+    def delet_serie(self, serie_id):
+        #DELETE  FROM
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
 
+        cursor.execute(f"DELETE  FROM  series WHERE id == {serie_id};")
+        cursor.execute(f"DELETE  FROM  parts WHERE serie_id == {serie_id};")
+        cursor.execute(f"DELETE  FROM  saved WHERE movie_id == {serie_id};")
+
+        cursor.execute(f"DELETE  FROM  liked WHERE movie_id == {serie_id};")
+        cursor.execute(f"DELETE  FROM  disliked WHERE movie_id == {serie_id};")
+
+        conection.commit()
+        conection.close()
 
     def add_movi(self, title = None, caption = None, message_id = None, duration = None, size = None, coment_url = None, thum_url = None, lang = 'uz', mode : str = 'hand'):
         conection = sqlite3.connect(self.file)

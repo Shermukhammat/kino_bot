@@ -545,7 +545,7 @@ Games
                 else:
                     await query.answer("Siz DisLike bosgansiz")
             
-            if command == 'dislike':
+            elif command == 'dislike':
                 movi_id = int(value)
                 state = db.is_like(user_id = query.from_user.id, movie_id = movi_id)
 
@@ -585,6 +585,22 @@ Games
                     await query.answer("Siz Like bosgansiz")
 
 
+            elif command == 'delets':
+                await query.answer("Xaqiqatdan xam kinoni o'chrmoqchimisiz?", show_alert = True)
+                await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                    message_id = query.message.message_id,
+                                                    reply_markup = ibuttons.suure_delet(id = value))
+
+            elif command == 'delets2':
+
+                movi_id = int(value)
+                movi = ram.movies_dict.get(movi_id)
+                if movi and movi['type'] == 'seri':
+                    db.delet_serie(movi_id)
+                    del ram.movies_dict[movi_id]
+
+                await query.answer("Kino o'chrldi")
+                await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
 
 
 

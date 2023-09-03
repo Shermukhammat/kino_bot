@@ -40,6 +40,7 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
         await message.answer(f"Bosh menu", reply_markup = dbuttons.menu(admin = True))
 
     elif message.text == "💾♻️ Saqlash":
+        await state.finish()
         user_id = message.from_user.id
         data = ram.input_series[user_id] #['title']
 
@@ -112,7 +113,6 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
         #Back media menu
         admin = ram.get_info(message.from_user.id, admin = True)
         admin['where'] = 'media'
-        await state.finish()
         await message.answer("Media menyusi", reply_markup = dbuttons.media())
 
 

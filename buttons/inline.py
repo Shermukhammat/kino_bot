@@ -133,7 +133,7 @@ class Inline_buttons:
         if serie:
             if admin:
                 buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = f"like.{id}"), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = f"dislike.{id}"), save],
-                          [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f"🗑 O'chrish", callback_data = f'delet.{id}')],
+                          [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f"🗑 O'chrish", callback_data = f'delets.{id}')],
                           [InlineKeyboardButton(text = "🎲 Tasodifiy", callback_data = "random2"), InlineKeyboardButton(text = f" 🔢 Qismlar ", callback_data = f'parts.{id}')],
                           [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
                           [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
@@ -164,6 +164,13 @@ class Inline_buttons:
                       [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
             return InlineKeyboardMarkup(inline_keyboard = buttons)
             
+
+    def suure_delet(self, id):
+        buttons = [[InlineKeyboardButton(text = "Xa", callback_data = f"delets2.{id}"), InlineKeyboardButton(text = "Yo'q", callback_data = f'back_ser.{id}')],
+                   [InlineKeyboardButton(text = "⬅️ Orqaga", callback_data = f'back_ser.{id}')],
+                   [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = '')]]
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+
 
     def serie_parts(self, serie_id = None, parts : dict = {}):
         buttons = [[]]
