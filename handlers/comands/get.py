@@ -44,12 +44,12 @@ async def get_2_handler(message : types.Message):
 async def admin(message : types.Message):
     await bot.delete_message(chat_id = message.from_user.id, message_id = message.message_id)
     
-    index = message.text.split(' ')[-1]
-    if index.isnumeric():
-        index = int(index)
+    movi_id = message.text.split(' ')[-1]
+    if movi_id.isnumeric():
+        movi_id = int(movi_id)
         if ram.check_admin(message.from_user.id):
-            if index < ram.movies_count:
-                movi = ram.get_movi(index = index)
+            if ram.movies_dict.get(movi_id):
+                movi = ram.movies_dict[movi_id]
 
                 state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
                 saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
@@ -63,11 +63,9 @@ async def admin(message : types.Message):
                 
             
         if ram.check_user(message.from_user.id):
-            if index < ram.movies_count:
-                movi = ram.get_movi(index = index)
-                # movi = ram.movies_dict.get(index)
-            
-                # print(ram.movies_dict)
+            if ram.movies_dict.get(movi_id):
+                movi = ram.movies_dict[movi_id]
+   
 
                 state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
                 saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])

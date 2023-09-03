@@ -62,13 +62,15 @@ async def search(message : types.InlineQuery):
 
 
         else:
-            # indexs = google.search_movies(match = message.query.lower(), limt = 10)
+            # Xamma seryal va kinolarnolardan izlash id larni
             movies_id = [extract[2] for extract in process.extract(message.query, ram.movies_dict, limit = 10)]
 
         
             answers = []
             for movi_id in movies_id:
                 movi = ram.movies_dict[movi_id]
+
+                # Kino Bo'lsa
                 if movi['type'] == 'movi':
                     answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = movi['title'],
@@ -76,6 +78,9 @@ async def search(message : types.InlineQuery):
                                                         #   thumb_url = "AAMCBAADGQEAAhkEZINYvRyHAdx3i3WIkCMpcamOMQQAAgkeAAI_vRhTWdHNQuX71tQBAAdtAAMvBA","https://telegra.ph/file/a7112f8f0763f8e4b22d5.jpg"
                                                         thumb_url = movi['thum_url'],
                                                         input_message_content = types.InputTextMessageContent(message_text = f"/get {movi['id']}")))
+                
+                
+                # Seriyal bo'lsa
                 elif movi['type'] == 'seri':
                     answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = movi['title'],
