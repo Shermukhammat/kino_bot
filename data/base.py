@@ -76,27 +76,11 @@ class Database:
         for row in cursor.execute(match):
             ids.append(row[0])
 
-        movies = []
-        for idd in ids:
-            match = f"SELECT * FROM {self.movies} WHERE id == {idd};"
-            for row in cursor.execute(match):
-                id, title, caption, file_size, duration, like, dislike, coments, thum_url, lang = row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]
-                movi =  {'id' : id, 
-                          'title' : title, 
-                          'caption' : caption, 
-                          'size' : file_size,
-                          'duration' : duration,
-                          'like' : like,
-                          'dislike' : dislike,
-                          'coments' : coments,
-                          'thum_url' : thum_url,
-                          'lang' : lang}
-                movies.append(movi)
-        
+
         conection.commit()
         conection.close()
 
-        return movies
+        return ids
 
     def get_movi(self, id : int):
         conection = sqlite3.connect(self.file)

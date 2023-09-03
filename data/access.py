@@ -16,6 +16,7 @@ class RAM:
         for seri in database.get_series():
             self.movies.append(seri)
         self.movies_dict = {movi['id'] : movi for movi in self.movies}
+        self.movies_id = [movi['id'] for movi in self.movies_dict.values()]
         
         self.movies_count = len(self.movies)
         self.movies_title = [movi['title'] for movi in self.movies]

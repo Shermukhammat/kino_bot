@@ -106,41 +106,56 @@ Games
 
 
         elif text == 'random':
-            index = randint(0, len(ram.movies)-1)
-            movi = ram.movies[index]
-
-            state = db.is_like(user_id = query.from_user.id, movie_id = movi['id'])
-            saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
-            buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
+            index = randint(0, len(ram.movies_id)-1)
+            movi_id = ram.movies_id[index]
+            movi = ram.movies_dict[movi_id]
+            
+            if movi['type'] == 'movi':
+                saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = movi['id'])
         
 
-            await bot.copy_message(chat_id = query.from_user.id,
+                await bot.copy_message(chat_id = query.from_user.id,
                                    from_chat_id = CHANEL_ID,
                                    message_id = movi['id'],
                                    reply_markup = buttons)
-                                #    ibuttons.movi_buttons(coments_url = movi['coments'], 
-                                #                                             first_state = True,  
-                                #                                             id = index, 
-                                #                                             like = movi['like'], 
-                                #                                             dislike = movi['dislike'],
-                                #                                             admin = False,
-                                #                                             randomly = True))
+            
+            elif movi['type'] == 'seri':
+                saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = movi['id'], serie = True)
+        
+                await bot.copy_message(chat_id = query.from_user.id,
+                                       message_id = movi['id'],
+                                       from_chat_id = CHANEL_ID,
+                                       reply_markup = buttons)
+
         
         elif text == 'random2':
-            index = randint(0, len(ram.movies)-1)
-            movi = ram.movies[index]
+            index = randint(0, len(ram.movies_id)-1)
+            movi_id = ram.movies_id[index]
+            movi = ram.movies_dict[movi_id]
             
-            state = db.is_like(user_id = query.from_user.id, movie_id = movi['id'])
-            saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
-            buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
+            if movi['type'] == 'movi':
+                saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = movi['id'])
             
-            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                await bot.edit_message_reply_markup(chat_id = query.from_user.id,
                                                 message_id = query.message.message_id,
                                                 reply_markup = None)
-            await bot.copy_message(chat_id = query.from_user.id,
+                await bot.copy_message(chat_id = query.from_user.id,
                                    from_chat_id = CHANEL_ID,
                                    message_id = movi['id'],
                                    reply_markup = buttons)
+            
+            
+            elif movi['type'] == 'seri':
+                saved = db.is_saved(user_id = query.from_user.id, movie_id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = movi['id'], serie = True)
+        
+                await bot.copy_message(chat_id = query.from_user.id,
+                                       message_id = movi['id'],
+                                       from_chat_id = CHANEL_ID,
+                                       reply_markup = buttons)
             
         elif text == 'check':
             await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
@@ -193,10 +208,10 @@ Games
                 # if movi
                 # movi = db.get_movi(id = index)
                 if seire:
-                    state = db.is_like(user_id = query.from_user.id, movie_id = seire['id'])
+                    # state = db.is_like(user_id = query.from_user.id, movie_id = seire['id'])
                     saved = db.is_saved(user_id = query.from_user.id, movie_id = seire['id'])
                     # db.get_
-                    buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], state = state, saved = saved, admin = False, id = value, serie = True)
+                    buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], saved = saved, admin = False, id = value, serie = True)
         
                     await bot.edit_message_reply_markup(chat_id = query.from_user.id, message_id = query.message.message_id, reply_markup = buttons)
 

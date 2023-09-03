@@ -47,17 +47,25 @@ async def search(message : types.InlineQuery):
             
             elif message.query == '#SAVED':
                 answers = []
-                
-                # db.get_saved(id = message.from_user.id))
 
-                for movi in db.get_saved(id = message.from_user.id):
-                    answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
+                for movi_id in db.get_saved(id = message.from_user.id):
+                    movi = ram.movies_dict.get(movi_id)
+                    if movi and movi['type'] == 'movi':
+                        answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = movi['title'],
                                                         description = f"xajmi : {movi['size']} mb| davomiyligi : {movi['duration']} | tili : {movi['lang']}",
                                                         #   thumb_url = "AAMCBAADGQEAAhkEZINYvRyHAdx3i3WIkCMpcamOMQQAAgkeAAI_vRhTWdHNQuX71tQBAAdtAAMvBA","https://telegra.ph/file/a7112f8f0763f8e4b22d5.jpg"
                                                         thumb_url = movi['thum_url'],
-                                                        input_message_content = types.InputTextMessageContent(message_text = f"/get2 {movi['id']}")))
-                
+                                                        input_message_content = types.InputTextMessageContent(message_text = f"/get {movi['id']}")))
+
+                    elif movi and movi['type'] == 'seri':
+                        answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
+                                                        title = movi['title'],
+                                                        description = f"qismlari soni : {len(movi['parts_id'])} | tili : {movi['lang']}",
+                                                        thumb_url = movi['thum_url'],
+                                                        input_message_content = types.InputTextMessageContent(message_text = f"/get2 {movi_id}")))
+                        
+
                 await message.answer(answers)
 
 
@@ -84,8 +92,7 @@ async def search(message : types.InlineQuery):
                 elif movi['type'] == 'seri':
                     answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = movi['title'],
-                                                        description = f"Yaxshi serial",
-                                                        #   thumb_url = "AAMCBAADGQEAAhkEZINYvRyHAdx3i3WIkCMpcamOMQQAAgkeAAI_vRhTWdHNQuX71tQBAAdtAAMvBA","https://telegra.ph/file/a7112f8f0763f8e4b22d5.jpg"
+                                                        description = f"qismlari soni : {len(movi['parts_id'])} | tili : {movi['lang']}",
                                                         thumb_url = movi['thum_url'],
                                                         input_message_content = types.InputTextMessageContent(message_text = f"/get2 {movi_id}")))
                     
