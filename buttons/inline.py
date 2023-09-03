@@ -102,7 +102,7 @@ class Inline_buttons:
     #         return InlineKeyboardMarkup(inline_keyboard = buttons)
 
 
-    def movi_buttons(self, coments_url : str, like : int = 0, dislike : int = 0, id : int = 0, last : str = "", state : str = None, admin : bool = True, saved : bool = False):
+    def movi_buttons(self, coments_url : str, like : int = 0, dislike : int = 0, id : int = 0, last : str = "", state : str = None, admin : bool = True, saved : bool = False, serie = False):
         """_summary_
 
         Args:
@@ -147,6 +147,23 @@ class Inline_buttons:
         
 
         
+        if serie:
+            if admin:
+                buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), save],
+                          [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f"🗑 O'chrish", callback_data = f'delet.{id}')],
+                          [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
+                          [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
+                return InlineKeyboardMarkup(inline_keyboard = buttons)
+        
+            else:             
+                buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), save],
+                      [InlineKeyboardButton(text = "💬 Izohlar", callback_data = "comment", url = coments_url), InlineKeyboardButton(text = f" ⚠️ SHikoyat", callback_data = f'information.{id}')],
+                      [InlineKeyboardButton(text = "🎲 Tasodifiy", callback_data = "random2"), InlineKeyboardButton(text = f" 🔢 Qismlar ", callback_data = f'parts.{id}')],# 🔢
+                      [InlineKeyboardButton(text = "❌", callback_data = 'delet')],
+                      [InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = last)]]
+                return InlineKeyboardMarkup(inline_keyboard = buttons)
+            
+
 
         if admin:
             buttons = [[InlineKeyboardButton(text = f"👍 {like}", callback_data = like_callback_data), InlineKeyboardButton(text = f"👎 {dislike}", callback_data = dislike_callback_data), save],
@@ -171,6 +188,21 @@ class Inline_buttons:
             # return InlineKeyboardMarkup(inline_keyboard = buttons)
             
 
+    def serie_parts(self, serie_id = None, parts : dict = {}):
+        buttons = [[]]
+        
+        for num, id in parts.items():
+            if len(buttons[0]) < 5:
+                buttons[0].append(InlineKeyboardButton(text = f" {num} ", callback_data = f"gpart.{id}"))
+            # elif len(buttons[1]) <= 5:
+            #     buttons[1].append(InlineKeyboardButton(text = f" {num} ", callback_data = f"blah{id}"))
+        
+        buttons.append([InlineKeyboardButton(text = " ◀️ ", callback_data = f'pback.{serie_id}'), InlineKeyboardButton(text = " ▶️ ", callback_data = f'pnex.{serie_id}')])
+        buttons.append([InlineKeyboardButton(text = "⬅️ Orqaga", callback_data = f'back_ser.{serie_id}')])
+        buttons.append([InlineKeyboardButton(text = "🔍 Kino Izlash", switch_inline_query_current_chat = "")])
+
+        return InlineKeyboardMarkup(inline_keyboard = buttons)
+        
 
     def subscribe_chanels(self, chanels : dict):
         buttons = [] 

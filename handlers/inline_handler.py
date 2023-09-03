@@ -87,7 +87,7 @@ async def search(message : types.InlineQuery):
                                                         description = f"Yaxshi serial",
                                                         #   thumb_url = "AAMCBAADGQEAAhkEZINYvRyHAdx3i3WIkCMpcamOMQQAAgkeAAI_vRhTWdHNQuX71tQBAAdtAAMvBA","https://telegra.ph/file/a7112f8f0763f8e4b22d5.jpg"
                                                         thumb_url = movi['thum_url'],
-                                                        input_message_content = types.InputTextMessageContent(message_text = f"/get_seri xaxa")))
+                                                        input_message_content = types.InputTextMessageContent(message_text = f"/get2 {movi_id}")))
                     
         
 

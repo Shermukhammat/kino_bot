@@ -11,6 +11,7 @@ class RAM:
         self.users_count = len(self.users)
         self.admins = database.get_admins()
 
+
         self.movies = database.get_movies()
         for seri in database.get_series():
             self.movies.append(seri)
