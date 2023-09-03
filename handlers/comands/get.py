@@ -30,10 +30,10 @@ async def get_2_handler(message : types.Message):
             # if movi
             # movi = db.get_movi(id = index)
             if seire:
-                state = db.is_like(user_id = message.from_user.id, movie_id = seire['id'])
+                # state = db.is_like(user_id = message.from_user.id, movie_id = seire['id'])
                 saved = db.is_saved(user_id = message.from_user.id, movie_id = seire['id'])
                 # db.get_
-                buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], state = state, saved = saved, admin = False, id = seire_id, serie = True)
+                buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], saved = saved, admin = False, id = seire_id, serie = True)
         
                 await bot.copy_message(chat_id = message.from_user.id,
                                        message_id = seire['id'],
@@ -52,9 +52,9 @@ async def admin(message : types.Message):
             if ram.movies_dict.get(movi_id):
                 movi = ram.movies_dict[movi_id]
 
-                state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
+                # state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
                 saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
-                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = True, id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = True, id = movi['id'])
         
                 await bot.copy_message(chat_id = message.from_user.id,
                                        message_id = movi['id'],
@@ -68,9 +68,9 @@ async def admin(message : types.Message):
                 movi = ram.movies_dict[movi_id]
    
 
-                state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
+                # state = db.is_like(user_id = message.from_user.id, movie_id = movi['id'])
                 saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
-                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], state = state, saved = saved, admin = False, id = movi['id'])
+                buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = movi['id'])
         
                 await bot.copy_message(chat_id = message.from_user.id,
                                        message_id = movi['id'],

@@ -16,7 +16,7 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
     id = query.from_user.id
     message_id = query.message.message_id
 
-
+    # print(text)
 
     if ram.check_user(query.from_user.id):
         if text == 'more':
@@ -149,105 +149,16 @@ Games
 
 
 
-        # Like va Dislikega jovob beruvchi qisim
-        text = text.split('.')
-        if len(text) == 3:
-            state, movi_id, action = text[-1], int(text[-2]), text[-3]
-
-            if ram.users[query.from_user.id]['action'] != 'like':
-                ram.users[query.from_user.id]['action'] = 'like'
-
-                # Foydalanuvchi like va dislike bosmagan bo'lsa
-                if state == 'firs':
-                    if action == 'like':
-                        movi = ram.movies_dict.get(movi_id)
-                        if movi:
-                            # movi = db.get_movi(id = movi_id)
-
-                            db.like_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
-                            ram.movies_dict[movi_id]['like'] += 1
-                        
-                            buttons = query.message.reply_markup.inline_keyboard
-
-                            buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}.lik")
-                            buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}.lik")
-                            await query.answer("Siz Like bosdingiz")
-                            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
-                                                        message_id = query.message.message_id,
-                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
- 
-                    if action == 'dislike':
-                        movi = ram.movies_dict.get(movi_id)
-                        if movi:
-                            db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
-                            ram.movies_dict[movi_id]['dislike'] += 1
-                        
-                            buttons = query.message.reply_markup.inline_keyboard
-
-                            buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}.dis")
-                            buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}.dis")
-                            await query.answer("Siz Dislike bosdingiz")
-                            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
-                                                        message_id = query.message.message_id,
-                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
-            
-                # Foydalanuvchi dislike bosgan bo'lsa
-                elif state == 'dis':
-                    if action == 'dislike':
-                        movi = ram.movies_dict.get(movi_id)
-                        if movi:
-                            db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'], remove = True)
-                            ram.movies_dict[movi_id]['dislike'] -= 1
-                        
-                            buttons = query.message.reply_markup.inline_keyboard
-
-                            buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}.firs")
-                            buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}.firs")
-                            await query.answer("Dislike olib tashlandi")
-                            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
-                                                        message_id = query.message.message_id,
-                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
-                    
-                    if action == 'like':
-                        await query.answer("Siz Dislike bosgansiz")
-            
-                elif state == 'lik':
-                    # print(action)
-                    if action == 'like':
-                        movi = ram.movies_dict.get(movi_id)
-                        if movi:
-                            db.like_movi(user_id = query.from_user.id, movie_id = movi_id, like_count = movi['like'], remove = True)
-                            ram.movies_dict[movi_id]['like'] -= 1
-
-                            buttons = query.message.reply_markup.inline_keyboard
-
-                            buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}.firs")
-                            buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}.firs")
-                            await query.answer("Like olib tashlandi")
-                            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
-                                                        message_id = query.message.message_id,
-                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
-
-
-                    if action == 'dislike':
-                        await query.answer("Siz Like bosgansiz")
-
-                ram.users[query.from_user.id]['action'] = None
-
-            else:
-                await query.answer("To many requests")
+        
 
         # Comandalar qismi
-        elif len(text) == 2:
+        text = text.split('.')
+        if len(text) == 2:
             command, value = text[0], text[1]
-
+            
             if command == 'parts':
                 value = int(value)
                 serie = ram.movies_dict[value]
-                
-                # for part_num, part_id in serie['parts_id']:
-                #     types.InlineKeyboardButton(text = part_num, callback_data = f"part.{part_id}&{value}&{part_num}")
-                #     print(part_num)
 
                 await bot.edit_message_reply_markup(chat_id = query.from_user.id, 
                                                     message_id = query.message.message_id,
@@ -322,14 +233,13 @@ Games
                 serie = ram.movies_dict[serie_id]
 
                 buttons = query.message.reply_markup.inline_keyboard            
-                head = int(buttons[0][0].text) - 5
+                head = int(buttons[0][0].text)
+                start = head - 5
                 # print(head)
 
                 new_buttons = []
-                n = 0
                 for num, idd in serie['parts_id'].items():
-                    if num >= head and  n < 5:
-                        n+=1
+                    if num >= start and num < head:
                         new_buttons.append(types.InlineKeyboardButton(text = f' {num} ', callback_data = f"gpart.{idd}"))
 
                 if len(new_buttons) > 0:
@@ -342,6 +252,83 @@ Games
                     await query.answer("Boshqa qismlar mavjud emas")
 
 
+            elif command == 'like':
+                movi_id = int(value)
+                state = db.is_like(user_id = query.from_user.id, movie_id = movi_id)
+                # print(state)
+
+                if state == 'like':
+                    movi = ram.movies_dict.get(movi_id)
+                    if movi:
+                        db.like_movi(user_id = query.from_user.id, movie_id = movi_id, like_count = movi['like'], remove = True)
+                        ram.movies_dict[movi_id]['like'] -= 1
+
+                        buttons = query.message.reply_markup.inline_keyboard
+
+                        buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}")
+                        buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}")
+                        await query.answer("Like olib tashlandi")
+                        await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
+                    
+                
+                elif state == None:
+                    movi = ram.movies_dict.get(movi_id)
+                    if movi:
+                        db.like_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
+                        ram.movies_dict[movi_id]['like'] += 1
+                    
+                        buttons = query.message.reply_markup.inline_keyboard
+                        buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}")
+                        buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}")
+
+                        await query.answer("Siz Like bosdingiz")
+                        await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
+                
+                else:
+                    await query.answer("Siz DisLike bosgansiz")
+            
+            if command == 'dislike':
+                movi_id = int(value)
+                state = db.is_like(user_id = query.from_user.id, movie_id = movi_id)
+
+                if state == None:
+                    movi = ram.movies_dict.get(movi_id)
+                    if movi:
+                        db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
+                        ram.movies_dict[movi_id]['dislike'] += 1
+                        
+                        buttons = query.message.reply_markup.inline_keyboard
+
+                        buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}")
+                        buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}")
+                        await query.answer("Siz Dislike bosdingiz")
+                        await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
+                
+                elif state == 'dislike':
+                    movi_id = int(value)
+                    movi = ram.movies_dict.get(movi_id)
+
+                    if movi:
+                            db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'], remove = True)
+                            ram.movies_dict[movi_id]['dislike'] -= 1
+                        
+                            buttons = query.message.reply_markup.inline_keyboard
+
+                            buttons[0][0] = types.InlineKeyboardButton(text = f"👍 {movi['like']}", callback_data = f"like.{movi_id}")
+                            buttons[0][1] = types.InlineKeyboardButton(text = f"👎 {movi['dislike']}", callback_data = f"dislike.{movi_id}")
+                            await query.answer("Dislike olib tashlandi")
+                            await bot.edit_message_reply_markup(chat_id = query.from_user.id,
+                                                        message_id = query.message.message_id,
+                                                        reply_markup = types.InlineKeyboardMarkup(inline_keyboard = buttons))
+                    
+                else:
+                    await query.answer("Siz Like bosgansiz")
 
 
                 
