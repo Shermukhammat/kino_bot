@@ -10,30 +10,23 @@ async def get_2_handler(message : types.Message):
     seire_id = message.text.split(' ')[-1]
     if seire_id.isnumeric():
         seire_id = int(seire_id)
-        # if ram.check_admin(message.from_user.id):
-        #     movi = db.get_movi(id = index)
-        #     # print(movi)
-        #     if movi:
-        #         await bot.copy_message(chat_id = message.from_user.id,
-        #                                message_id = movi['id'],
-        #                                from_chat_id = CHANEL_ID,
-        #                                reply_markup = ibuttons.movi_buttons(coments_url = movi['coments'],
-        #                                                                     admin = True,
-        #                                                                     first_state = True,  
-        #                                                                     id = 1, 
-        #                                                                     like = movi['like'], 
-        #                                                                     dislike = movi['dislike']))
-                
-            
+
         if ram.check_user(message.from_user.id):
             seire = ram.movies_dict.get(seire_id)
-            # if movi
-            # movi = db.get_movi(id = index)
             if seire:
-                # state = db.is_like(user_id = message.from_user.id, movie_id = seire['id'])
                 saved = db.is_saved(user_id = message.from_user.id, movie_id = seire['id'])
-                # db.get_
                 buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], saved = saved, admin = False, id = seire_id, serie = True)
+        
+                await bot.copy_message(chat_id = message.from_user.id,
+                                       message_id = seire['id'],
+                                       from_chat_id = CHANEL_ID,
+                                       reply_markup = buttons)
+                
+        elif ram.check_admin(message.from_user.id):
+            seire = ram.movies_dict.get(seire_id)
+            if seire:
+                saved = db.is_saved(user_id = message.from_user.id, movie_id = seire['id'])
+                buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], saved = saved, admin = True, id = seire_id, serie = True)
         
                 await bot.copy_message(chat_id = message.from_user.id,
                                        message_id = seire['id'],
