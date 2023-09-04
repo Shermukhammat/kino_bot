@@ -27,7 +27,8 @@ if __name__ == '__main__':
     # set.data['forced_chanels'] = {}https://t.me/sexiiwbeyw
     # set.data['forced_chanels']['@kino_bot_discuss'] = 'https://t.me/Kino_bot_news'
     # set.data['forced_chanels']['@sexiiwbeyw'] = 'https://t.me/sexiiwbeyw'
-    set.data['bot_url'] = '@kino_qidiruvchi_robot'
+    # set.data['bot_url'] = '@kino_qidiruvchi_robot'
+    # set.data['user_manual'] = 'Blah blah'
     print(set.data)
 
     set.update()

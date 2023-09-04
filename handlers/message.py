@@ -130,14 +130,6 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
         
 
 
-
-
-
-        
-
-
-
-
 @dp.message_handler(state = main_states.input_serie_info)
 async def input_seroie_info(message : types.Message, state : FSMContext):
     if message.text == "⬅️ Orqaga":
@@ -564,8 +556,46 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                 admin['where'] = 'head_menu'
                 await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
 
-            if message.text == "📡 Kanallar":
+            elif message.text == "📡 Kanallar":
                 await message.answer("Hozirda majvjud jami kanallar ", reply_markup = ibuttons.chanels(setting.data['forced_chanels'].keys()))
+            
+            elif message.text == "📓 Qo'lanma":
+                admin['where'] = 'manual_m'
+                await message.answer("Qaysi qo'lanmani tahrirlaymiz?", reply_markup = dbuttons.manual_edit())
+        
+        elif  admin['where'] == 'manual_m':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'settings'
+                await message.answer("Sozlamalar", reply_markup = dbuttons.settings())
+            
+            elif message.text == "🏠 Bosh sahifa":
+                admin['where'] = 'head_menu'
+                await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", 
+                                     reply_markup = dbuttons.menu(admin = True))
+            
+            elif message.text == "📝 Yozuvli qo'lanma":
+                admin['where'] = 'input_tman'
+                await message.answer("Ok, text qo'lanmani kiriting!", reply_markup = dbuttons.input_menu())
+        
+        elif admin['where'] == 'input_tman':
+            if message.text == "⬅️ Orqaga":
+                admin['where'] = 'manual_m'
+                await message.answer("qo'lanma menyusi", reply_markup = dbuttons.manual_edit())
+
+            elif message.text == "🏠 Bosh sahifa":
+                admin['where'] = 'head_menu'
+                await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", 
+                                     reply_markup = dbuttons.menu(admin = True))
+            
+
+            else:
+                setting.data['user_manual'] = message.text
+                setting.update()
+                
+                admin['where'] = 'manual_m'
+                await message.answer("qo'lanma menyusi", reply_markup = dbuttons.manual_edit())
+
+        
 
         elif admin['where'] == 'media':
             if message.text == "⬅️ Orqaga":
@@ -634,6 +664,7 @@ async def core_message_handler(message : types.Message, state : FSMContext):
 
                 await state.set_state(movi_add.set_video)
                 await message.answer("Endi kinoyingzni tashlang", reply_markup = dbuttons.input_video())
+    
     else:
         await message.answer(f"Assalomu alaykum {message.from_user.first_name}, Xush kelibsiz", reply_markup = dbuttons.menu())
         ram.registr(id = message.from_user.id, name = message.from_user.first_name)

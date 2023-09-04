@@ -108,3 +108,11 @@ class Defolt_buttons:
         
         else:
             pass
+    
+    def manual_edit(self):
+        buttons = [[KeyboardButton(text = "📝 Yozuvli qo'lanma"), KeyboardButton(text = "🎞 Video qo'lanma")],
+                   [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]]
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
+
+    def input_menu(self):
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]], resize_keyboard = True)
