@@ -35,6 +35,8 @@ class Main_States(StatesGroup):
     input_chanle = State()
     primyer = State()
 
+    input_video_manual = State()
+
     input_serie_lang = State()
     input_serie_title = State()
     input_serie_info = State()

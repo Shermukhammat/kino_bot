@@ -27,7 +27,6 @@ async def get_movi_from_hand(message : types.Message, state : FSMContext):
 
         duration = convert(message.video.duration)
         message_id = message.message_id
-        
         # creating thumb photo url
         media = await bot.download_file_by_id(message.video.thumb.file_id)
         with open("./data/pictures/photo.jpg", "wb") as file:
@@ -113,3 +112,16 @@ async def get_part(message : types.Message, state : FSMContext):
             await message.reply(f"{ram.input_series[message.from_user.id]['last_part']} - qisim qo'shiildi", 
                                 reply_markup = dbuttons.seri_input_menu(save = True))
             
+
+@dp.message_handler(content_types = ContentTypes.VIDEO, state = main_states.input_video_manual)
+async def get_part(message : types.Message, state : FSMContext):
+    data = await bot.copy_message(from_chat_id = message.from_user.id, chat_id = CHANEL_ID, message_id = message.message_id)
+    
+    
+    await bot.delete_message(chat_id = CHANEL_ID, message_id = setting.data['vide_manual'])
+    
+    setting.data['vide_manual'] = data.message_id
+    setting.update()
+
+    await state.finish()
+    await bot.send_message(text = "qo'lanma menyusi", reply_markup = dbuttons.manual_edit(), chat_id = message.from_user.id)

@@ -29,6 +29,7 @@ if __name__ == '__main__':
     # set.data['forced_chanels']['@sexiiwbeyw'] = 'https://t.me/sexiiwbeyw'
     # set.data['bot_url'] = '@kino_qidiruvchi_robot'
     # set.data['user_manual'] = 'Blah blah'
+    set.data['vide_manual'] = 333
     print(set.data)
 
     set.update()

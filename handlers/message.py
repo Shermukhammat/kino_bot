@@ -9,6 +9,25 @@ import time
 import asyncio
 
 
+@dp.message_handler(state = main_states.input_video_manual)
+async def input_manual_video_message(message : types.Message, state : FSMContext):
+
+    if message.text == "⬅️ Orqaga":
+        await state.finish()
+
+        admin = ram.get_info(message.from_user.id, admin = True)
+        admin['where'] = 'manual_m'
+        await message.answer("qo'lanma menyusi", reply_markup = dbuttons.manual_edit())
+
+    elif message.text == "🏠 Bosh sahifa":
+        await state.finish()
+
+        admin = ram.get_info(message.from_user.id, admin = True)
+        admin['where'] = 'head_menu'
+        await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}\n Bugun nima qilamiz admin aka?", 
+                                    reply_markup = dbuttons.menu(admin = True))
+
+
 @dp.message_handler(state = main_states.input_series_part)
 async def input_series_part_mesage(message : types.Message, state : FSMContext):
     if message.text == "⬅️ Orqaga":
@@ -576,6 +595,10 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             elif message.text == "📝 Yozuvli qo'lanma":
                 admin['where'] = 'input_tman'
                 await message.answer("Ok, text qo'lanmani kiriting!", reply_markup = dbuttons.input_menu())
+            
+            elif message.text == "🎞 Video qo'lanma":
+                await state.set_state(main_states.input_video_manual)
+                await message.answer("Ok, Yangi video qo'lanmani tashlang", reply_markup = dbuttons.input_menu())
         
         elif admin['where'] == 'input_tman':
             if message.text == "⬅️ Orqaga":
@@ -591,9 +614,10 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             else:
                 setting.data['user_manual'] = message.text
                 setting.update()
-                
+
                 admin['where'] = 'manual_m'
                 await message.answer("qo'lanma menyusi", reply_markup = dbuttons.manual_edit())
+        
 
         
 
