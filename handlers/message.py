@@ -57,8 +57,16 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
         
         data['parts_id'] = sorted_part 
 
-        print(data)
+        if data['caption'] == None:
+            data['caption'] = data['title']
+
+        # print(data)
         await message.answer("Seriyal yuklanishi boshland")
+
+        #Back media menu
+        admin = ram.get_info(message.from_user.id, admin = True)
+        admin['where'] = 'media'
+        await message.answer("Media menyusi", reply_markup = dbuttons.media())
         
 
         
@@ -107,13 +115,21 @@ async def input_series_part_mesage(message : types.Message, state : FSMContext):
                     lang = data['lang'],
                     parts_id = parts_id)
         
+        # Add serie to ram
+        seri =  {'id' : mes_data.message_id,
+                     'title' : data['title'], 
+                     'like' : 0,
+                     'dislike' : 0,
+                     'coments' : coment_url,
+                     'thum_url' : data['thumb'],
+                     'parts_id' : parts_id,
+                     'lang' : data['lang'],
+                     'type' : 'seri'}
+        ram.movies_dict[id] = seri
+        
         
 
 
-        #Back media menu
-        admin = ram.get_info(message.from_user.id, admin = True)
-        admin['where'] = 'media'
-        await message.answer("Media menyusi", reply_markup = dbuttons.media())
 
 
 

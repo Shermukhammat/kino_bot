@@ -448,11 +448,18 @@ Games
             elif command == 'back_ser':
                 value = int(value)
                 seire = ram.movies_dict.get(value)
-                if seire:
+                if seire and seire['type'] == 'seri':
                     saved = db.is_saved(user_id = query.from_user.id, movie_id = seire['id'])
                     buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], saved = saved, admin = True, id = value, serie = True)
         
                     await bot.edit_message_reply_markup(chat_id = query.from_user.id, message_id = query.message.message_id, reply_markup = buttons)
+                
+                elif seire and seire['type'] == 'movi':
+                    saved = db.is_saved(user_id = query.from_user.id, movie_id = seire['id'])
+                    buttons = ibuttons.movi_buttons(coments_url = seire['coments'], like = seire['like'], dislike = seire['dislike'], saved = saved, admin = True, id = value)
+        
+                    await bot.edit_message_reply_markup(chat_id = query.from_user.id, message_id = query.message.message_id, reply_markup = buttons)
+
 
 
             elif  command == 'gpart':
@@ -591,6 +598,8 @@ Games
                                                     message_id = query.message.message_id,
                                                     reply_markup = ibuttons.suure_delet(id = value))
 
+
+            #back_ser
             elif command == 'delets2':
 
                 movi_id = int(value)
