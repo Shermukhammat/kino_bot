@@ -121,7 +121,7 @@ class RAM:
 
     
     
-    def add_search_movi(self, message_id =  None, title = None, caption = None, size = None, duration = None, coments = None, thum_url = None, lang = 'uz'):
+    def add_search_movi(self, message_id =  None, title = None, caption = None, size = None, duration = None, coments = None, thum_url = None, lang = 'uz', type = 'movi'):
         data = {'id' : message_id, 
                 'title' : title, 
                 'caption' : caption, 
@@ -131,11 +131,10 @@ class RAM:
                 'dislike' : 0,
                 'coments' : coments,
                 'thum_url' : thum_url,
-                'lang' : lang}
+                'lang' : lang,
+                'type' : type}
         
-        self.movies.append(data)
-        self.movies_title.append(title)
-        self.movies_count += 1
+        self.movies_dict[message_id] = data
         
     def like_movi(self, index : int, incres : bool = True):
         if incres:

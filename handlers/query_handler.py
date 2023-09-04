@@ -596,11 +596,47 @@ Games
                 movi_id = int(value)
                 movi = ram.movies_dict.get(movi_id)
                 if movi and movi['type'] == 'seri':
+
+                    # Delet comment
+                    if movi['coments'].split('/')[-1].isnumeric:
+                        try:
+                            await bot.delete_message(chat_id = '@kino_bot_discuss', message_id = int(movi['coments'].split('/')[-1]))
+                        except:
+                            await query.answer("Comment message topilmadi")
+
+                    try:
+                        for part_num, part_id in movi['parts_id'].items():
+                            await bot.delete_message(chat_id = CHANEL_ID, message_id = part_id)
+                        await query.answer("Hamma seriyal qismlari o'chrib tashlandi")
+                    except:
+                        await query.answer("Seriyal qismlari topilmadi")
+                    
+                    await bot.delete_message(chat_id = CHANEL_ID, message_id = movi_id)
+
+                    
                     db.delet_serie(movi_id)
                     del ram.movies_dict[movi_id]
 
-                await query.answer("Kino o'chrldi")
-                await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+                    await query.answer("Seriyal o'chrldi")
+                    await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+            
+                elif movi and movi['type'] == 'movi':
+                    movi =  ram.movies_dict[movi_id]
+
+                    # Delet comment
+                    if movi['coments'].split('/')[-1].isnumeric:
+                        try:
+                            await bot.delete_message(chat_id = '@kino_bot_discuss', message_id = int(movi['coments'].split('/')[-1]))
+                        except:
+                            await query.answer("Comment message topilmadi")
+                    
+                        db.delet_movi(movi_id)
+                        del ram.movies_dict[movi_id]
+
+                        await query.answer("Kino o'chrldi")
+                        await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+
+
 
 
 

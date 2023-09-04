@@ -328,46 +328,48 @@ async def set_thum_message_handler(message: types.Message, state : FSMContext):
                 await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
         
         elif message.text == "🗃 Saqlash":
-            movi_data = ram.get_movi(message.from_user.id)    
+            movi_data = ram.admin_movi.get(message.from_user.id) 
+            if movi_data:   
             
-            # Creating comment url and Checking caption    
-            if movi_data['caption'] == None:
-                movi_data['caption'] = movi_data['title'] + "\n@kino_qidiruvchi_robot"
+                # Creating comment url and Checking caption  
 
-            data2 = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
-                                        photo = movi_data['thumb'],
-                                        caption = movi_data['caption'])
-            commens_url = data2.url
+                if movi_data['caption'] == None:
+                    movi_data['caption'] = movi_data['title'] + "\n@kino_qidiruvchi_robot"
+
+                data2 = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
+                                            photo = movi_data['thumb'],
+                                            caption = movi_data['caption'])
+                commens_url = data2.url
                         
             
                         
-            data = await bot.copy_message(message_id = movi_data['message_id'],
-                                         chat_id = CHANEL_ID,
-                                         from_chat_id = message.from_user.id,
-                                         caption = movi_data['caption'])          
+                data = await bot.copy_message(message_id = movi_data['message_id'],
+                                             chat_id = CHANEL_ID,
+                                             from_chat_id = message.from_user.id,
+                                             caption = movi_data['caption'])          
                         
-            db.add_movi(title = movi_data['title'],
-                        caption = movi_data['caption'],
-                        message_id = data.message_id,
-                        duration = movi_data['duration'],
-                        size = movi_data['size'],
-                        lang = movi_data['lang'],
-                        thum_url = movi_data['thumb'],
-                        coment_url = commens_url)
+                db.add_movi(title = movi_data['title'],
+                            caption = movi_data['caption'],
+                            message_id = data.message_id,
+                            duration = movi_data['duration'],
+                            size = movi_data['size'],
+                            lang = movi_data['lang'],
+                            thum_url = movi_data['thumb'],
+                            coment_url = commens_url)
                         
-            ram.add_search_movi(message_id = data.message_id, 
-                                title = movi_data['title'],
-                                caption = movi_data['caption'],
-                                size = movi_data['size'],
-                                duration = movi_data['duration'],
-                                coments = commens_url,
-                                thum_url = movi_data['thumb'],
-                                lang = movi_data['lang'])
+                ram.add_search_movi(message_id = data.message_id, 
+                                    title = movi_data['title'],
+                                    caption = movi_data['caption'],
+                                    size = movi_data['size'],
+                                    duration = movi_data['duration'],
+                                    coments = commens_url,
+                                    thum_url = movi_data['thumb'],
+                                    lang = movi_data['lang'] )#movi
 
-            admin = ram.get_info(message.from_user.id, admin = True)
-            admin['where'] = 'media'
-            await state.finish()
-            await message.answer("Kino muvvafaqiyatli databasega saqlandi", reply_markup = dbuttons.media())
+                admin = ram.get_info(message.from_user.id, admin = True)
+                admin['where'] = 'media'
+                await state.finish()
+                await message.answer("Kino muvvafaqiyatli databasega saqlandi", reply_markup = dbuttons.media())
         
 
 n = 0
