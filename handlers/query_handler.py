@@ -275,7 +275,10 @@ Games
                 if state == 'like':
                     movi = ram.movies_dict.get(movi_id)
                     if movi:
-                        db.like_movi(user_id = query.from_user.id, movie_id = movi_id, like_count = movi['like'], remove = True)
+                        if movi['type'] == 'movi':
+                            db.like_movi(user_id = query.from_user.id, movie_id = movi_id, like_count = movi['like'], remove = True)
+                        else:
+                            db.like_movi(user_id = query.from_user.id, movie_id = movi_id, like_count = movi['like'], remove = True, serie = True)
                         ram.movies_dict[movi_id]['like'] -= 1
 
                         buttons = query.message.reply_markup.inline_keyboard
@@ -291,7 +294,10 @@ Games
                 elif state == None:
                     movi = ram.movies_dict.get(movi_id)
                     if movi:
-                        db.like_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
+                        if movi['type'] == 'movi':
+                            db.like_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
+                        else:
+                            db.like_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'], serie = True)
                         ram.movies_dict[movi_id]['like'] += 1
                     
                         buttons = query.message.reply_markup.inline_keyboard
@@ -313,7 +319,10 @@ Games
                 if state == None:
                     movi = ram.movies_dict.get(movi_id)
                     if movi:
-                        db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
+                        if movi['type'] == 'movi':
+                            db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'])
+                        else:
+                            db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'], serie = True)
                         ram.movies_dict[movi_id]['dislike'] += 1
                         
                         buttons = query.message.reply_markup.inline_keyboard
@@ -330,7 +339,10 @@ Games
                     movi = ram.movies_dict.get(movi_id)
 
                     if movi:
-                            db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['like'], remove = True)
+                            if movi['type'] == 'movi':
+                                db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['dislike'], remove = True)
+                            else:
+                                db.dislike_movi(user_id = query.from_user.id, movie_id = movi['id'], like_count = movi['dislike'], remove = True, serie = True)
                             ram.movies_dict[movi_id]['dislike'] -= 1
                         
                             buttons = query.message.reply_markup.inline_keyboard

@@ -296,36 +296,54 @@ class Database:
         conection.close()
 
 
-    def like_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False, incres : bool = True):
+    def like_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False, serie : bool = False):
         #UPDATE movies SET 'like' = 10 WHERE id == 2766;
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
 
-        if remove:
-            match = f"DELETE FROM liked WHERE user_id == {user_id} AND movie_id == {movie_id};"
-            cursor.execute(match)
-            cursor.execute(f"UPDATE {self.movies} SET like = {like_count - 1} WHERE id == {movie_id};")
+        if serie:
+            if remove:
+                cursor.execute( f"DELETE FROM liked WHERE user_id == {user_id} AND movie_id == {movie_id};")
+                cursor.execute(f"UPDATE series SET like = {like_count - 1} WHERE id == {movie_id};")
+            else:
+                cursor.execute(f"INSERT INTO liked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});")
+                cursor.execute(f"UPDATE series SET like = {like_count + 1} WHERE id == {movie_id};")
+
         else:
-            match = f"INSERT INTO liked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
-            cursor.execute(match)
-            cursor.execute(f"UPDATE {self.movies} SET like = {like_count + 1} WHERE id == {movie_id};")
+            if remove:
+                match = f"DELETE FROM liked WHERE user_id == {user_id} AND movie_id == {movie_id};"
+                cursor.execute(match)
+                cursor.execute(f"UPDATE {self.movies} SET like = {like_count - 1} WHERE id == {movie_id};")
+            else:
+                match = f"INSERT INTO liked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+                cursor.execute(match)
+                cursor.execute(f"UPDATE {self.movies} SET like = {like_count + 1} WHERE id == {movie_id};")
             
         conection.commit()
         conection.close()
     
-    def dislike_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False):
+    def dislike_movi(self, user_id : int = None, movie_id : int = None, like_count : int = None, remove : bool = False, serie : bool = False):
         #UPDATE movies SET 'like' = 10 WHERE id == 2766;
         conection = sqlite3.connect(self.file)
         cursor = conection.cursor()
+        
+        if serie:
+            if remove:
+                cursor.execute(f"DELETE FROM disliked WHERE user_id == {user_id} AND movie_id == {movie_id};")
+                cursor.execute(f"UPDATE series SET dislike = {like_count - 1} WHERE id == {movie_id};")
+            else:
+                cursor.execute(f"INSERT INTO disliked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});")
+                cursor.execute(f"UPDATE series SET dislike = {like_count + 1} WHERE id == {movie_id};")
 
-        if remove:
-            match = f"DELETE FROM disliked WHERE user_id == {user_id} AND movie_id == {movie_id};"
-            cursor.execute(match)
-            cursor.execute(f"UPDATE {self.movies} SET dislike = {like_count - 1} WHERE id == {movie_id};")
         else:
-            match = f"INSERT INTO disliked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
-            cursor.execute(match)
-            cursor.execute(f"UPDATE {self.movies} SET dislike = {like_count + 1} WHERE id == {movie_id};")
+            if remove:
+                match = f"DELETE FROM disliked WHERE user_id == {user_id} AND movie_id == {movie_id};"
+                cursor.execute(match)
+                cursor.execute(f"UPDATE {self.movies} SET dislike = {like_count - 1} WHERE id == {movie_id};")
+            else:
+                match = f"INSERT INTO disliked ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+                cursor.execute(match)
+                cursor.execute(f"UPDATE {self.movies} SET dislike = {like_count + 1} WHERE id == {movie_id};")
             
         conection.commit()
         conection.close()

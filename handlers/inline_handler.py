@@ -17,6 +17,7 @@ async def search(message : types.InlineQuery):
                 for index in indexs:
                     n += 1
                     movi = ram.movies[index]
+                    
                     answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = f"{n}. {movi['title']}",
                                                         description = f"xajmi : {movi['size']} mb| davomiyligi : {movi['duration']} | tili : {movi['lang']}",
