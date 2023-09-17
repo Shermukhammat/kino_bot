@@ -26,7 +26,7 @@ class Bro(BaseMiddleware):
                     status = False
                     buttons[f"{n}-kanal"] = url 
         
-
+            # print(status)
             if not status:
                 await update.message.answer("Iltimos quydagi kanallarga obuna bo'ling", disable_web_page_preview = True,reply_markup = ibuttons.subscribe_chanels(buttons))
                 raise CancelHandler()

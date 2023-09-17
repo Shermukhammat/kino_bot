@@ -21,4 +21,4 @@ async def start(message : types.Message):
     else:
         name = message.from_user.first_name
         ram.registr(id = id, name = name)
-        await message.answer(f"Siznikiruyxatdan utdi ")
+        await message.answer(f"Assalomu alaykum. welkome our bot. Siz royhatdan muvaffaqqiyatli o'ttibgiz. ishlaringizga omad!")
