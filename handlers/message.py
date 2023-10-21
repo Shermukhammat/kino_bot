@@ -495,7 +495,7 @@ async def input_user_message(message: types.Message, state : FSMContext):
     user = ram.get_info(message.from_user.id, admin = False)
     if message.text == "⬅️ Orqaga":
         await message.answer("menu", reply_markup = dbuttons.menu())
-        await message.answer(f"Foydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.more_menu())
+        await message.answer(f"Foydalanuvchi : {user['name']} \nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.more_menu())
         await state.finish()
 
 @dp.message_handler()
