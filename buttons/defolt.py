@@ -116,3 +116,8 @@ class Defolt_buttons:
 
     def input_menu(self):
         return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]], resize_keyboard = True)
+    
+    def movies_code_menu(self):
+        buttons = [[KeyboardButton(text = "🆕 qo'shish"), KeyboardButton(text = "🔄 tahrirlash")],
+                   [KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]]
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)

@@ -478,6 +478,18 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
                 await message.reply("Iltimos avval kino tashlang")
             
 
+@dp.message_handler(state = main_states.set_movi_code)
+async def input_avto_movi_message_handler(message: types.Message, state : FSMContext):
+    admin = ram.get_info(message.from_user.id, admin = True)
+    if message.text == "⬅️ Orqaga":
+        admin['where'] = 'media'
+        await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
+        await state.finish()
+    
+    elif message.text == "🆕 qo'shish":
+        
+        pass
+    
 
 
 @dp.message_handler()
@@ -630,7 +642,11 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             elif message.text == "📺 Serial qo'shish":
                 await state.set_state(main_states.input_serie_lang)
                 await message.answer("Seriyal tilni tanlang", reply_markup = dbuttons.chose_lang()) 
-                
+            
+            elif message.text == '🧮 Kodli kinolar':
+                pass
+                await message.answer("Kodli kinolar menyus", reply_markup = dbuttons.movies_code_menu())
+                await state.set_state(main_states.set_movi_code)
 
         elif admin['where'] == 'chose_hlang':
             if message.text == "⬅️ Orqaga":
@@ -643,7 +659,8 @@ async def core_message_handler(message : types.Message, state : FSMContext):
 
                 await state.set_state(movi_add.set_video)
                 await message.answer("Endi kinoyingzni tashlang", reply_markup = dbuttons.input_video())
-    
+        
+        
     else:
         await message.answer(f"Assalomu alaykum {message.from_user.first_name}, Xush kelibsiz", reply_markup = dbuttons.menu())
         ram.registr(id = message.from_user.id, name = message.from_user.first_name)

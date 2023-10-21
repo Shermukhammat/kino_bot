@@ -21,10 +21,27 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS liked (user_id, movie_id);")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS disliked (user_id, movie_id);")
 
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS codes (code, movie_id);")
+
         # print("database conected ...", end = '\r')
         
         conection.commit()
         conection.close()
+    
+    def add_movi_code(self, movie_id : int = None, code : int = None):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        try:
+            match = f"INSERT INTO saved ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+            # print(match)
+            cursor.execute(match)
+        except:
+            print(f"Can't save movie, id : {movie_id} ...")
+        
+        conection.commit()
+        conection.close()
+
 
     def save_movi(self, user_id : int = None, movie_id : int = None):
         conection = sqlite3.connect(self.file)
