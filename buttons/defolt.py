@@ -38,7 +38,10 @@ class Defolt_buttons:
         
         return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]], resize_keyboard = True)
 
+    def user_input_movi(self):
+        buttons = [[KeyboardButton(text = "🚀 jo'natish")], [KeyboardButton(text = "⬅️ Orqaga")]]
 
+        return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     
     def add_movi(self, mode = 'none'):
         if mode == 'none':

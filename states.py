@@ -44,3 +44,4 @@ class Main_States(StatesGroup):
     input_series_part = State()
 
     set_movi_code = State()
+    input_user_movi = State()

@@ -8,7 +8,7 @@ from random import randint
 
 cheet = {'uz' : "o'zbek", 'en' : "ingliz", 'ru' : "rus"}
 
-    
+
             
 @dp.callback_query_handler()
 async def query_handler(query : types.CallbackQuery, state : FSMContext):
@@ -50,7 +50,12 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                                         text = setting.data['contact'], 
                                         reply_markup = ibuttons.contact_menu("back_more2")) 
         
-        # elif text == ''
+        elif text == 'add_movi':
+            await bot.delete_message(chat_id = query.from_user.id,
+                                     message_id = query.message.message_id)
+            await bot.send_message(chat_id = query.from_user.id, text = "Kinoyingizni jo'nating", reply_markup = dbuttons.user_input_movi())
+            await state.set_state(main_states.input_user_movi)
+
         
         elif text == 'back_more':
             user = ram.get_info(query.from_user.id, admin = False)
