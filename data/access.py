@@ -13,7 +13,9 @@ class RAM:
 
 
         self.movies = database.get_movies()
+        self.series_count = 0
         for seri in database.get_series():
+            self.series_count+=1
             self.movies.append(seri)
         self.movies_dict = {movi['id'] : movi for movi in self.movies}
         self.movies_id = [movi['id'] for movi in self.movies_dict.values()]
@@ -41,7 +43,7 @@ class RAM:
         
 
     def get_bot_info(self):
-        return f"Bot Foydalanuvchilar soni : {self.users_count}\nJami kinolar soni {self.movies_count}\nJami Seryallar soni : coming son ...\n\n@kino_qidiruvchi_robot"
+        return f"Bot Foydalanuvchilari soni : {self.users_count} \nJami kinolar soni {self.movies_count}  \nJami Seryallar soni : {self.series_count}\n\n@kino_qidiruvchi_robot"
 
 
 
