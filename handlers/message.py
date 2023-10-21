@@ -545,9 +545,6 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                     
             
     elif ram.check_admin(id):
-        # await state.set_state(main_states.input_series_part)
-
-
         admin = ram.get_info(id, admin = True)
         name = admin['name']
         where = admin['where']
@@ -627,60 +624,18 @@ async def core_message_handler(message : types.Message, state : FSMContext):
                 await message.answer(f"Admin : {admin['name']}\nRo'yxatdan o'tdi : {admin['registred']}", reply_markup = dbuttons.menu(admin = True))
             
             elif message.text == "🎬 Kino qo'shish":
-                admin['where'] = 'chose_mtype'
-                await message.answer("Qanday usul bilan kino kiritmoqchisiz?", reply_markup = dbuttons.chose_movi_input_type())
+                admin['where'] = 'chose_hlang'
+                await message.answer("Ok, Endi kinoyingzni tilni tanlang", reply_markup = dbuttons.chose_lang())
             
-            # elif message.text == "⚡️ Primyeralar":
-            #     await state.set_state(main_states.primyer) #"⬅️ Orqaga"
-            #     await message.answer("Primyeralr menyusi", reply_markup = dbuttons.primyer())
-            #     await message.answer("Jami primyeralar soni : 0", reply_markup = ibuttons)
             elif message.text == "📺 Serial qo'shish":
                 await state.set_state(main_states.input_serie_lang)
                 await message.answer("Seriyal tilni tanlang", reply_markup = dbuttons.chose_lang()) 
-        
-        elif admin['where'] == 'chose_mtype':
-            if message.text == "⬅️ Orqaga":
-                admin['where'] = 'media'
-                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
-
-            elif message.text == '♻️ Avtomatik':
-                admin['where'] = 'chose_alang'
-                await bot.send_photo(chat_id = message.from_user.id,
-                                         photo = open('./data/pictures/add_movi/choose_lang.jpg', 'rb'), 
-                                         caption = "Kinolarni qaysi tilda kiritmoqchisiz?",
-                                         reply_markup = dbuttons.chose_lang())
-            
-            elif message.text == "👊 Qo'lda":
-                admin['where'] = 'chose_hlang'
-                await message.answer("Ok, Endi kinoyingzni tilni tanlang", reply_markup = dbuttons.chose_lang())
-        
-        elif admin['where'] == 'chose_alang':
-            if message.text == "⬅️ Orqaga":
-                admin['where'] = 'chose_mtype'
-                await bot.send_photo(photo = open('./data/pictures/add_movi/select_input_type.jpg', 'rb'),
-                                    chat_id = id,
-                                    caption = "Qanday usul bilan kino kiritmoqchisiz?",
-                                    reply_markup = dbuttons.chose_movi_input_type())
-            
-            elif message.text == "🪓 Bekor qilish":
-                admin['where'] = 'media'
-                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
-            
-            elif message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
-                cheet = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}
-                ram.admin_movies_set_lang(lang = cheet[message.text], admin_id = message.from_user.id)
-
-                await state.set_state(main_states.input_avto_movi)
-                await bot.send_photo(chat_id = message.from_user.id,
-                                     photo = open('./data/pictures/add_movi/send_movi.jpg', 'rb'), 
-                                     caption = "Kinolaringzni tashlang",
-                                     reply_markup = dbuttons.avto_input_movi_menu())
                 
 
         elif admin['where'] == 'chose_hlang':
             if message.text == "⬅️ Orqaga":
-                admin['where'] = 'chose_mtype'
-                await message.answer("Qanday usul bilan kino kiritmoqchisiz?", reply_markup = dbuttons.chose_movi_input_type())
+                admin['where'] = 'media'
+                await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
             
             elif message.text in ["🇺🇿 O'zbekcha", "🇷🇺 Ruscha", "🇬🇧 Inglizcha"]:
                 cheet = {"🇺🇿 O'zbekcha" : 'uz', "🇷🇺 Ruscha" : 'ru', "🇬🇧 Inglizcha" : 'en'}
