@@ -44,7 +44,14 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                                         text = ram.get_bot_info(), 
                                         reply_markup = ibuttons.manual_menu(back = "back_more2"))
 
-            
+        elif text == 'contact':
+            await bot.edit_message_text(chat_id = query.from_user.id, 
+                                        message_id = query.message.message_id,
+                                        text = setting.data['contact'], 
+                                        reply_markup = ibuttons.contact_menu("back_more2")) 
+        
+        # elif text == ''
+        
         elif text == 'back_more':
             user = ram.get_info(query.from_user.id, admin = False)
             await bot.edit_message_text(chat_id = query.from_user.id, 

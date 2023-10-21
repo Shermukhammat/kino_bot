@@ -33,7 +33,7 @@ class Database:
         cursor = conection.cursor()
 
         try:
-            match = f"INSERT INTO saved ('user_id', 'movie_id') VALUES ({user_id}, {movie_id});"
+            match = f"INSERT INTO codes ('code', 'movie_id') VALUES ({code}, {movie_id});"
             # print(match)
             cursor.execute(match)
         except:
@@ -41,6 +41,18 @@ class Database:
         
         conection.commit()
         conection.close()
+    
+    def get_movi_code(self):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        respons = {}
+        for row in cursor.execute('SELECT * FROM codes;'):
+            respons[row[0]] = row[1]
+        conection.commit()
+        conection.close()
+        
+        return respons
 
 
     def save_movi(self, user_id : int = None, movie_id : int = None):
@@ -444,5 +456,7 @@ if __name__ == '__main__':
 
     # print(data_base.is_like(user_id = 1661189380, movie_id = 2805))   
     # data_base.add_seri(title = 'arkein', message_id = 3, coment_url = 'coment', thumb = 'www.thum.org', lang = 'en', parts_id = {1 : 11, 2 : 12, 3 : 13, 4 : 14, 5 : 15, 6 : 16})
-    for ser in data_base.get_series():
-        print(ser)
+    # for ser in data_base.get_series():
+    #     print(ser)
+
+    data_base.get_movi_code()

@@ -20,7 +20,7 @@ async def search(message : types.InlineQuery):
                     
                     answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = f"{n}. {movi['title']}",
-                                                        description = f"xajmi : {movi['size']} mb| davomiyligi : {movi['duration']} | tili : {movi['lang']}",
+                                                        # description = f"xajmi : {movi['size']} mb| davomiyligi : {movi['duration']} | tili : {movi['lang']}",
                                                         #   thumb_url = "AAMCBAADGQEAAhkEZINYvRyHAdx3i3WIkCMpcamOMQQAAgkeAAI_vRhTWdHNQuX71tQBAAdtAAMvBA","https://telegra.ph/file/a7112f8f0763f8e4b22d5.jpg"
                                                         thumb_url = movi['thum_url'],
                                                         input_message_content = types.InputTextMessageContent(message_text = f"/get {index}")))
@@ -38,7 +38,7 @@ async def search(message : types.InlineQuery):
                     movi = ram.movies[index]
                     answers.append(types.InlineQueryResultArticle(id = str(uuid.uuid4()), 
                                                         title = f"{n}. {movi['title']}",
-                                                        description = f"xajmi : {movi['size']} mb| davomiyligi : {movi['duration']} | tili : {movi['lang']}",
+                                                        # description = f"xajmi : {movi['size']} mb| davomiyligi : {movi['duration']} | tili : {movi['lang']}",
                                                         #   thumb_url = "AAMCBAADGQEAAhkEZINYvRyHAdx3i3WIkCMpcamOMQQAAgkeAAI_vRhTWdHNQuX71tQBAAdtAAMvBA","https://telegra.ph/file/a7112f8f0763f8e4b22d5.jpg"
                                                         thumb_url = movi['thum_url'],
                                                         input_message_content = types.InputTextMessageContent(message_text = f"/get {index}")))

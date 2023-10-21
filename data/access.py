@@ -11,7 +11,7 @@ class RAM:
         self.users_count = len(self.users)
         self.admins = database.get_admins()
 
-
+        self.movies_code = database.get_movi_code()
         self.movies = database.get_movies()
         self.series_count = 0
         for seri in database.get_series():
@@ -29,6 +29,8 @@ class RAM:
         self.input_series = {}
         self.port = True
         self.block = {}
+
+    
 
     def get_top_movies_index(self, limit : int = 10):
         likes =  [movi['like'] for movi in self.movies]
