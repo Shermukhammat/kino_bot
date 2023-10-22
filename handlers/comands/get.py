@@ -1,21 +1,33 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, ram, bot, CHANEL_ID, ibuttons, db, main_states
+from loader import types, dp, ram, bot, CHANEL_ID, ibuttons, db, main_states, dbuttons
 
 
 
-@dp.message_handler(commands = 'get', state = main_states.set_movi_code)
-async def add_movi_code(message : types.Message):
-    await bot.delete_message(chat_id = message.from_user.id, message_id = message.message_id)
+@dp.message_handler(commands = ['get', 'get2'], state = main_states.set_movi_code)
+async def add_movi_code(message : types.Message, state : FSMContext):
+    # await bot.delete_message(chat_id = message.from_user.id, message_id = message.message_id)
     admin = ram.get_info(message.from_user.id, admin = True)
     movi_id = message.text.split(' ')[-1]
 
     if movi_id.isnumeric() and type(admin['action']) == int:
         movi_id = int(movi_id)
-        print(ram.movies_code.values())
+        # print(movi_id)
+        # print(ram.movies_code.values())
         if movi_id not in ram.movies_code.values():
-            pass 
+            if admin['action'] in ram.movies_code.keys():
+                ram.movies_code[admin['action']] = movi_id
+                db.update_movi_code(movie_id = movi_id, code = admin['action'])
+
+                admin['action'] = None
+                await message.answer("Kino yangliandi", reply_markup = dbuttons.movies_code_menu())
+            else:
+                ram.movies_code[admin['action']] = movi_id
+                db.add_movi_code(movie_id = movi_id, code = admin['action'])
+
+                admin['action'] = None
+                await message.answer("Kino qo'shildi", reply_markup = dbuttons.movies_code_menu())
         else:
-            await bot.send_message(text = "Bu kino aloqachon qo'shilgan", chat_id = message.from_id.id)
+            await message.answer("Bu kino aloqachon qo'shilgan")
 
 
 

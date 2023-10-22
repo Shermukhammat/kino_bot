@@ -25,6 +25,9 @@ class Defolt_buttons:
         
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)
     
+    def onli_back(self):
+        return ReplyKeyboardMarkup(keyboard = [[KeyboardButton(text = "⬅️ Orqaga")]], resize_keyboard = True)
+
     def primyer(self):
         buttons = [[KeyboardButton(text = "⬅️ Orqaga"), KeyboardButton(text = "🏠 Bosh sahifa")]] 
         return ReplyKeyboardMarkup(keyboard = buttons, resize_keyboard = True)

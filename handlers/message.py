@@ -491,10 +491,11 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
             
 
 @dp.message_handler(state = main_states.set_movi_code)
-async def input_avto_movi_message_handler(message: types.Message, state : FSMContext):
+async def set_movi_code_message_handler(message: types.Message, state : FSMContext):
     admin = ram.get_info(message.from_user.id, admin = True)
     if message.text == "⬅️ Orqaga":
         admin['where'] = 'media'
+        admin['action'] = None
         await message.answer(f"📂 Media menyusi", reply_markup = dbuttons.media())
         await state.finish()
     
@@ -506,6 +507,33 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
         
         admin['action'] = code
         await message.answer(f"kino kodi : {code}, kinoni tanlang", reply_markup = ibuttons.chose_movi())
+    
+    elif message.text == "🔄 tahrirlash":
+        await state.set_state(main_states.input_movi_number)
+        await message.answer("Mavjud kino ko'dini kiriting", reply_markup = dbuttons.onli_back())
+
+
+@dp.message_handler(state = main_states.input_movi_number)
+async def input_number(message: types.Message, state : FSMContext):
+    admin = ram.get_info(message.from_user.id, admin = True)
+    if message.text == "⬅️ Orqaga":
+        admin['action'] = None
+        await state.set_state(main_states.set_movi_code)
+        await message.answer("Kodli kinolar menyusi", reply_markup = dbuttons.movies_code_menu())
+
+    elif message.text.isnumeric():
+        code = int(message.text)
+
+        if code in ram.movies_code.keys():
+            admin['action'] = code
+            await state.set_state(main_states.set_movi_code)
+            await message.answer("Kodli kinolar menyusi", reply_markup = dbuttons.movies_code_menu())
+            await message.reply(f"{code} kodi uchun yangi kino tanlang", reply_markup = ibuttons.chose_movi())
+        else:
+            await message.reply("Bunday kod bilan birorta ham kino saqlanmagan", reply_markup = dbuttons.onli_back())
+    else: 
+        await message.reply("Kod raqam emasa", reply_markup = dbuttons.onli_back())
+
 
 
 @dp.message_handler(state = main_states.input_user_movi)

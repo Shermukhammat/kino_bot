@@ -45,3 +45,4 @@ class Main_States(StatesGroup):
 
     set_movi_code = State()
     input_user_movi = State()
+    input_movi_number = State()

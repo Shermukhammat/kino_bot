@@ -21,7 +21,7 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS liked (user_id, movie_id);")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS disliked (user_id, movie_id);")
 
-        cursor.execute(f"CREATE TABLE IF NOT EXISTS codes (code INTEGER, movie_id);")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS codes (code INTEGER, movie_id INTEGER);")
 
         # print("database conected ...", end = '\r')
         
@@ -41,6 +41,20 @@ class Database:
         
         conection.commit()
         conection.close()
+
+    def update_movi_code(self, movie_id : int = None, code : int = None):
+        conection = sqlite3.connect(self.file)
+        cursor = conection.cursor()
+
+        try:
+            match = f"UPDATE codes SET movie_id = {movie_id} WHERE code == {code};;"
+            # print(match)
+            cursor.execute(match)
+        except:
+            print(f"Can't update movie, id : {movie_id} ...")
+        
+        conection.commit()
+        conection.close()
     
     def get_movi_code(self):
         conection = sqlite3.connect(self.file)
@@ -53,6 +67,8 @@ class Database:
         conection.close()
         
         return respons
+    
+    
 
 
     def save_movi(self, user_id : int = None, movie_id : int = None):
