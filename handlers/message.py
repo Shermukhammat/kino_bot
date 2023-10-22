@@ -250,7 +250,14 @@ async def admin_login_mesage_handler(message : types.Message, state : FSMContext
     elif ram.admin_login(message.from_user.id) < 3:
         if message.text == setting.data['pasword']:
             ram.registr(id =  message.from_user.id, name = message.from_user.first_name, admin = True)
+
             await state.finish()
+            await bot.delete_message(chat_id = message.from_user.id, message_id = message.message_id)
+            message_data = await bot.send_sticker(chat_id = message.from_user.id, sticker = 'CAACAgIAAxkBAAI6tWU1NXTI6ZhBHGkyBqEPXPtdO-M-AAJJAgACVp29CiqXDJ0IUyEOMAQ')
+            
+            await asyncio.sleep(3)
+            await bot.delete_message(chat_id = message.from_user.id, message_id = message_data.message_id) 
+
             await message.answer("Admin panel", reply_markup = dbuttons.menu(admin = True))
         else:
             if ram.admin_login(message.from_user.id, block = True) == 3:
@@ -492,8 +499,14 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
         await state.finish()
     
     elif message.text == "🆕 qo'shish":
+        if len(ram.movies_code) != 0:
+            code = max(ram.movies_code.keys()) + 1
+        else:
+            code = 1
         
-        pass
+        admin['action'] = code
+        await message.answer(f"kino kodi : {code}, kinoni tanlang", reply_markup = ibuttons.chose_movi())
+
 
 @dp.message_handler(state = main_states.input_user_movi)
 async def input_user_message(message: types.Message, state : FSMContext):

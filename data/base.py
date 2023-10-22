@@ -21,7 +21,7 @@ class Database:
         cursor.execute(f"CREATE TABLE IF NOT EXISTS liked (user_id, movie_id);")
         cursor.execute(f"CREATE TABLE IF NOT EXISTS disliked (user_id, movie_id);")
 
-        cursor.execute(f"CREATE TABLE IF NOT EXISTS codes (code, movie_id);")
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS codes (code INTEGER, movie_id);")
 
         # print("database conected ...", end = '\r')
         

@@ -1,10 +1,10 @@
 from aiogram import types
 import uuid
-from loader import db, dp, ram, google
+from loader import db, dp, ram, google, main_states
 from fuzzywuzzy import process
 
 
-@dp.inline_handler()
+@dp.inline_handler(state = [None, main_states.set_movi_code])
 async def search(message : types.InlineQuery):
     if len(message.query) > 1:
         if message.query[0] == '#':

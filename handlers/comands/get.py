@@ -1,5 +1,22 @@
 from aiogram.dispatcher import FSMContext
-from loader import types, dp, ram, bot, CHANEL_ID, ibuttons, db
+from loader import types, dp, ram, bot, CHANEL_ID, ibuttons, db, main_states
+
+
+
+@dp.message_handler(commands = 'get', state = main_states.set_movi_code)
+async def add_movi_code(message : types.Message):
+    await bot.delete_message(chat_id = message.from_user.id, message_id = message.message_id)
+    admin = ram.get_info(message.from_user.id, admin = True)
+    movi_id = message.text.split(' ')[-1]
+
+    if movi_id.isnumeric() and type(admin['action']) == int:
+        movi_id = int(movi_id)
+        print(ram.movies_code.values())
+        if movi_id not in ram.movies_code.values():
+            pass 
+        else:
+            await bot.send_message(text = "Bu kino aloqachon qo'shilgan", chat_id = message.from_id.id)
+
 
 
 

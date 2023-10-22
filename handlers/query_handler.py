@@ -39,10 +39,15 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
                                         reply_markup = ibuttons.manual_menu(back = "back_more"))
         
         elif text == "statistics":
-            await bot.edit_message_text(chat_id = query.from_user.id, 
-                                        message_id = query.message.message_id,
-                                        text = ram.get_bot_info(), 
-                                        reply_markup = ibuttons.manual_menu(back = "back_more2"))
+            await bot.delete_message(chat_id = query.from_user.id, message_id = query.message.message_id)
+            message_data = await bot.send_sticker(chat_id = query.from_user.id, sticker = 'CAACAgIAAxkBAAI6hmU1My_55RaMjLTOCYH6Wtjo5USuAAJLAgACVp29CmJQRdBQ-nGcMAQ')
+            
+            await asyncio.sleep(3)
+            await bot.delete_message(chat_id = query.from_user.id, message_id = message_data.message_id)
+
+            await bot.send_message(chat_id = query.from_user.id,
+                                   text = ram.get_bot_info(), 
+                                   reply_markup = ibuttons.manual_menu(back = "back_more2"))
 
         elif text == 'contact':
             await bot.edit_message_text(chat_id = query.from_user.id, 
