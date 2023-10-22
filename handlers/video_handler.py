@@ -3,6 +3,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import ContentTypes
 from loader import db, dp, ram,bot, picsum, ibuttons, movi_add, CHANEL_ID, main_states, title_finder, info_cleaner, dbuttons, setting
 import re
+import asyncio
 
 def convert(seconds):
     seconds = seconds % (24 * 3600)
@@ -125,3 +126,16 @@ async def get_part(message : types.Message, state : FSMContext):
 
     await state.finish()
     await bot.send_message(text = "qo'lanma menyusi", reply_markup = dbuttons.manual_edit(), chat_id = message.from_user.id)
+
+
+@dp.message_handler(content_types = ContentTypes.VIDEO, state = main_states.input_user_movi)
+async def cetch_movi_from_user(message : types.Message, state : FSMContext):
+    message_id = message.message_id
+
+    if ram.check_user(message.from_user.id):
+        ram.users[message.from_user.id]['message'].append(message_id)
+
+        message_data = await bot.send_sticker(chat_id = message.from_user.id, sticker = 'CAACAgIAAxkBAAI3sGU031I-nn2ofC9saOTUIoBxnJDOAALuFAAC41VQSThLiq0CE2G8MAQ')
+        await asyncio.sleep(3)
+        await bot.delete_message(chat_id = message.from_user.id, message_id = message_data.message_id)
+    

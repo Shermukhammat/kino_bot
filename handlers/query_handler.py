@@ -53,8 +53,14 @@ async def query_handler(query : types.CallbackQuery, state : FSMContext):
         elif text == 'add_movi':
             await bot.delete_message(chat_id = query.from_user.id,
                                      message_id = query.message.message_id)
-            await bot.send_message(chat_id = query.from_user.id, text = "Kinoyingizni jo'nating", reply_markup = dbuttons.user_input_movi())
+            
+            message_data =await bot.send_sticker(sticker = 'CAACAgIAAxkBAAI4BmU05-M4Lr5L2aS4jVP-0sBkK-ciAAKtGAACMGzBSTAFoKYyH4doMAQ', chat_id = query.from_user.id)
             await state.set_state(main_states.input_user_movi)
+            await asyncio.sleep(3)
+            await bot.delete_message(chat_id = query.from_user.id, message_id = message_data.message_id)
+            
+            await bot.send_message(chat_id = query.from_user.id, text = "Kinoyingizni jo'nating", reply_markup = dbuttons.user_input_movi())
+            
 
         
         elif text == 'back_more':

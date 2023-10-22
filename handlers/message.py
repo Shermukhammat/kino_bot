@@ -9,6 +9,11 @@ import time
 import asyncio
 
 
+@dp.message_handler(content_types=types.ContentType.STICKER)
+async def catch_sticer(message : types.Message):
+    print(message.sticker.file_id)
+    await bot.send_sticker(chat_id = message.from_user.id, sticker = message.sticker.file_id)
+
 @dp.message_handler(state = main_states.input_video_manual)
 async def input_manual_video_message(message : types.Message, state : FSMContext):
 
@@ -494,9 +499,36 @@ async def input_avto_movi_message_handler(message: types.Message, state : FSMCon
 async def input_user_message(message: types.Message, state : FSMContext):
     user = ram.get_info(message.from_user.id, admin = False)
     if message.text == "⬅️ Orqaga":
+        await state.finish()
+
+        message_data = await bot.send_sticker(chat_id = message.from_user.id, sticker = 'CAACAgIAAxkBAAI4FmU06SmntgY8Ccfnlc1iTwJ2lN8RAALoGAACgJoYSUfokcsDkNm5MAQ')
+        await asyncio.sleep(3)
+        await bot.delete_message(chat_id = message.from_user.id, message_id = message_data.message_id)
+        
         await message.answer("menu", reply_markup = dbuttons.menu())
         await message.answer(f"Foydalanuvchi : {user['name']} \nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.more_menu())
-        await state.finish()
+
+    
+    elif message.text == "🚀 jo'natish":
+        if len(user['message']) > 0:
+            for id in user['message']:
+                await bot.copy_message(chat_id = setting.data['ram'], message_id = id, from_chat_id = message.from_user.id)
+
+            user['message'] = []
+            await state.finish()
+
+            message_data = await bot.send_sticker(chat_id = message.from_user.id, sticker = 'CAACAgIAAxkBAAI38mU05aGaRAI16hxdbFcS_XPMOdfdAAICFQACOsFQSbdMkgm_6KgTMAQ')
+            await asyncio.sleep(3)
+            await bot.delete_message(chat_id = message.from_user.id, message_id = message_data.message_id)
+            await message.answer("Kino jo'natidi adminlarimiz kinoyingzni tez orda ko'rib chiqshadi", reply_markup = dbuttons.menu())
+            
+
+        else:
+            message_data = await bot.send_sticker(chat_id = message.from_user.id, sticker = 'CAACAgIAAxkBAAI302U045uxJZXGFm3fUVo8KKQ7cpoPAALLFAAC3bBRSUxgbDQypB1hMAQ')
+            await asyncio.sleep(2)
+            await bot.delete_message(chat_id = message.from_user.id, message_id = message_data.message_id)
+            await message.answer("Iltimos birinchi kino yoki seriyal jo'nating", reply_markup = dbuttons.user_input_movi())
+
 
 @dp.message_handler()
 async def core_message_handler(message : types.Message, state : FSMContext):
