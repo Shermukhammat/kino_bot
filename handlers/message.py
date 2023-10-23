@@ -574,6 +574,7 @@ async def input_user_message(message: types.Message, state : FSMContext):
 @dp.message_handler()
 async def core_message_handler(message : types.Message, state : FSMContext):
     id = message.from_user.id 
+    print(id)
     
     
     if ram.check_user(id):
