@@ -73,7 +73,7 @@ class RAM:
         
     
     def logout(self, id : int, name : str = None, lang : str = 'uz',  admin : bool = False):
-        data = {'name' : name, 'lang' : lang, 'where' : 'none', 'action' : 'none', 'registred' : now()}
+        data = {'name' : name, 'lang' : lang, 'where' : 'none', 'action' : 'none', 'message' : [], 'registred' : now()}
         if admin:
             del self.admins[id]
             self.users[id] = data
