@@ -30,7 +30,7 @@ class Inline_buttons:
                        [InlineKeyboardButton(text = "📲 Aloqa", callback_data = "contact"), InlineKeyboardButton(text = "📈 Statistika", callback_data = "statistics")],
                        [InlineKeyboardButton(text = "🧪 Kino qo'shish", callback_data = "add_movi")],
                     
-                       [InlineKeyboardButton(text = "🏆 Top 100", callback_data = "top_100"), InlineKeyboardButton(text = "⚡️ Primyeralar", callback_data = "premier")],
+                       [InlineKeyboardButton(text = "🚧👷🏻‍♂🏆Top 100", callback_data = "top_100"), InlineKeyboardButton(text = "🚧👷🏻‍♂⚡️Primyeralar", callback_data = "premier")],
                        [InlineKeyboardButton(text = "⭐️ Saqlanganlar", switch_inline_query_current_chat = "#SAVED"), InlineKeyboardButton(text = "🎲 Tasodifiy", callback_data = "random")],
                     #    [InlineKeyboardButton(text = "🎲 Tasodifiy", callback_data = "random")],
                     #    [[InlineKeyboardButton(text = "🧩 Filtir", callback_data = "filtir")]],
