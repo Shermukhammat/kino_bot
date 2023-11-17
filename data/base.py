@@ -47,7 +47,7 @@ class Database:
         cursor = conection.cursor()
 
         try:
-            match = f"UPDATE codes SET movie_id = {movie_id} WHERE code == {code};;"
+            match = f"UPDATE codes SET movie_id = {movie_id} WHERE code == {code};"
             # print(match)
             cursor.execute(match)
         except:

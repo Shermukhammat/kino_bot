@@ -574,25 +574,9 @@ async def input_user_message(message: types.Message, state : FSMContext):
 @dp.message_handler()
 async def core_message_handler(message : types.Message, state : FSMContext):
     id = message.from_user.id 
+    print(id)
     
-    # status = await check_sub(id, '@kino_bot_discuss')
-    # print(status)
-    # but = Bot.get_current()
-    # member = await but.get_chat_member(chat_id = "@kino_bot_discuss", user_id = 5850618492+1) #user_id = 5850618492, -1001942423128
-    # print(member)
-
-
-    # chat = await bot.get_chat("@kino_bot_discuss")
-    # print(chat.id)
-
     
-    # data = await bot.send_photo(chat_id = DISCUSS_CHANEL_ID,
-    #                      photo="https://picsum.photos/200",
-    #                      caption = "Yaxshi kino 1")
-    
-    # print(data.url)
-    # await bot.send_video(chat_id = message.from_user.id, video = "http://88.99.56.141/Kinolar/Meg%202%20X%20480p%20O'zbek%20tilida%20(asilmedia.net).mp4")
-
     if ram.check_user(id):
         # {'name': 'SHermukhammad', 'lang': 'uz', 'where': 'none', 'action': 'none', 'registred': '17.07.2023 13:47'}
         user = ram.get_info(id, admin = False)
@@ -615,6 +599,32 @@ async def core_message_handler(message : types.Message, state : FSMContext):
             if message.text == '🎛 Menu':
                 await message.answer(f"📓 Bosh menu:\n\nFoydalanuvchi : {user['name']}\nRo'yxatdan o'tdi : {user['registred']}", reply_markup = ibuttons.menu())
 
+            elif message.text.isnumeric():
+                code = int(message.text)
+                if ram.movies_code.get(code):
+                    movi = ram.movies_dict[ram.movies_code[code]]
+                    
+                    if movi['type'] == 'seri':
+                        saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
+                        buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = ram.movies_code[code], serie = True)
+        
+                        await bot.copy_message(chat_id = message.from_user.id,
+                                       message_id = movi['id'],
+                                       from_chat_id = CHANEL_ID,
+                                       reply_markup = buttons)
+                    
+                    else:
+                        saved = db.is_saved(user_id = message.from_user.id, movie_id = movi['id'])
+                        buttons = ibuttons.movi_buttons(coments_url = movi['coments'], like = movi['like'], dislike = movi['dislike'], saved = saved, admin = False, id = movi['id'])
+        
+                        await bot.copy_message(chat_id = message.from_user.id,
+                                       message_id = movi['id'],
+                                       from_chat_id = CHANEL_ID,
+                                       reply_markup = buttons)
+            
+                else:
+                    await message.reply("Bunday kod mavjud emas")
+                return
 
             if user['action'] == 'sign_admin':
                 count = ram.bloc_user(id)
